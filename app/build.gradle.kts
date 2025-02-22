@@ -17,8 +17,8 @@ android {
         applicationId = "com.bunbeauty.tiptoplive"
         minSdk = 27
         targetSdk = 35
-        versionCode = 322
-        versionName = "3.2.2"
+        versionCode = 323
+        versionName = "3.2.3"
         multiDexEnabled = true
         setProperty("archivesBaseName", "FakeLive-$versionName")
 
