@@ -7,7 +7,8 @@ import com.bunbeauty.tiptoplive.features.subscription.view.SubscriptionItem
 interface Subscription {
 
     data class State(
-        val subscriptions: List<SubscriptionItem>
+        val subscriptions: List<SubscriptionItem>,
+        val timer: String?
     ): Base.State {
 
         val selectedSubscription: SubscriptionItem?

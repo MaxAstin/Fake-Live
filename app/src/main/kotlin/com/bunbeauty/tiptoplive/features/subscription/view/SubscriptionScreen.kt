@@ -180,8 +180,18 @@ private fun SubscriptionContent(
 
             Column(
                 modifier = Modifier.padding(bottom = 72.dp),
-                verticalArrangement = spacedBy(8.dp)
+                verticalArrangement = spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                state.timer?.let { timer ->
+                    Text(
+                        text = stringResource(R.string.subscription_offer_ends, timer),
+                        color = FakeLiveTheme.colors.onBackground,
+                        style = FakeLiveTheme.typography.titleSmall,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
                 state.subscriptions.forEach { subscriptionItem ->
                     SubscriptionItem(
                         subscriptionItem = subscriptionItem,
@@ -375,7 +385,8 @@ private fun SubscriptionScreenPreview() {
                         isLifetime = true,
                         isSelected = false
                     )
-                )
+                ),
+                timer = "12:00:00"
             ),
             onAction = {}
         )

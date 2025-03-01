@@ -7,6 +7,7 @@ import com.bunbeauty.tiptoplive.features.billing.BillingService
 import com.bunbeauty.tiptoplive.features.billing.PurchaseResultListener
 import com.bunbeauty.tiptoplive.features.billing.model.PurchaseData
 import com.bunbeauty.tiptoplive.features.billing.model.PurchaseResult
+import com.bunbeauty.tiptoplive.features.subscription.domain.GetOfferTimerFlowUseCase
 import com.bunbeauty.tiptoplive.features.subscription.mapper.toSubscriptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -18,18 +19,19 @@ import javax.inject.Inject
 class SubscriptionViewModel @Inject constructor(
     private val analyticsManager: AnalyticsManager,
     private val billingService: BillingService,
-    private val purchaseResultListener: PurchaseResultListener
+    private val purchaseResultListener: PurchaseResultListener,
+    private val getOfferTimerFlowUseCase: GetOfferTimerFlowUseCase
 ) : BaseViewModel<Subscription.State, Subscription.Action, Subscription.Event>(
     initState = {
         Subscription.State(
-            subscriptions = emptyList()
+            subscriptions = emptyList(),
+            timer = null
         )
     }
 ) {
 
     init {
         loadSubscriptions()
-        subscribeOnPurchaseFlow()
     }
 
     override fun onAction(action: Subscription.Action) {
@@ -77,7 +79,20 @@ class SubscriptionViewModel @Inject constructor(
             setState {
                 copy(subscriptions = subscriptions)
             }
+
+            if (subscriptions.isNotEmpty()) {
+                startOfferTimer()
+                subscribeOnPurchaseFlow()
+            }
         }
+    }
+
+    private fun startOfferTimer() {
+        getOfferTimerFlowUseCase().onEach { timer ->
+            setState {
+                copy(timer = timer)
+            }
+        }.launchIn(viewModelScope)
     }
 
     private fun subscribeOnPurchaseFlow() {
