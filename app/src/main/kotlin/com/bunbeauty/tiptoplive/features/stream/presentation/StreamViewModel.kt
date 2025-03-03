@@ -8,7 +8,6 @@ import com.bunbeauty.tiptoplive.common.util.Seconds
 import com.bunbeauty.tiptoplive.common.util.getCurrentTimeSeconds
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
 import com.bunbeauty.tiptoplive.features.stream.CameraUtil
-import com.bunbeauty.tiptoplive.features.stream.domain.GetCommentsDelayUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.GetCommentsUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.GetQuestionUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.model.Question
@@ -18,6 +17,8 @@ import com.bunbeauty.tiptoplive.shared.domain.GetViewerCountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.min
@@ -32,7 +33,6 @@ class StreamViewModel @Inject constructor(
     private val getViewerCountUseCase: GetViewerCountUseCase,
     private val isPremiumAvailableUseCase: IsPremiumAvailableUseCase,
     private val getCommentsUseCase: GetCommentsUseCase,
-    private val getCommentsDelayUseCase: GetCommentsDelayUseCase,
     private val getQuestionUseCase: GetQuestionUseCase,
     private val analyticsManager: AnalyticsManager,
     private val cameraUtil: CameraUtil,
@@ -328,19 +328,11 @@ class StreamViewModel @Inject constructor(
     }
 
     private fun startGenerateComments() {
-        viewModelScope.launch {
-            while (true) {
-                val newComments = getCommentsUseCase(viewersCount = currentState.viewersCount)
-                val delayMillis = getCommentsDelayUseCase(viewersCount = currentState.viewersCount)
-                delay(delayMillis)
-
-                setState {
-                    copy(
-                        comments = newComments + comments.take(100)
-                    )
-                }
+        getCommentsUseCase().onEach { newComments ->
+            setState {
+                copy(comments = newComments + comments.take(100))
             }
-        }
+        }.launchIn(viewModelScope)
     }
 
     private fun startGenerateQuestions() {
