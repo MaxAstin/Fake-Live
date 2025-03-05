@@ -2,6 +2,7 @@ package com.bunbeauty.tiptoplive.features.stream.view.ui
 
 import android.content.Context
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -30,6 +31,7 @@ fun CameraComponent(
     isFront: Boolean,
     isEnabled: Boolean,
     image: ImageSource<*>,
+    imageCapture: ImageCapture,
     onCameraError: (Exception) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -52,6 +54,7 @@ fun CameraComponent(
                         isFront = isFront,
                         lifecycleOwner = lifecycleOwner,
                         cameraProvider = cameraProvider,
+                        imageCapture = imageCapture,
                         onCameraError = onCameraError,
                     )
                 }
@@ -61,6 +64,7 @@ fun CameraComponent(
                     isFront = isFront,
                     lifecycleOwner = lifecycleOwner,
                     cameraProvider = cameraProvider,
+                    imageCapture = imageCapture,
                     onCameraError = onCameraError,
                 )
             }
@@ -113,6 +117,7 @@ private fun PreviewView.update(
     isFront: Boolean,
     lifecycleOwner: LifecycleOwner,
     cameraProvider: ProcessCameraProvider?,
+    imageCapture: ImageCapture?,
     onCameraError: (Exception) -> Unit,
 ) {
     val cameraSelector = cameraProvider?.getCameraSelector(isFront = isFront) ?: return
@@ -124,7 +129,8 @@ private fun PreviewView.update(
         cameraProvider.bindToLifecycle(
             lifecycleOwner,
             cameraSelector,
-            preview
+            preview,
+            imageCapture
         )
     } catch (exception: Exception) {
         onCameraError(exception)

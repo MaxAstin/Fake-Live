@@ -10,6 +10,7 @@ import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCas
 import com.bunbeauty.tiptoplive.features.stream.CameraUtil
 import com.bunbeauty.tiptoplive.features.stream.domain.GetCommentsUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.GetQuestionUseCase
+import com.bunbeauty.tiptoplive.features.stream.domain.UpdateCurrentPictureUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.model.Question
 import com.bunbeauty.tiptoplive.shared.domain.GetImageUriFlowUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetUsernameUseCase
@@ -32,6 +33,7 @@ class StreamViewModel @Inject constructor(
     private val getUsernameUseCase: GetUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
     private val isPremiumAvailableUseCase: IsPremiumAvailableUseCase,
+    private val updateCurrentPictureUseCase: UpdateCurrentPictureUseCase,
     private val getCommentsUseCase: GetCommentsUseCase,
     private val getQuestionUseCase: GetQuestionUseCase,
     private val analyticsManager: AnalyticsManager,
@@ -66,6 +68,7 @@ class StreamViewModel @Inject constructor(
         setupViewerCount()
         checkPremiumStatus()
 
+        startSendingTakePictureEvents()
         startGenerateReactions()
         startGenerateViewersCount()
         startGenerateComments()
@@ -243,6 +246,10 @@ class StreamViewModel @Inject constructor(
                 )
             }
 
+            is Stream.Action.HandlePicture -> {
+                updateCurrentPictureUseCase(bytes = action.bytes)
+            }
+
             is Stream.Action.CameraError -> {
                 analyticsManager.trackCameraError()
             }
@@ -327,12 +334,25 @@ class StreamViewModel @Inject constructor(
         }
     }
 
-    private fun startGenerateComments() {
-        getCommentsUseCase().onEach { newComments ->
-            setState {
-                copy(comments = newComments + comments.take(100))
+    private fun startSendingTakePictureEvents() {
+        viewModelScope.launch {
+            delay(2_000)
+            while (true) {
+                sendEvent(Stream.Event.TakePicture)
+                delay(30_000)
             }
-        }.launchIn(viewModelScope)
+        }
+    }
+
+    private fun startGenerateComments() {
+        viewModelScope.launch {
+            delay(3_000)
+            getCommentsUseCase().onEach { newComments ->
+                setState {
+                    copy(comments = newComments + comments.take(100))
+                }
+            }.launchIn(viewModelScope)
+        }
     }
 
     private fun startGenerateQuestions() {

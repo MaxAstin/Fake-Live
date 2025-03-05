@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.application)
     alias(libs.plugins.kotlin.android)
@@ -21,6 +23,15 @@ android {
         versionName = "3.3.0"
         multiDexEnabled = true
         setProperty("archivesBaseName", "FakeLive-$versionName")
+
+        val authToken = rootProject.file("local.properties")
+            .inputStream()
+            .use { input ->
+                Properties().apply {
+                    load(input)
+                }.getProperty("AUTH_TOKEN")
+            }
+        buildConfigField("String", "AUTH_TOKEN", "\"$authToken\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -112,6 +123,9 @@ dependencies {
 
     // Billing
     implementation(libs.billing.ktx)
+
+    // Serialization
+    implementation(libs.bundles.ktor)
 
     // Serialization
     implementation(libs.kotlinx.serialization.json)

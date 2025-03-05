@@ -65,6 +65,7 @@ interface Stream {
         data object Start : Action
         data object Stop : Action
         data object FinishStreamClick : Action
+        data class HandlePicture(val bytes: ByteArray) : Action
         data class CameraError(val exception: Exception) : Action
     }
 
@@ -76,6 +77,7 @@ interface Stream {
             }
         }
         data object ShowFilterNotAvailable : Event
+        data object TakePicture : Event
     }
 
 }

@@ -2,6 +2,7 @@ package com.bunbeauty.tiptoplive.features.stream.domain
 
 import com.bunbeauty.tiptoplive.common.util.chance
 import com.bunbeauty.tiptoplive.common.util.percent
+import com.bunbeauty.tiptoplive.features.stream.data.comment.CommentRepository
 import com.bunbeauty.tiptoplive.features.stream.data.user.UserRepository
 import com.bunbeauty.tiptoplive.features.stream.domain.model.Comment
 import com.bunbeauty.tiptoplive.shared.domain.GetViewerCountUseCase
@@ -16,6 +17,7 @@ private const val COMMENT_LIST_SIZE = 100
 
 class GetCommentsUseCase @Inject constructor(
     private val getViewerCountUseCase: GetViewerCountUseCase,
+    private val commentRepository: CommentRepository,
     private val userRepository: UserRepository,
     private val getRandomCommentText: GetRandomCommentTextUseCase,
     private val getRandomUsernameUseCase: GetRandomUsernameUseCase,
@@ -54,19 +56,36 @@ class GetCommentsUseCase @Inject constructor(
         }
     }
 
-    private fun getComments(): List<Comment> {
+    private suspend fun getComments(): List<Comment> {
+        return commentRepository.getComments(
+            count = COMMENT_LIST_SIZE
+        ).fold(
+            onSuccess = { comments ->
+                comments.shuffled()
+                    .map { it.toComment() }
+            },
+            onFailure = { generateRandomComments() }
+        )
+    }
+
+    private fun generateRandomComments(): List<Comment> {
         return List(COMMENT_LIST_SIZE) {
-            val picture = if (chance(10.percent)) {
-                null
-            } else {
-                userRepository.getCommentPictureName()
-            }
-            Comment(
-                picture = picture,
-                username = getRandomUsernameUseCase(),
-                text = getRandomCommentText(),
-            )
+            getRandomCommentText().toComment()
         }
+    }
+
+    private fun String.toComment(): Comment {
+        val picture = if (chance(10.percent)) {
+            null
+        } else {
+            userRepository.getCommentPictureName()
+        }
+
+        return Comment(
+            picture = picture,
+            username = getRandomUsernameUseCase(),
+            text = this,
+        )
     }
 
     private fun getDelay(viewerCount: ViewerCount): Long {
