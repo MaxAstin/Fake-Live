@@ -7,14 +7,23 @@ import com.bunbeauty.tiptoplive.features.stream.data.user.UserRepository
 import com.bunbeauty.tiptoplive.features.stream.domain.model.Comment
 import com.bunbeauty.tiptoplive.shared.domain.GetViewerCountUseCase
 import com.bunbeauty.tiptoplive.shared.domain.model.ViewerCount
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.random.Random
 
 private const val COMMENT_LIST_SIZE = 100
+private const val PREFETCH_THRESHOLD = 20
+private const val THRESHOLD_CHECK_PERIOD = 1_000L
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class GetCommentsUseCase @Inject constructor(
     private val getViewerCountUseCase: GetViewerCountUseCase,
     private val commentRepository: CommentRepository,
@@ -30,19 +39,48 @@ class GetCommentsUseCase @Inject constructor(
     )
 
     operator fun invoke(): Flow<List<Comment>> {
-        return flow {
+        return channelFlow {
             val viewerCount = getViewerCountUseCase()
+            val aiCommentChannel = Channel<String>(Channel.UNLIMITED)
+            val aiCommentSize = MutableStateFlow(0)
 
-            while (true) {
-                val comments = getComments()
-                val chunkSize = getChunkSize(viewerCount = viewerCount)
-                var currentIndex = 0
-
-                while (currentIndex < comments.size) {
-                    val chunkEnd = (currentIndex + chunkSize).coerceAtMost(comments.size)
-                    emit(comments.slice(currentIndex until chunkEnd))
+            launch {
+                while (isActive) {
                     delay(getDelay(viewerCount = viewerCount))
-                    currentIndex = chunkEnd + 1
+
+                    val chunkSize = getChunkSize(viewerCount = viewerCount)
+                    val comments = List(chunkSize) {
+                        val aiGenerated = !aiCommentChannel.isEmpty
+                        val commentText = if (aiGenerated) {
+                            aiCommentSize.update { size ->
+                                size - 1
+                            }
+                            aiCommentChannel.receive()
+                        } else {
+                            getRandomCommentText()
+                        }
+                        commentText.toComment(aiGenerated = aiGenerated)
+                    }
+                    send(comments)
+                }
+            }
+            launch {
+                while (isActive) {
+                    delay(THRESHOLD_CHECK_PERIOD)
+
+                    if (aiCommentSize.value < PREFETCH_THRESHOLD) {
+                        commentRepository.getComments(
+                            count = COMMENT_LIST_SIZE
+                        ).onSuccess { comments ->
+                            comments.shuffled()
+                                .forEach { aiCommentText ->
+                                    aiCommentChannel.send(aiCommentText)
+                                }
+                            aiCommentSize.update { size ->
+                                size + comments.size
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -56,25 +94,7 @@ class GetCommentsUseCase @Inject constructor(
         }
     }
 
-    private suspend fun getComments(): List<Comment> {
-        return commentRepository.getComments(
-            count = COMMENT_LIST_SIZE
-        ).fold(
-            onSuccess = { comments ->
-                comments.shuffled()
-                    .map { it.toComment() }
-            },
-            onFailure = { generateRandomComments() }
-        )
-    }
-
-    private fun generateRandomComments(): List<Comment> {
-        return List(COMMENT_LIST_SIZE) {
-            getRandomCommentText().toComment()
-        }
-    }
-
-    private fun String.toComment(): Comment {
+    private fun String.toComment(aiGenerated: Boolean): Comment {
         val picture = if (chance(10.percent)) {
             null
         } else {
@@ -85,6 +105,7 @@ class GetCommentsUseCase @Inject constructor(
             picture = picture,
             username = getRandomUsernameUseCase(),
             text = this,
+            aiGenerated = aiGenerated
         )
     }
 

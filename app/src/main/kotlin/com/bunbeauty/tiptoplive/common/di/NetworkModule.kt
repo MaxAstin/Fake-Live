@@ -1,19 +1,23 @@
 package com.bunbeauty.tiptoplive.common.di
 
-import android.util.Log
 import com.bunbeauty.tiptoplive.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.ktor.client.*
-import io.ktor.client.engine.okhttp.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.bearerAuth
+import io.ktor.client.request.header
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.URLProtocol
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
@@ -46,7 +50,6 @@ object NetworkModule {
                 this.host = "api.openai.com/v1/chat"
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
                 bearerAuth(BuildConfig.AUTH_TOKEN)
-                Log.d("testTag", "token ${BuildConfig.AUTH_TOKEN}")
 
                 url {
                     protocol = URLProtocol.HTTPS
