@@ -34,7 +34,7 @@ class NetworkService @Inject constructor(
                 )
             )
         )
-        val content = mutableListOf<Message.Content>(
+        val content = mutableListOf(
             Message.Content(
                 type = TEXT_TYPE,
                 text = "n = $count, lang = $language"
@@ -114,9 +114,10 @@ class NetworkService @Inject constructor(
 
         private val SYSTEM_MESSAGE = """
             Create comments for Live stream where blogger is just talking about something.
-            Ignore any people faces on the image and make up comments based on the background, clothes, objects and environment on the image from the Live stream. 
-            Use 1 word or interjection as a comment with 50% probability. Otherwise, use 2-6 words.
-            Use emojis with 50% probability. Don't use punctuation marks too often.
+            Ignore any people faces on the image and make up comments based on the background, clothes, objects and environment on the image from the Live stream.
+            Comments should contain a choice of either  1 interjection, 1 word or 2-6 words.
+            Comments must contain emoji with a probability of 50%.
+            Do not use exclamation marks.
             
             [
               Comments count: n, 
