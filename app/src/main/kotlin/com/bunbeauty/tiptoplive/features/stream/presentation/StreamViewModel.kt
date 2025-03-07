@@ -68,7 +68,6 @@ class StreamViewModel @Inject constructor(
         setupViewerCount()
         checkPremiumStatus()
 
-        startSendingTakePictureEvents()
         startGenerateReactions()
         startGenerateViewersCount()
         startGenerateComments()
@@ -246,12 +245,16 @@ class StreamViewModel @Inject constructor(
                 )
             }
 
-            is Stream.Action.HandlePicture -> {
-                updateCurrentPictureUseCase(bytes = action.bytes)
+            is Stream.Action.PreviewIsReady -> {
+                startSendingTakePictureEvents()
             }
 
             is Stream.Action.CameraError -> {
                 analyticsManager.trackCameraError()
+            }
+
+            is Stream.Action.HandlePicture -> {
+                updateCurrentPictureUseCase(bytes = action.bytes)
             }
         }
     }
@@ -336,7 +339,6 @@ class StreamViewModel @Inject constructor(
 
     private fun startSendingTakePictureEvents() {
         viewModelScope.launch {
-            delay(2_000)
             while (true) {
                 sendEvent(Stream.Event.TakePicture)
                 delay(30_000)
@@ -346,7 +348,6 @@ class StreamViewModel @Inject constructor(
 
     private fun startGenerateComments() {
         viewModelScope.launch {
-            delay(3_000)
             getCommentsUseCase().onEach { newComments ->
                 setState {
                     copy(comments = newComments + comments.take(100))

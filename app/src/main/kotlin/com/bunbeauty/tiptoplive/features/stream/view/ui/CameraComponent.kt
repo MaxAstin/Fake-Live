@@ -32,6 +32,7 @@ fun CameraComponent(
     isEnabled: Boolean,
     image: ImageSource<*>,
     imageCapture: ImageCapture,
+    onPreviewIsReady: () -> Unit,
     onCameraError: (Exception) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -57,6 +58,11 @@ fun CameraComponent(
                         imageCapture = imageCapture,
                         onCameraError = onCameraError,
                     )
+                    previewStreamState.observe(lifecycleOwner) { streamState ->
+                        if (streamState == PreviewView.StreamState.STREAMING) {
+                            onPreviewIsReady()
+                        }
+                    }
                 }
             },
             update = { previewView ->

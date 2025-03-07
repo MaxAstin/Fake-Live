@@ -209,6 +209,9 @@ private fun StreamContent(
                             isEnabled = state.isCameraEnabled,
                             image = state.image,
                             imageCapture = imageCapture,
+                            onPreviewIsReady = {
+                                onAction(Stream.Action.PreviewIsReady)
+                            },
                             onCameraError = { exception ->
                                 onAction(Stream.Action.CameraError(exception = exception))
                             }
