@@ -40,6 +40,7 @@ interface Preparation {
         data class StreamFinished(val durationInSeconds: Int): Action
         data object CloseFeedbackDialogClick: Action
         data class FeedbackClick(val isPositive: Boolean): Action
+        data object CloseStreamDurationLimitsDialogClick: Action
         data object PremiumLaterClick: Action
         data class NotShowFeedbackChecked(val checked: Boolean): Action
         data object ShareClick: Action
