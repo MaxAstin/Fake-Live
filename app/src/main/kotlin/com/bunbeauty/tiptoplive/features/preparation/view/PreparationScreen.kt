@@ -48,6 +48,7 @@ import com.bunbeauty.tiptoplive.common.ui.rippleClickable
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation
 import com.bunbeauty.tiptoplive.features.preparation.presentation.PreparationViewModel
+import com.bunbeauty.tiptoplive.features.stream.presentation.TIME_LIMIT_FOR_FREE_VERSION
 import com.bunbeauty.tiptoplive.shared.domain.model.ViewerCount
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.launchIn
@@ -265,11 +266,20 @@ private fun PreparationContent(
                 onAction(Preparation.Action.StartStreamClick)
             }
         ) {
+            val startLiveText =  stringResource(R.string.preparation_start_live)
+            val secondsText =  stringResource(R.string.preparation_seconds, TIME_LIMIT_FOR_FREE_VERSION)
+            val text = remember(state.status) {
+                if (state.status == Preparation.Status.FREE) {
+                    "$startLiveText $secondsText"
+                } else {
+                    startLiveText
+                }
+            }
             Text(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(12.dp),
-                text = stringResource(R.string.preparation_start_live),
+                text = text,
                 color = FakeLiveTheme.colors.onSurface,
                 style = FakeLiveTheme.typography.titleSmall,
             )
