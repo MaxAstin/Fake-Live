@@ -1,5 +1,6 @@
 package com.bunbeauty.tiptoplive.common.di
 
+import android.util.Log
 import com.bunbeauty.tiptoplive.BuildConfig
 import dagger.Module
 import dagger.Provides
@@ -11,6 +12,7 @@ import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.header
@@ -45,6 +47,11 @@ object NetworkModule {
             }
             install(Logging) {
                 level = LogLevel.ALL
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Log.d("Ktor", message)
+                    }
+                }
             }
             install(DefaultRequest) {
                 this.host = "api.openai.com/v1/chat"

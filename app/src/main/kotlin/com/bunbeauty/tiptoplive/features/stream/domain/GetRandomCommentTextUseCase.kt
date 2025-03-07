@@ -45,8 +45,7 @@ class GetRandomCommentTextUseCase @Inject constructor(
         comment = when (type) {
             CommentType.ONE_LETTER,
             CommentType.TWO_LETTER,
-            CommentType.THREE_LETTER,
-            -> {
+            CommentType.THREE_LETTER -> {
                 if (Random.nextBoolean()) {
                     comment.repeatRandomLetter()
                 } else {
@@ -155,11 +154,19 @@ class GetRandomCommentTextUseCase @Inject constructor(
     }
 
     private fun randomEmoji(): String {
-        return EMOJI[Random.nextInt(EMOJI.size)]
+        return EMOJI.random()
     }
 
     private fun randomType(): CommentType {
-        val randomTypeIndex = Random.nextInt(CommentType.entries.size)
-        return CommentType.entries[randomTypeIndex]
+        val commentTypeList = listOf(
+            CommentType.ONE_LETTER,
+            CommentType.TWO_LETTER,
+            CommentType.THREE_LETTER,
+            CommentType.ONE_WORD,
+            CommentType.LONG
+        )
+
+        return commentTypeList.random()
     }
+
 }

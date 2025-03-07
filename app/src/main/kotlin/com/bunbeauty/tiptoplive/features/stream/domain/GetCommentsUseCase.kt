@@ -50,11 +50,9 @@ class GetCommentsUseCase @Inject constructor(
 
                     val chunkSize = getChunkSize(viewerCount = viewerCount)
                     val comments = List(chunkSize) {
-                        val aiGenerated = !aiCommentChannel.isEmpty
+                        val aiGenerated = !aiCommentChannel.isEmpty && chance(60.percent)
                         val commentText = if (aiGenerated) {
-                            aiCommentSize.update { size ->
-                                size - 1
-                            }
+                            aiCommentSize.update { size -> size - 1 }
                             aiCommentChannel.receive()
                         } else {
                             getRandomCommentText()
