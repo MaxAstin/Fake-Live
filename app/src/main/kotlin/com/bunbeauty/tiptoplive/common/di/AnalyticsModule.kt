@@ -16,7 +16,16 @@ object AnalyticsModule {
     @Singleton
     @Provides
     fun providesFirebaseAnalytics(): FirebaseAnalytics {
-        return Firebase.analytics
+        return Firebase.analytics.apply {
+            setConsent(
+                mapOf(
+                    FirebaseAnalytics.ConsentType.AD_STORAGE to FirebaseAnalytics.ConsentStatus.DENIED,
+                    FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE to FirebaseAnalytics.ConsentStatus.GRANTED,
+                    FirebaseAnalytics.ConsentType.AD_USER_DATA to FirebaseAnalytics.ConsentStatus.DENIED,
+                    FirebaseAnalytics.ConsentType.AD_PERSONALIZATION to FirebaseAnalytics.ConsentStatus.DENIED
+                )
+            )
+        }
     }
 
 }

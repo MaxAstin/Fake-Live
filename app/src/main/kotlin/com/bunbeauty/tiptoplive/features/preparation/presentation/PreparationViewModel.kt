@@ -150,6 +150,12 @@ class PreparationViewModel @Inject constructor(
                 }
             }
 
+            Preparation.Action.CloseStreamDurationLimitsDialogClick -> {
+                setState {
+                    copy(showStreamDurationLimitsDialog = false)
+                }
+            }
+
             is Preparation.Action.PremiumLaterClick -> {
                 analyticsManager.trackPremiumLaterClick()
                 setState {

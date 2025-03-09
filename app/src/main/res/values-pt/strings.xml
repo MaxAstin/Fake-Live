@@ -32,6 +32,7 @@
     <string name="preparation_username_hint">user_name</string>
     <string name="preparation_viewer_count">Contagem de espectadores</string>
     <string name="preparation_start_live">Iniciar Ao Vivo</string>
+    <string name="preparation_seconds">(%d seg)</string>
     <string name="preparation_premium">Premium</string>
     <string name="crop_image_next">Próximo</string>
 

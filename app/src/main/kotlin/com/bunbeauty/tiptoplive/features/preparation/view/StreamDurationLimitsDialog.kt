@@ -56,7 +56,7 @@ fun StreamDurationLimitsDialog(
                         .padding(start = 8.dp)
                         .size(24.dp)
                         .clickableWithoutIndication {
-                            onAction(Preparation.Action.CloseFeedbackDialogClick)
+                            onAction(Preparation.Action.CloseStreamDurationLimitsDialogClick)
                         },
                     painter = painterResource(R.drawable.ic_close),
                     tint = FakeLiveTheme.colors.onSurfaceVariant,

@@ -31,6 +31,7 @@
     <string name="preparation_username_hint">user_name</string>
     <string name="preparation_viewer_count">Количество зрителей</string>
     <string name="preparation_start_live">Начать стрим</string>
+    <string name="preparation_seconds">(%d сек)</string>
     <string name="preparation_premium">Премиум</string>
 
     <string name="limits_live_has_ended">Трансляция завершена ⏳</string>

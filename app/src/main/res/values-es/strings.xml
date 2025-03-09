@@ -31,6 +31,7 @@
     <string name="preparation_username_hint">nombre_de_usuario</string>
     <string name="preparation_viewer_count">Recuento de espectadores</string>
     <string name="preparation_start_live">Comenzar Directo</string>
+    <string name="preparation_seconds">(%d seg)</string>
     <string name="preparation_premium">Premium</string>
 
     <string name="limits_live_has_ended">La transmisión ha terminado ⏳</string>

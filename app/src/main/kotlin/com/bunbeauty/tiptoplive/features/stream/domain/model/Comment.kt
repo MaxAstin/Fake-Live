@@ -4,4 +4,5 @@ data class Comment(
     val picture: String?,
     val username: String,
     val text: String,
+    val aiGenerated: Boolean
 )

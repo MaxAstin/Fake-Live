@@ -5,6 +5,9 @@ import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
@@ -44,6 +47,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
@@ -84,36 +88,19 @@ fun StreamScreen(navController: NavHostController) {
         }
     }
     val context = LocalContext.current
+    val imageCapture: ImageCapture = remember {
+        ImageCapture.Builder().build()
+    }
 
     LaunchedEffect(Unit) {
         viewModel.event.onEach { event ->
-            when (event) {
-                is Stream.Event.NavigateBack -> {
-                    val route = when (event.type) {
-                        Stream.Event.NavigateBack.Type.Auto -> {
-                            NavigationRote.Preparation(showStreamDurationLimits = true)
-                        }
-                        is Stream.Event.NavigateBack.Type.User -> {
-                            NavigationRote.Preparation(
-                                durationInSeconds = event.type.duration.value
-                            )
-                        }
-                    }
-                    navController.navigate(route = route) {
-                        popUpTo<NavigationRote.Preparation> {
-                            inclusive = true
-                        }
-                    }
-                }
-
-                Stream.Event.ShowFilterNotAvailable -> {
-                    context.showToast(
-                        message = context.resources.getString(
-                            R.string.stream_filter_not_available
-                        )
-                    )
-                }
-            }
+            handleEvent(
+                event = event,
+                navController = navController,
+                context = context,
+                imageCapture = imageCapture,
+                onAction = onAction
+            )
         }.launchIn(this)
     }
     LifecycleEventEffect(Lifecycle.Event.ON_START) {
@@ -125,6 +112,7 @@ fun StreamScreen(navController: NavHostController) {
 
     StreamContent(
         state = state.toViewState(),
+        imageCapture = imageCapture,
         onAction = onAction,
     )
 
@@ -139,9 +127,54 @@ fun StreamScreen(navController: NavHostController) {
     }
 }
 
+private fun handleEvent(
+    event: Stream.Event,
+    navController: NavHostController,
+    context: Context,
+    imageCapture: ImageCapture,
+    onAction: (Stream.Action) -> Unit,
+) {
+    when (event) {
+        is Stream.Event.NavigateBack -> {
+            val route = when (event.type) {
+                Stream.Event.NavigateBack.Type.Auto -> {
+                    NavigationRote.Preparation(showStreamDurationLimits = true)
+                }
+
+                is Stream.Event.NavigateBack.Type.User -> {
+                    NavigationRote.Preparation(
+                        durationInSeconds = event.type.duration.value
+                    )
+                }
+            }
+            navController.navigate(route = route) {
+                popUpTo<NavigationRote.Preparation> {
+                    inclusive = true
+                }
+            }
+        }
+
+        Stream.Event.ShowFilterNotAvailable -> {
+            context.showToast(
+                message = context.resources.getString(
+                    R.string.stream_filter_not_available
+                )
+            )
+        }
+
+        Stream.Event.TakePicture -> {
+            imageCapture.takePicture(
+                context = context,
+                onAction = onAction
+            )
+        }
+    }
+}
+
 @Composable
 private fun StreamContent(
     state: ViewState,
+    imageCapture: ImageCapture,
     onAction: (Stream.Action) -> Unit,
 ) {
     BackHandler {
@@ -175,6 +208,10 @@ private fun StreamContent(
                             isFront = state.isCameraFront,
                             isEnabled = state.isCameraEnabled,
                             image = state.image,
+                            imageCapture = imageCapture,
+                            onPreviewIsReady = {
+                                onAction(Stream.Action.PreviewIsReady)
+                            },
                             onCameraError = { exception ->
                                 onAction(Stream.Action.CameraError(exception = exception))
                             }
@@ -734,6 +771,27 @@ private fun Context.showToast(message: String) {
         .show()
 }
 
+private fun ImageCapture.takePicture(
+    context: Context,
+    onAction: (Stream.Action) -> Unit
+) {
+    takePicture(
+        ContextCompat.getMainExecutor(context),
+        object : ImageCapture.OnImageCapturedCallback() {
+            override fun onCaptureSuccess(image: ImageProxy) {
+                val buffer = image.planes[0].buffer
+                val bytes = ByteArray(buffer.capacity()).also { buffer.get(it) }
+                image.close()
+                onAction(Stream.Action.HandlePicture(bytes = bytes))
+            }
+
+            override fun onError(exception: ImageCaptureException) {
+                onAction(Stream.Action.CameraError(exception = exception))
+            }
+        }
+    )
+}
+
 @LocalePreview
 @Composable
 private fun StreamScreenPreview() {
@@ -781,6 +839,7 @@ private fun StreamScreenPreview() {
                     ),
                     showDirect = false,
                 ),
+                imageCapture = ImageCapture.Builder().build(),
                 onAction = {},
             )
         }
