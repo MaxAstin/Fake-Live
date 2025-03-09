@@ -5,7 +5,8 @@
 Whether for learning how to do a real Live stream, pranks, or just for fun, 
 this app provides a platform to create realistic fake Lives.
 
-![Preview](https://github.com/user-attachments/assets/ea743bc7-710a-4c4f-8cfa-60e61cd31e98)
+![Preview](https://github.com/user-attachments/assets/ae69348e-68bd-47d3-b1fc-0e5a6742adb2)
+
 
 ## Features
 ✅ Setting custom username and avatar </br>
@@ -14,7 +15,7 @@ this app provides a platform to create realistic fake Lives.
 ✅ Endless stream of fake comments </br>
 ✅ Endless stream of reactions </br>
 ✅ Questions from fake fans </br>
-🔜 Generating comments by AI </br>
+✅ Generating comments by AI </br>
 
 ## Platforms
 ✅ Instagram – supported </br>
@@ -34,7 +35,7 @@ this app provides a platform to create realistic fake Lives.
 <a href="https://play.google.com/store/apps/details?id=com.bunbeauty.tiptoplive">
     <img 
         style="margin: 10px" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" 
-        alt="Git" 
+        alt="Google Play" 
         height="80" 
     />
 </a>
