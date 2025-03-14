@@ -59,8 +59,8 @@ data class SubscriptionItem(
     val offerToken: String?,
     val name: String,
     val currentPrice: String,
-    val previousPrice: String?,
-    val discountPercent: String?,
+    val previousPrice: String,
+    val discountPercent: String,
     val isLifetime: Boolean,
     val isSelected: Boolean,
 )
@@ -302,24 +302,20 @@ private fun SubscriptionItem(
                             text = stringResource(R.string.subscription_use_forever)
                         )
                     } else {
-                        subscriptionItem.discountPercent?.let { discountPercent ->
-                            Label(
-                                modifier = Modifier.padding(start = 8.dp),
-                                text = stringResource(R.string.subscription_save, discountPercent)
-                            )
-                        }
+                        Label(
+                            modifier = Modifier.padding(start = 8.dp),
+                            text = stringResource(R.string.subscription_save, subscriptionItem.discountPercent)
+                        )
                     }
                 }
-                subscriptionItem.previousPrice?.let {
-                    Text(
-                        modifier = Modifier.padding(top = 2.dp),
-                        text = subscriptionItem.previousPrice,
-                        color = FakeLiveTheme.colors.onBackgroundVariant,
-                        style = FakeLiveTheme.typography.bodyMedium.copy(
-                            textDecoration = TextDecoration.LineThrough
-                        )
+                Text(
+                    modifier = Modifier.padding(top = 2.dp),
+                    text = subscriptionItem.previousPrice,
+                    color = FakeLiveTheme.colors.onBackgroundVariant,
+                    style = FakeLiveTheme.typography.bodyMedium.copy(
+                        textDecoration = TextDecoration.LineThrough
                     )
-                }
+                )
             }
         }
         RadioButton(
@@ -381,7 +377,7 @@ private fun SubscriptionScreenPreview() {
                         name = "Lifetime",
                         currentPrice = "$6,99",
                         previousPrice = "$20,99/month",
-                        discountPercent = null,
+                        discountPercent = "$20,99/month",
                         isLifetime = true,
                         isSelected = false
                     )
