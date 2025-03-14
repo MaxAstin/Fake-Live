@@ -5,7 +5,7 @@ import com.bunbeauty.tiptoplive.common.util.Seconds
 import com.bunbeauty.tiptoplive.common.util.toTimeString
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.logEvent
-import java.lang.Exception
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,7 +18,6 @@ private const val STREAM_STOPPED_EVENT = "stream_stopped"
 private const val STREAM_FINISHED_EVENT = "stream_finished"
 private const val STREAM_AUTO_FINISHED_EVENT = "stream_auto_finished"
 private const val STREAM_DURATION_PARAM = "stream_duration"
-private const val CAMERA_ERROR_EVENT = "camera_error"
 
 private const val FEEDBACK_POSITIVE_EVENT = "feedback_positive"
 private const val FEEDBACK_NEGATIVE_EVENT = "feedback_negative"
@@ -45,13 +44,12 @@ private const val PURCHASE_FAILED_EVENT = "purchase_failed_"
 private const val ACKNOWLEDGE_PRODUCT_EVENT = "acknowledge_product_"
 private const val ACKNOWLEDGEMENT_FAILED_EVENT = "acknowledgement_failed_"
 
-private const val ERROR_PREFIX = "error_"
-
 private const val ANALYTICS_TAG = "analytics"
 
 @Singleton
 class AnalyticsManager @Inject constructor(
-    private val firebaseAnalytics: FirebaseAnalytics
+    private val firebaseAnalytics: FirebaseAnalytics,
+    private val crashlytics: FirebaseCrashlytics
 ) {
 
     fun trackStreamStart(username: String, viewerCount: Int) {
@@ -85,10 +83,6 @@ class AnalyticsManager @Inject constructor(
 
     fun trackStreamAutoFinish() {
         trackEvent(event = STREAM_AUTO_FINISHED_EVENT)
-    }
-
-    fun trackCameraError() {
-        trackEvent(event = CAMERA_ERROR_EVENT)
     }
 
     fun trackFeedback(isPositive: Boolean) {
@@ -176,8 +170,8 @@ class AnalyticsManager @Inject constructor(
         trackEvent(event = "$USED_DAYS_PREFIX$eventPostfix")
     }
 
-    fun trackError(exception: Exception) {
-        trackEvent(event = "$ERROR_PREFIX${exception::class.simpleName}")
+    fun trackError(throwable: Throwable) {
+        crashlytics.recordException(throwable)
     }
 
     private fun trackEvent(event: String, params: Map<String, Any> = emptyMap()) {

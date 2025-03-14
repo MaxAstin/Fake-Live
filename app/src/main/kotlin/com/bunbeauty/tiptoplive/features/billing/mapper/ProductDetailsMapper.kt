@@ -40,55 +40,47 @@ fun ProductDetails.subscriptionToProduct(percent: Int): Product? {
     )
 }
 
-fun String.calculatePreviousPrice(percent: Int): String? {
-    return try {
-        val format = getPriceFormat()
-        var price = toBigBigDecimal(format = format)
-        if (price.toInt() == 0) {
-            price = BigDecimal(1)
-        }
-        val previousPrice = price
-            .multiply(BigDecimal(100))
-            .divide(
-                BigDecimal(100 - percent),
-                0,
-                RoundingMode.HALF_UP
-            )
-            .toInt()
-        val formattedPreviousPrice = previousPrice.formatNumber(format = format)
-        val decimalPart = decimalPart(format = format)
-
-        "${getPrefix()}$formattedPreviousPrice$decimalPart${getPostfix()}"
-    } catch (exception: Exception) {
-        null
+fun String.calculatePreviousPrice(percent: Int): String {
+    val format = getPriceFormat()
+    var price = toBigBigDecimal(format = format)
+    if (price.toInt() == 0) {
+        price = BigDecimal(1)
     }
+    val previousPrice = price
+        .multiply(BigDecimal(100))
+        .divide(
+            BigDecimal(100 - percent),
+            0,
+            RoundingMode.HALF_UP
+        )
+        .toInt()
+    val formattedPreviousPrice = previousPrice.formatNumber(format = format)
+    val decimalPart = decimalPart(format = format)
+
+    return "${getPrefix()}$formattedPreviousPrice$decimalPart${getPostfix()}"
 }
 
-fun String.calculateDiscountPercent(percent: Int): Int? {
-    return try {
-        val format = getPriceFormat()
-        val currentPrice = toBigBigDecimal(format = format)
-        val previousPrice = currentPrice.multiply(BigDecimal(100))
-            .divide(
-                BigDecimal(100 - percent),
-                0,
-                RoundingMode.HALF_UP
-            )
-            .toInt()
-        val decimalPart = decimalPart(format = format)
-            .replace(',', '.')
+fun String.calculateDiscountPercent(percent: Int): Int {
+    val format = getPriceFormat()
+    val currentPrice = toBigBigDecimal(format = format)
+    val previousPrice = currentPrice.multiply(BigDecimal(100))
+        .divide(
+            BigDecimal(100 - percent),
+            0,
+            RoundingMode.HALF_UP
+        )
+        .toInt()
+    val decimalPart = decimalPart(format = format)
+        .replace(',', '.')
 
-        100 - currentPrice
-            .multiply(BigDecimal(100))
-            .divide(
-                BigDecimal("$previousPrice$decimalPart"),
-                0,
-                RoundingMode.HALF_UP
-            )
-            .toInt()
-    } catch (exception: Exception) {
-        null
-    }
+    return 100 - currentPrice
+        .multiply(BigDecimal(100))
+        .divide(
+            BigDecimal("$previousPrice$decimalPart"),
+            0,
+            RoundingMode.HALF_UP
+        )
+        .toInt()
 }
 
 private fun String.getPriceFormat(): PriceFormat {

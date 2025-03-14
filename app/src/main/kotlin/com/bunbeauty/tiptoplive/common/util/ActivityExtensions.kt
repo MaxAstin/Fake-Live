@@ -25,17 +25,12 @@ fun Activity.openSettings() {
     )
 }
 
-fun Activity.openSharing(text: String): Boolean {
-    return try {
-        val intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, text)
-        }
-        val chooser = Intent.createChooser(intent, null)
-        startActivity(chooser)
-        true
-    } catch (exception: Exception) {
-        false
+fun Activity.openSharing(text: String) {
+    val intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, text)
     }
+    val chooser = Intent.createChooser(intent, null)
+    startActivity(chooser)
 }

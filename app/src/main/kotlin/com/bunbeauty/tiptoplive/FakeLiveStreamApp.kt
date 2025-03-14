@@ -1,18 +1,24 @@
 package com.bunbeauty.tiptoplive
 
 import android.app.Application
-import com.google.firebase.Firebase
-import com.google.firebase.analytics.analytics
-import com.google.firebase.crashlytics.crashlytics
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 @HiltAndroidApp
 class FakeLiveStreamApp: Application() {
 
+    @Inject
+    lateinit var analytics: FirebaseAnalytics
+
+    @Inject
+    lateinit var crashlytics: FirebaseCrashlytics
+
     override fun onCreate() {
         super.onCreate()
 
-        Firebase.analytics.setAnalyticsCollectionEnabled(!BuildConfig.DEBUG)
-        Firebase.crashlytics.setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
+        analytics.setAnalyticsCollectionEnabled(!BuildConfig.DEBUG)
+        crashlytics.isCrashlyticsCollectionEnabled = !BuildConfig.DEBUG
     }
 }
