@@ -45,11 +45,13 @@ object NetworkModule {
                     retryOnTimeout = true
                 )
             }
-            install(Logging) {
-                level = LogLevel.ALL
-                logger = object : Logger {
-                    override fun log(message: String) {
-                        Log.d("Ktor", message)
+            if (BuildConfig.DEBUG) {
+                install(Logging) {
+                    level = LogLevel.ALL
+                    logger = object : Logger {
+                        override fun log(message: String) {
+                            Log.d("Ktor", message)
+                        }
                     }
                 }
             }
