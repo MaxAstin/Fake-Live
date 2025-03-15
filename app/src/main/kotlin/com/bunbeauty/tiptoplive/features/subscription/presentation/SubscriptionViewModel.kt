@@ -10,6 +10,7 @@ import com.bunbeauty.tiptoplive.features.billing.model.PurchaseResult
 import com.bunbeauty.tiptoplive.features.subscription.domain.GetOfferTimerFlowUseCase
 import com.bunbeauty.tiptoplive.features.subscription.mapper.toSubscriptions
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -25,13 +26,15 @@ class SubscriptionViewModel @Inject constructor(
     initState = {
         Subscription.State(
             subscriptions = emptyList(),
-            timer = null
+            timer = null,
+            isCrossIconVisible = false
         )
     }
 ) {
 
     init {
         loadSubscriptions()
+        showCrossIcon()
     }
 
     override fun onAction(action: Subscription.Action) {
@@ -83,6 +86,15 @@ class SubscriptionViewModel @Inject constructor(
             if (subscriptions.isNotEmpty()) {
                 startOfferTimer()
                 subscribeOnPurchaseFlow()
+            }
+        }
+    }
+
+    private fun showCrossIcon() {
+        viewModelScope.launch {
+            delay(1_500)
+            setState {
+                copy(isCrossIconVisible = true)
             }
         }
     }

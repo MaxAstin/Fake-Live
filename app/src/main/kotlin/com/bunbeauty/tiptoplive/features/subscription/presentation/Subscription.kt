@@ -8,7 +8,8 @@ interface Subscription {
 
     data class State(
         val subscriptions: List<SubscriptionItem>,
-        val timer: String?
+        val timer: String?,
+        val isCrossIconVisible: Boolean
     ): Base.State {
 
         val selectedSubscription: SubscriptionItem?
