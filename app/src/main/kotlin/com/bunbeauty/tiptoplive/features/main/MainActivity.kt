@@ -28,6 +28,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.bunbeauty.tiptoplive.R
+import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.util.showToast
@@ -35,6 +36,7 @@ import com.bunbeauty.tiptoplive.common.util.launchInAppReview
 import com.bunbeauty.tiptoplive.common.util.openSettings
 import com.bunbeauty.tiptoplive.common.util.openSharing
 import com.bunbeauty.tiptoplive.features.billing.BillingService
+import com.bunbeauty.tiptoplive.features.billing.model.PurchaseData
 import com.bunbeauty.tiptoplive.features.cropimage.CropImageScreen
 import com.bunbeauty.tiptoplive.features.intro.view.IntroScreen
 import com.bunbeauty.tiptoplive.features.main.presentation.Main
@@ -42,7 +44,6 @@ import com.bunbeauty.tiptoplive.features.main.presentation.MainViewModel
 import com.bunbeauty.tiptoplive.features.main.view.CameraIsRequiredDialog
 import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
 import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
-import com.bunbeauty.tiptoplive.features.billing.model.PurchaseData
 import com.bunbeauty.tiptoplive.features.subscription.view.PurchaseFailedScreen
 import com.bunbeauty.tiptoplive.features.subscription.view.SubscriptionScreen
 import com.bunbeauty.tiptoplive.features.subscription.view.SuccessfullyPurchasedScreen
@@ -62,6 +63,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var billingService: Lazy<BillingService>
+
+    @Inject
+    lateinit var analyticsManager: Lazy<AnalyticsManager>
 
     private val requestCameraPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -179,14 +183,16 @@ class MainActivity : ComponentActivity() {
                         launchInAppReview()
                     },
                     onShareClick = {
-                        val isSuccessful = openSharing(
-                            text = getString(
-                                R.string.sharing_text,
-                                getString(R.string.app_name),
-                                GOOGLE_PLAY_LINK
-                            ),
-                        )
-                        if (!isSuccessful) {
+                        runCatching {
+                            openSharing(
+                                text = getString(
+                                    R.string.sharing_text,
+                                    getString(R.string.app_name),
+                                    GOOGLE_PLAY_LINK
+                                ),
+                            )
+                        }.onFailure { exception ->
+                            analyticsManager.get().trackError(exception)
                             showToast(message = getString(R.string.common_something_went_wrong))
                         }
                     }

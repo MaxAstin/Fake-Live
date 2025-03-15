@@ -250,7 +250,7 @@ class StreamViewModel @Inject constructor(
             }
 
             is Stream.Action.CameraError -> {
-                analyticsManager.trackCameraError()
+                analyticsManager.trackError(throwable = action.exception)
             }
 
             is Stream.Action.HandlePicture -> {

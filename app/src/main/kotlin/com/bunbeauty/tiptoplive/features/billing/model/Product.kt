@@ -5,6 +5,6 @@ data class Product(
     val offerToken: String?,
     val name: String,
     val currentPrice: String,
-    val previousPrice: String?,
+    val previousPrice: String,
     val discountPercent: Int?
 )

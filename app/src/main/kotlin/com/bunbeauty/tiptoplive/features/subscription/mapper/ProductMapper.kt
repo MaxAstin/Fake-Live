@@ -11,9 +11,7 @@ fun List<Product>.toSubscriptions(): List<SubscriptionItem> {
             name = product.name,
             currentPrice = product.currentPrice,
             previousPrice = product.previousPrice,
-            discountPercent = product.discountPercent?.let { discountPercent ->
-                "$discountPercent%"
-            },
+            discountPercent = "${product.discountPercent}%",
             isLifetime = product.id == "lifetime",
             isSelected = index == 0
         )
