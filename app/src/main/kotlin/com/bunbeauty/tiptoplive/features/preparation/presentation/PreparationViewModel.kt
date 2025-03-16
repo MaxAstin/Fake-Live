@@ -67,6 +67,9 @@ class PreparationViewModel @Inject constructor(
             Preparation.Action.StartScreen -> {
                 checkPremiumStatus()
             }
+            Preparation.Action.ProgressClick -> {
+                sendEvent(Preparation.Event.NavigateToProgress)
+            }
 
             is Preparation.Action.ViewerCountSelect -> {
                 if (action.item.isAvailable) {
