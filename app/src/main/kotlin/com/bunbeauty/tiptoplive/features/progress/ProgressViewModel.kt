@@ -14,6 +14,7 @@ class ProgressViewModel @Inject constructor() : BaseViewModel<Progress.State, Pr
     init {
         setState {
             Progress.State.Success(
+                showHint = true,
                 level = 1,
                 emoji = "\uD83D\uDC23",
                 progress = 0f,
@@ -23,5 +24,14 @@ class ProgressViewModel @Inject constructor() : BaseViewModel<Progress.State, Pr
         }
     }
 
-    override fun onAction(action: Progress.Action) {}
+    override fun onAction(action: Progress.Action) {
+        when (action) {
+            Progress.Action.HideHintClick -> {
+                val state = currentState as? Progress.State.Success ?: return
+                setState {
+                    state.copy(showHint = false)
+                }
+            }
+        }
+    }
 }

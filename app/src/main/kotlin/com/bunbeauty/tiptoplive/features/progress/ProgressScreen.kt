@@ -10,15 +10,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -30,14 +32,21 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.tiptoplive.R
+import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
 import com.bunbeauty.tiptoplive.common.ui.components.CloseIcon
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.bold
+import com.bunbeauty.tiptoplive.features.progress.view.SpeechBubbleShape
 
 @Composable
 fun ProgressScreen(navController: NavHostController) {
     val viewModel: ProgressViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val onAction = remember {
+        { action: Progress.Action ->
+            viewModel.onAction(action)
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -57,7 +66,8 @@ fun ProgressScreen(navController: NavHostController) {
             )
             ProgressBlock(
                 modifier = Modifier.align(Alignment.BottomCenter),
-                state = successState
+                state = successState,
+                onAction = onAction
             )
         }
     }
@@ -94,29 +104,25 @@ private fun CenterBlock(
 @Composable
 private fun ProgressBlock(
     state: Progress.State.Success,
+    onAction: (Progress.Action) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        val shape = RoundedCornerShape(8.dp)
-        // TODO: Add a triangle pointer to speech bubble
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 24.dp, bottom = 12.dp)
-                .clip(shape)
-                .background(FakeLiveTheme.colors.interactive.copy(0.4f))
-                .border(
-                    width = 1.dp,
-                    color = FakeLiveTheme.colors.onBackground,
-                    shape = shape
-                )
-                .padding(8.dp),
-            text = stringResource(R.string.progress_minute_equals_point),
-            style = FakeLiveTheme.typography.bodySmall,
-            color = FakeLiveTheme.colors.onBackground
-        )
+        if (state.showHint) {
+            HintBox(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, bottom = 4.dp),
+                onAction = onAction
+            )
+        }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
+                modifier = Modifier.clickableWithoutIndication(
+                    onClick = {
+                        onAction(Progress.Action.HideHintClick)
+                    }
+                ),
                 text = state.emoji,
                 style = TextStyle(fontSize = 48.sp),
             )
@@ -145,6 +151,47 @@ private fun ProgressBlock(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun HintBox(
+    onAction: (Progress.Action) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val bubbleShape = SpeechBubbleShape(
+        cornerRadius = 8.dp,
+        triangleWidth = 12.dp,
+        triangleHeight = 16.dp
+    )
+    Box(
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color = FakeLiveTheme.colors.onBackground,
+                shape = bubbleShape
+            )
+            .clickableWithoutIndication(
+                onClick = {
+                    onAction(Progress.Action.HideHintClick)
+                }
+            )
+    ) {
+        Text(
+            modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 24.dp),
+            text = stringResource(R.string.progress_minute_equals_point),
+            style = FakeLiveTheme.typography.bodySmall,
+            color = FakeLiveTheme.colors.onBackground
+        )
+        Icon(
+            modifier = Modifier
+                .padding(bottom = 16.dp, end = 8.dp)
+                .size(16.dp)
+                .align(Alignment.CenterEnd),
+            painter = painterResource(R.drawable.ic_close),
+            contentDescription = "Hide hint",
+            tint = FakeLiveTheme.colors.onBackgroundVariant
+        )
     }
 }
 

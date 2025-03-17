@@ -23,6 +23,6 @@ fun CloseIcon(
             .clickableWithoutIndication(onClick = onClick),
         painter = painterResource(R.drawable.ic_close),
         tint = tint,
-        contentDescription = "Top icon"
+        contentDescription = "Close"
     )
 }
