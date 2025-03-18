@@ -1,5 +1,6 @@
 package com.bunbeauty.tiptoplive.features.progress
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
@@ -22,11 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -94,9 +93,10 @@ private fun CenterBlock(
             style = FakeLiveTheme.typography.titleLarge.bold,
             textAlign = TextAlign.Center
         )
-        Text(
-            text = state.emoji,
-            style = TextStyle(fontSize = 180.sp),
+        Image(
+            modifier = Modifier.size(240.dp),
+            painter = painterResource(id = state.imageId),
+            contentDescription = "emoji",
         )
     }
 }
@@ -117,14 +117,16 @@ private fun ProgressBlock(
             )
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                modifier = Modifier.clickableWithoutIndication(
-                    onClick = {
-                        onAction(Progress.Action.HideHintClick)
-                    }
-                ),
-                text = state.emoji,
-                style = TextStyle(fontSize = 48.sp),
+            Image(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clickableWithoutIndication(
+                        onClick = {
+                            onAction(Progress.Action.HideHintClick)
+                        }
+                    ),
+                painter = painterResource(id = state.imageId),
+                contentDescription = "emoji",
             )
             Column(
                 modifier = Modifier.padding(start = 8.dp),
@@ -145,7 +147,7 @@ private fun ProgressBlock(
                     strokeCap = StrokeCap.Round
                 )
                 Text(
-                    text = "${state.points} / ${state.pointsToNextLevel} ${stringResource(R.string.progress_points)}",
+                    text = "${state.points} / ${state.nextLevelPoints} ${stringResource(R.string.progress_points)}",
                     style = FakeLiveTheme.typography.bodySmall,
                     color = FakeLiveTheme.colors.onBackgroundVariant
                 )

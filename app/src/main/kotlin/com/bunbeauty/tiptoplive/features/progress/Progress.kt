@@ -1,5 +1,6 @@
 package com.bunbeauty.tiptoplive.features.progress
 
+import androidx.annotation.DrawableRes
 import com.bunbeauty.tiptoplive.common.presentation.Base
 
 interface Progress {
@@ -10,9 +11,10 @@ interface Progress {
             val showHint: Boolean,
             val level: Int,
             val emoji: String,
+            @DrawableRes val imageId: Int,
             val progress: Float,
             val points: Int,
-            val pointsToNextLevel: Int
+            val nextLevelPoints: Int
         ): State
     }
 
