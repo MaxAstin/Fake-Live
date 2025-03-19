@@ -9,6 +9,7 @@ import kotlinx.collections.immutable.ImmutableList
 interface Preparation {
 
     data class State(
+        val newLevel: Boolean,
         val image: ImageSource<*>,
         val username: String,
         val viewerCountList: ImmutableList<ViewerCountItem>,

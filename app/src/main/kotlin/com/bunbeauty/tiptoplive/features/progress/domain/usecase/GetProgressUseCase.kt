@@ -1,4 +1,4 @@
-package com.bunbeauty.tiptoplive.features.progress.domain
+package com.bunbeauty.tiptoplive.features.progress.domain.usecase
 
 import com.bunbeauty.tiptoplive.common.domain.KeyValueStorage
 import com.bunbeauty.tiptoplive.features.progress.domain.model.Level
@@ -29,11 +29,10 @@ class GetProgressUseCase @Inject constructor(
 
         return Progress(
             showHint = showHint,
-            level = currentLevel.number,
-            emoji = currentLevel.emoji,
+            level = currentLevel,
             progress = points.toFloat() / nextLevel.points,
             points = min(points, nextLevel.points),
-            nextLevelPoints = nextLevel.points
+            nextLevel = nextLevel
         )
     }
 

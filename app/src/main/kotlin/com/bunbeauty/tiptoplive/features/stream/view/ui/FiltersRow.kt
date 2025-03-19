@@ -26,14 +26,14 @@ import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 
 private val filters = listOf(
-    R.drawable.none_filter,
-    R.drawable.which_disnay_filter,
-    R.drawable.good_day_filter,
-    R.drawable.glitter_filter,
-    R.drawable.aqua_glitter_filter,
-    R.drawable.doodle_heart_filter,
-    R.drawable.nineties_stethic_filter,
-    R.drawable.heart_bloom_filter,
+    R.drawable.img_filter_none,
+    R.drawable.img_filter_disney,
+    R.drawable.img_filter_good_day,
+    R.drawable.img_filter_glitter,
+    R.drawable.img_filter_aqua_glitter,
+    R.drawable.img_filter_doodle_heart,
+    R.drawable.img_filter_nineties_aesthetic,
+    R.drawable.img_filter_heart_bloom,
 )
 
 @Composable

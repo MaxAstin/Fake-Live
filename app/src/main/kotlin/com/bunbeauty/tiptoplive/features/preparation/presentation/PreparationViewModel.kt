@@ -10,6 +10,7 @@ import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCas
 import com.bunbeauty.tiptoplive.features.preparation.domain.SaveShouldAskFeedbackUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.ShouldAskFeedbackUseCase
 import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation.ViewerCountItem
+import com.bunbeauty.tiptoplive.features.progress.domain.usecase.GetNewLevelUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetImageUriFlowUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetUsernameUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetViewerCountUseCase
@@ -35,6 +36,7 @@ import javax.inject.Inject
 class PreparationViewModel @Inject constructor(
     private val getImageUriFlowUseCase: GetImageUriFlowUseCase,
     private val saveImageUriUseCase: SaveImageUriUseCase,
+    private val getNewLevelUseCase: GetNewLevelUseCase,
     private val getUsernameUseCase: GetUsernameUseCase,
     private val saveUsernameUseCase: SaveUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
@@ -46,6 +48,7 @@ class PreparationViewModel @Inject constructor(
 ) : BaseViewModel<Preparation.State, Preparation.Action, Preparation.Event>(
     initState = {
         Preparation.State(
+            newLevel = false,
             image = ImageSource.ResId(R.drawable.img_default_avatar),
             username = "",
             viewerCountList = persistentListOf(),
@@ -66,6 +69,7 @@ class PreparationViewModel @Inject constructor(
         when (action) {
             Preparation.Action.StartScreen -> {
                 checkPremiumStatus()
+                updateNewLevel()
             }
             Preparation.Action.ProgressClick -> {
                 sendEvent(Preparation.Event.NavigateToProgress)
@@ -210,6 +214,15 @@ class PreparationViewModel @Inject constructor(
                 )
             }
         }.launchIn(viewModelScope)
+    }
+
+    private fun updateNewLevel() {
+        viewModelScope.launch {
+            val newLevel = getNewLevelUseCase()
+            setState {
+                copy(newLevel = newLevel)
+            }
+        }
     }
 
     private fun checkPremiumStatus() {

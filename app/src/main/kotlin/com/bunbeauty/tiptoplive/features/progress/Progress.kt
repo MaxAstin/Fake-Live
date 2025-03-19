@@ -10,7 +10,6 @@ interface Progress {
         data class Success(
             val showHint: Boolean,
             val level: Int,
-            val emoji: String,
             @DrawableRes val imageId: Int,
             val progress: Float,
             val points: Int,

@@ -12,7 +12,9 @@ interface KeyValueStorage {
     suspend fun saveIsIntroViewed(isIntroViewed: Boolean)
     suspend fun saveLastUsedDate(date: String)
     suspend fun saveUsedDayCount(count: Int)
+    suspend fun saveProgressPoints(points: Int)
     suspend fun saveShouldShowProgressHint(shouldShowProgressHint: Boolean)
+    suspend fun saveNewLevel(newLevel: Boolean)
 
     fun getImageUriFlow(): Flow<String?>
     suspend fun getUsername(): String?
@@ -24,5 +26,6 @@ interface KeyValueStorage {
     suspend fun getUsedDayCount(defaultValue: Int): Int
     suspend fun getProgressPoints(defaultValue: Int): Int
     suspend fun getShouldShowProgressHint(defaultValue: Boolean): Boolean
+    suspend fun getNewLevel(defaultValue: Boolean): Boolean
 
 }

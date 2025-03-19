@@ -1,4 +1,4 @@
-package com.bunbeauty.tiptoplive.features.progress.domain
+package com.bunbeauty.tiptoplive.features.progress.domain.usecase
 
 import com.bunbeauty.tiptoplive.common.domain.KeyValueStorage
 import javax.inject.Inject

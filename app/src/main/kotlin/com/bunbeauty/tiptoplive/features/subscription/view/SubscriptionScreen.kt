@@ -120,7 +120,7 @@ private fun SubscriptionContent(
     Box {
         Image(
             modifier = Modifier.fillMaxSize(),
-            painter = painterResource(R.drawable.img_social_networks),
+            painter = painterResource(R.drawable.bg_social_networks),
             contentScale = ContentScale.Crop,
             contentDescription = "Background"
         )
