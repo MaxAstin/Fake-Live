@@ -12,6 +12,7 @@ class GetProgressUseCase @Inject constructor(
 
     suspend operator fun invoke(): Progress {
         val showHint = keyValueStorage.getShouldShowProgressHint(defaultValue = true)
+        val newLevel = keyValueStorage.getNewLevel(defaultValue = false)
         var points = keyValueStorage.getProgressPoints(defaultValue = 0)
 
         var currentLevel = Level.LEVEL_1
@@ -28,6 +29,7 @@ class GetProgressUseCase @Inject constructor(
         } ?: Level.entries.last()
 
         return Progress(
+            newLevel = newLevel,
             showHint = showHint,
             level = currentLevel,
             progress = points.toFloat() / nextLevel.points,

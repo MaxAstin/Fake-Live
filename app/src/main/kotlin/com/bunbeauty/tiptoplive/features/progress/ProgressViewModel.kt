@@ -3,10 +3,10 @@ package com.bunbeauty.tiptoplive.features.progress
 import androidx.lifecycle.viewModelScope
 import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
-import com.bunbeauty.tiptoplive.features.progress.domain.usecase.GetProgressUseCase
-import com.bunbeauty.tiptoplive.features.progress.domain.usecase.SaveShouldShowProgressHintUseCase
 import com.bunbeauty.tiptoplive.features.progress.domain.model.Level
+import com.bunbeauty.tiptoplive.features.progress.domain.usecase.GetProgressUseCase
 import com.bunbeauty.tiptoplive.features.progress.domain.usecase.SaveNewLevelUseCase
+import com.bunbeauty.tiptoplive.features.progress.domain.usecase.SaveShouldShowProgressHintUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,7 +23,6 @@ class ProgressViewModel @Inject constructor(
 ) {
 
     init {
-        resetNewLevel()
         loadProgress()
     }
 
@@ -41,17 +40,12 @@ class ProgressViewModel @Inject constructor(
         }
     }
 
-    private fun resetNewLevel() {
-        viewModelScope.launch {
-            saveNewLevelUseCase(newLevel = false)
-        }
-    }
-
     private fun loadProgress() {
         viewModelScope.launch {
             val progress = getProgressUseCase()
             setState {
                 Progress.State.Success(
+                    showNewLevelAnimation = progress.newLevel,
                     showHint = progress.showHint,
                     level = progress.level.number,
                     imageId = progress.level.imageId(),
@@ -60,6 +54,16 @@ class ProgressViewModel @Inject constructor(
                     nextLevelPoints = progress.nextLevel.points
                 )
             }
+
+            if (progress.newLevel) {
+                resetNewLevel()
+            }
+        }
+    }
+
+    private fun resetNewLevel() {
+        viewModelScope.launch {
+            saveNewLevelUseCase(newLevel = false)
         }
     }
 

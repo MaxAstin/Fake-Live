@@ -124,11 +124,14 @@ dependencies {
     // Billing
     implementation(libs.billing.ktx)
 
-    // Serialization
+    // Ktor
     implementation(libs.bundles.ktor)
 
     // Serialization
     implementation(libs.kotlinx.serialization.json)
+
+    // Lottie
+    implementation(libs.lottie)
 
     // Testing
     testImplementation(libs.junit)

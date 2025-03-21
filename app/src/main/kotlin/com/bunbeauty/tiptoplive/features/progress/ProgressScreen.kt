@@ -30,6 +30,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
 import com.bunbeauty.tiptoplive.common.ui.components.CloseIcon
@@ -47,6 +50,19 @@ fun ProgressScreen(navController: NavHostController) {
         }
     }
 
+    ProgressContent(
+        state = state,
+        navController = navController,
+        onAction = onAction
+    )
+}
+
+@Composable
+private fun ProgressContent(
+    state: Progress.State,
+    navController: NavHostController,
+    onAction: (Progress.Action) -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -61,15 +77,22 @@ fun ProgressScreen(navController: NavHostController) {
         (state as? Progress.State.Success)?.let { successState ->
             CenterBlock(
                 modifier = Modifier.align(Alignment.Center),
-                state = successState
+                state = state
             )
             ProgressBlock(
                 modifier = Modifier.align(Alignment.BottomCenter),
-                state = successState,
+                state = state,
                 onAction = onAction
             )
         }
     }
+
+    val composition by rememberLottieComposition(LottieCompositionSpec.Asset("new_level_animation.json"))
+    LottieAnimation(
+        modifier = Modifier.fillMaxSize(),
+        isPlaying = (state as? Progress.State.Success)?.showNewLevelAnimation ?: false,
+        composition = composition
+    )
 }
 
 @Composable
@@ -200,5 +223,19 @@ private fun HintBox(
 @Preview
 @Composable
 private fun ProgressScreenPreview() {
-    ProgressScreen(navController = rememberNavController())
+    FakeLiveTheme {
+        ProgressContent(
+            state = Progress.State.Success(
+                showNewLevelAnimation = true,
+                showHint = true,
+                level = 3,
+                imageId = R.drawable.img_party_popper,
+                progress = 0.5f,
+                points = 4,
+                nextLevelPoints = 8,
+            ),
+            navController = rememberNavController(),
+            onAction = {}
+        )
+    }
 }

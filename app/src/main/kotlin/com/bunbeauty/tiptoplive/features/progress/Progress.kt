@@ -8,6 +8,7 @@ interface Progress {
     sealed interface State: Base.State {
         data object Loading: State
         data class Success(
+            val showNewLevelAnimation: Boolean,
             val showHint: Boolean,
             val level: Int,
             @DrawableRes val imageId: Int,

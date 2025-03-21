@@ -25,6 +25,7 @@ kotlinxSerializationJson = "1.8.0"
 junit = "4.13.2"
 junitJupiter = "5.8.1"
 ktor = "3.1.1"
+lottie = "6.6.4"
 
 [libraries]
 billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billingKtx" }
@@ -81,6 +82,9 @@ ktor-okhttp = { module = "io.ktor:ktor-client-okhttp-jvm", version.ref = "ktor" 
 ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
+# Lottie
+lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 
 [plugins]
 application = { id = "com.android.application", version.ref = "application" }
