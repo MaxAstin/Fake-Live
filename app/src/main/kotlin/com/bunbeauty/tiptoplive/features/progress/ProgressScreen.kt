@@ -145,7 +145,7 @@ private fun ProgressBlock(
                     .size(48.dp)
                     .clickableWithoutIndication(
                         onClick = {
-                            onAction(Progress.Action.HideHintClick)
+                            onAction(Progress.Action.EmojiClick)
                         }
                     ),
                 painter = painterResource(id = state.imageId),
@@ -200,7 +200,7 @@ private fun HintBox(
             )
             .clickableWithoutIndication(
                 onClick = {
-                    onAction(Progress.Action.HideHintClick)
+                    onAction(Progress.Action.HintClick)
                 }
             )
     ) {

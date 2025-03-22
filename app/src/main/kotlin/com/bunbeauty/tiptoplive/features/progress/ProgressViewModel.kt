@@ -28,14 +28,11 @@ class ProgressViewModel @Inject constructor(
 
     override fun onAction(action: Progress.Action) {
         when (action) {
-            Progress.Action.HideHintClick -> {
-                val state = currentState as? Progress.State.Success ?: return
-                setState {
-                    state.copy(showHint = false)
-                }
-                viewModelScope.launch {
-                    saveShouldShowProgressHintUseCase(shouldShowProgressHint = false)
-                }
+            Progress.Action.HintClick -> {
+                updateHintVisibility()
+            }
+            Progress.Action.EmojiClick -> {
+                updateHintVisibility()
             }
         }
     }
@@ -55,8 +52,20 @@ class ProgressViewModel @Inject constructor(
                 )
             }
 
-            if (progress.newLevel) {
-                resetNewLevel()
+            resetNewLevel()
+        }
+    }
+
+    private fun updateHintVisibility() {
+        val state = currentState as? Progress.State.Success ?: return
+        val showHint = state.showHint
+
+        setState {
+            state.copy(showHint = !showHint)
+        }
+        if (showHint) {
+            viewModelScope.launch {
+                saveShouldShowProgressHintUseCase(shouldShowProgressHint = false)
             }
         }
     }

@@ -19,7 +19,8 @@ interface Progress {
     }
 
     sealed interface Action: Base.Action {
-        data object HideHintClick: Action
+        data object HintClick: Action
+        data object EmojiClick: Action
     }
 
     sealed interface Event: Base.Event
