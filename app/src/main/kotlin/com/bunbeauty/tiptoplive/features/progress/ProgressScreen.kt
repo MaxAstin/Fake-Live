@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -164,10 +164,12 @@ private fun ProgressBlock(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(12.dp),
-                    progress = state.progress,
+                    progress = { state.progress },
                     color = FakeLiveTheme.colors.progress,
-                    backgroundColor = FakeLiveTheme.colors.inactive,
-                    strokeCap = StrokeCap.Round
+                    trackColor = FakeLiveTheme.colors.inactive,
+                    strokeCap = StrokeCap.Round,
+                    gapSize = (-12).dp,
+                    drawStopIndicator = {}
                 )
                 Text(
                     text = "${state.points} / ${state.nextLevelPoints} ${stringResource(R.string.progress_points)}",
