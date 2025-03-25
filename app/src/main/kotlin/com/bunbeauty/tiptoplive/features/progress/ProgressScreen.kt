@@ -229,12 +229,12 @@ private fun ProgressScreenPreview() {
         ProgressContent(
             state = Progress.State.Success(
                 showNewLevelAnimation = true,
-                showHint = true,
-                level = 3,
-                imageId = R.drawable.img_party_popper,
-                progress = 0.5f,
-                points = 4,
-                nextLevelPoints = 8,
+                showHint = false,
+                level = 10,
+                imageId = R.drawable.img_crown,
+                progress = 1f,
+                points = 100,
+                nextLevelPoints = 100,
             ),
             navController = rememberNavController(),
             onAction = {}

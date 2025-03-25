@@ -40,10 +40,8 @@ object NetworkModule {
                 )
             }
             install(HttpRequestRetry) {
-                retryOnException(
-                    maxRetries = 3,
-                    retryOnTimeout = true
-                )
+                maxRetries = 3
+                exponentialDelay()
             }
             if (BuildConfig.DEBUG) {
                 install(Logging) {

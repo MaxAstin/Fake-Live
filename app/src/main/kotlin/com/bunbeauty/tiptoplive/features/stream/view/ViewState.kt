@@ -45,6 +45,7 @@ sealed interface ViewersCountUi {
 
 @Immutable
 data class CommentUi(
+    val uuid: String,
     val picture: ImageSource<*>,
     val username: String,
     val text: String,

@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -100,6 +101,7 @@ class GetCommentsUseCase @Inject constructor(
         }
 
         return Comment(
+            uuid = UUID.randomUUID().toString(),
             picture = picture,
             username = getRandomUsernameUseCase(),
             text = this,

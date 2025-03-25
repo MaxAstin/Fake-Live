@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Badge
@@ -30,7 +31,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -73,6 +76,7 @@ import com.bunbeauty.tiptoplive.features.stream.view.ui.QuestionState
 import com.bunbeauty.tiptoplive.features.stream.view.ui.QuestionUi
 import com.bunbeauty.tiptoplive.features.stream.view.ui.QuestionsBottomSheet
 import com.bunbeauty.tiptoplive.features.stream.view.ui.VideoComponent
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -496,17 +500,42 @@ private fun Actions(
 @Composable
 private fun Comments(
     modifier: Modifier = Modifier,
-    comments: List<CommentUi>,
+    comments: ImmutableList<CommentUi>,
 ) {
+    val listState = rememberLazyListState()
+    val isScrolling by remember {
+        derivedStateOf {
+            listState.isScrollInProgress
+        }
+    }
+    var lastScrollTime by remember { mutableLongStateOf(0) }
+
+    LaunchedEffect(isScrolling) {
+        if (!isScrolling) {
+            lastScrollTime = System.currentTimeMillis()
+        }
+    }
+
+    LaunchedEffect(comments.size) {
+        val sinceLastScroll = System.currentTimeMillis() - lastScrollTime
+        if (comments.size > 0 && !isScrolling && sinceLastScroll > 1_000) {
+            listState.animateScrollToItem(0)
+        }
+    }
+
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
             .height(224.dp)
             .blurTop(),
+        state = listState,
         verticalArrangement = spacedBy(16.dp, Alignment.Bottom),
         reverseLayout = true
     ) {
-        items(comments) { comment ->
+        items(
+            items = comments,
+            key = { it.uuid }
+        ) { comment ->
             CommentItem(comment)
         }
     }
@@ -807,16 +836,19 @@ private fun StreamScreenPreview() {
                     ),
                     comments = persistentListOf(
                         CommentUi(
+                            uuid = "1",
                             picture = ImageSource.ResId(R.drawable.img_default_avatar),
                             username = "username1",
                             text = "Text 1",
                         ),
                         CommentUi(
+                            uuid = "2",
                             picture = ImageSource.ResId(R.drawable.img_default_avatar),
                             username = "username2",
                             text = "Text 2",
                         ),
                         CommentUi(
+                            uuid = "3",
                             picture = ImageSource.ResId(R.drawable.img_default_avatar),
                             username = "username3",
                             text = "Text 3",

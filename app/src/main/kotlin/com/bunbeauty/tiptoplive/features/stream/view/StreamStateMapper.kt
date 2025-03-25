@@ -60,6 +60,7 @@ fun Stream.State.toViewState(): ViewState {
 
 private fun Comment.toCommentUi(): CommentUi {
     return CommentUi(
+        uuid = uuid,
         picture = if (picture == null) {
             ImageSource.ResId(R.drawable.img_default_avatar)
         } else {
