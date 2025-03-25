@@ -85,6 +85,12 @@
     <string name="stream_direct_body">Поделиться недоступно</string>
     <string name="stream_direct_description">Нет возможности отправить этот прямой эфир.</string>
 
+    <string name="progress_stream_more">Проводи Live трансляции,\nчтобы перейти на следующий уровень</string>
+    <string name="progress_new_level">Поздравляем!\nТы достиг нового уровня</string>
+    <string name="progress_level">Уровень %d</string>
+    <string name="progress_points">Очков</string>
+    <string name="progress_minute_equals_point">1 минута в Live = 1 очко</string>
+
     <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">
         <item>А</item>
         <item>У</item>

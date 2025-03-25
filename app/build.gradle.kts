@@ -19,8 +19,8 @@ android {
         applicationId = "com.bunbeauty.tiptoplive"
         minSdk = 27
         targetSdk = 35
-        versionCode = 350
-        versionName = "3.5.0"
+        versionCode = 360
+        versionName = "3.6.0"
         multiDexEnabled = true
         setProperty("archivesBaseName", "FakeLive-$versionName")
 
@@ -124,11 +124,14 @@ dependencies {
     // Billing
     implementation(libs.billing.ktx)
 
-    // Serialization
+    // Ktor
     implementation(libs.bundles.ktor)
 
     // Serialization
     implementation(libs.kotlinx.serialization.json)
+
+    // Lottie
+    implementation(libs.lottie)
 
     // Testing
     testImplementation(libs.junit)

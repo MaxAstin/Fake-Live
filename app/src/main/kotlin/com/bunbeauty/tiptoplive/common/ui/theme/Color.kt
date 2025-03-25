@@ -14,9 +14,11 @@ val Gray300 = Color(0xFF6D6D6D)
 val Gray200 = Color(0xFF888888)
 val Gray150 = Color(0xFFADADAD)
 val Gray100 = Color(0xFFDBDBDB)
+val Gray50 = Color(0xFFE9E9E9)
 val Blue = Color(0xFF0195F7)
 val Green = Color(0xFF00BE64)
 val Red = Color(0xFFF95667)
+val Yellow = Color(0xFFF7CA01)
 val Pink = Color(0xFFDB0D67)
 val BrightPurple = Color(0xFFCD00BD)
 val Scarlet = Color(0xFFFF1E44)
@@ -39,6 +41,8 @@ class ColorScheme(
     borderVariant: Color,
     positive: Color,
     negative: Color,
+    progress: Color,
+    inactive: Color,
     instagram: InstagramColors,
 ) {
 
@@ -87,6 +91,12 @@ class ColorScheme(
     var negative by mutableStateOf(negative)
         internal set
 
+    var progress by mutableStateOf(progress)
+        internal set
+
+    var inactive by mutableStateOf(inactive)
+        internal set
+
     var instagram by mutableStateOf(instagram)
         internal set
 
@@ -107,6 +117,8 @@ class ColorScheme(
         borderVariant: Color = this.borderVariant,
         positive: Color = this.positive,
         negative: Color = this.negative,
+        progress: Color = this.progress,
+        inactive: Color = this.inactive,
         instagram: InstagramColors = this.instagram,
     ): ColorScheme = ColorScheme(
         interactive = interactive,
@@ -124,6 +136,8 @@ class ColorScheme(
         borderVariant = borderVariant,
         positive = positive,
         negative = negative,
+        progress = progress,
+        inactive = inactive,
         instagram = instagram.copy(
             logo1 = instagram.logo1,
             logo2 = instagram.logo2,

@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
+import com.bunbeauty.tiptoplive.common.util.chance
+import com.bunbeauty.tiptoplive.common.util.percent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -40,7 +42,7 @@ fun AnimatedReaction(
     val xOffsetAnimation = remember { Animatable(0f) }
     val yOffsetAnimation = remember { Animatable(0f) }
     val alphaAnimation = remember { Animatable(1f) }
-    var emojiImageId by remember { mutableIntStateOf(R.drawable.heart) }
+    var emojiImageId by remember { mutableIntStateOf(R.drawable.img_reaction_heart) }
 
     LaunchedEffect(Unit) {
         val delayMillis = Random.nextLong(300, 500) * order
@@ -52,16 +54,12 @@ fun AnimatedReaction(
                 delayMillis = Random.nextInt(300, 1_200),
                 easing = LinearEasing
             )
-
-            emojiImageId = when (Random.nextInt(100)) {
-                in 0 until 90 ->  R.drawable.heart
-                in 90 until 96 ->  R.drawable.fire
-                96 ->  R.drawable.thumbs_up
-                97 ->  R.drawable.lol
-                98 ->  R.drawable.hundred
-                99 ->  R.drawable.smile
-                else -> R.drawable.heart
-            }
+            emojiImageId = chance(
+                80.percent to R.drawable.img_reaction_heart,
+                9.percent to R.drawable.img_reaction_lol,
+                9.percent to R.drawable.img_reaction_fire,
+                2.percent to R.drawable.img_reaction_hundred
+            )
             val xOffsetAnimationJob = launch {
                 val amplitude = Random.nextInt(minXAmplitude, maxXAmplitude)
                 val startXOffset = Random.nextInt(0, amplitude).toFloat()

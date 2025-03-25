@@ -86,6 +86,12 @@
     <string name="stream_direct_body">Direct not available</string>
     <string name="stream_direct_description">There is no way to send this live stream.</string>
 
+    <string name="progress_stream_more">Stream more to reach\nthe next level</string>
+    <string name="progress_new_level">Congrats!\nYou reached new level</string>
+    <string name="progress_level">Level %d</string>
+    <string name="progress_points">Points</string>
+    <string name="progress_minute_equals_point">1 minute of Live = 1 Point</string>
+
     <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">
         <item>S</item>
         <item>O</item>

@@ -14,9 +14,12 @@ private const val USERNAME_KEY = "username"
 private const val VIEWER_COUNT_INDEX_KEY = "viewer count index"
 private const val SHOULD_ASK_FEEDBACK_KEY = "should ask feedback"
 private const val SHOULD_HIGHLIGHT_DONATE_KEY = "should highlight donate"
-private const val IS_INTRO_VIEWED = "is intro viewed"
-private const val LAST_USED_DATE = "last used date"
-private const val USED_DAY_COUNT = "used day count"
+private const val IS_INTRO_VIEWED_KEY = "is intro viewed"
+private const val LAST_USED_DATE_KEY = "last used date"
+private const val USED_DAY_COUNT_KEY = "used day count"
+private const val PROGRESS_POINTS_KEY = "progress points"
+private const val SHOULD_SHOW_PROGRESS_HINT_KEY = "should show progress hint"
+private const val NEW_LEVEL_KEY = "new level"
 
 class SharedPreferencesStorage @Inject constructor(
     @ApplicationContext private val context: Context
@@ -58,19 +61,37 @@ class SharedPreferencesStorage @Inject constructor(
 
     override suspend fun saveIsIntroViewed(isIntroViewed: Boolean) {
         sharedPreferences.edit {
-            putBoolean(IS_INTRO_VIEWED, isIntroViewed)
+            putBoolean(IS_INTRO_VIEWED_KEY, isIntroViewed)
         }
     }
 
     override suspend fun saveLastUsedDate(date: String) {
         sharedPreferences.edit {
-            putString(LAST_USED_DATE, date)
+            putString(LAST_USED_DATE_KEY, date)
         }
     }
 
     override suspend fun saveUsedDayCount(count: Int) {
         sharedPreferences.edit {
-            putInt(USED_DAY_COUNT, count)
+            putInt(USED_DAY_COUNT_KEY, count)
+        }
+    }
+
+    override suspend fun saveProgressPoints(points: Int) {
+        sharedPreferences.edit {
+            putInt(PROGRESS_POINTS_KEY, points)
+        }
+    }
+
+    override suspend fun saveShouldShowProgressHint(shouldShowProgressHint: Boolean) {
+        sharedPreferences.edit {
+            putBoolean(SHOULD_SHOW_PROGRESS_HINT_KEY, shouldShowProgressHint)
+        }
+    }
+
+    override suspend fun saveNewLevel(newLevel: Boolean) {
+        sharedPreferences.edit {
+            putBoolean(NEW_LEVEL_KEY, newLevel)
         }
     }
 
@@ -95,15 +116,27 @@ class SharedPreferencesStorage @Inject constructor(
     }
 
     override suspend fun getIsIntroViewed(defaultValue: Boolean): Boolean {
-        return sharedPreferences.getBoolean(IS_INTRO_VIEWED, defaultValue)
+        return sharedPreferences.getBoolean(IS_INTRO_VIEWED_KEY, defaultValue)
     }
 
     override suspend fun getLastUsedDate(): String? {
-        return sharedPreferences.getString(LAST_USED_DATE, null)
+        return sharedPreferences.getString(LAST_USED_DATE_KEY, null)
     }
 
     override suspend fun getUsedDayCount(defaultValue: Int): Int {
-        return sharedPreferences.getInt(USED_DAY_COUNT, defaultValue)
+        return sharedPreferences.getInt(USED_DAY_COUNT_KEY, defaultValue)
+    }
+
+    override suspend fun getProgressPoints(defaultValue: Int): Int {
+        return sharedPreferences.getInt(PROGRESS_POINTS_KEY, defaultValue)
+    }
+
+    override suspend fun getShouldShowProgressHint(defaultValue: Boolean): Boolean {
+        return sharedPreferences.getBoolean(SHOULD_SHOW_PROGRESS_HINT_KEY, defaultValue)
+    }
+
+    override suspend fun getNewLevel(defaultValue: Boolean): Boolean {
+        return sharedPreferences.getBoolean(NEW_LEVEL_KEY, defaultValue)
     }
 
     private fun getImageUri(): String? {

@@ -120,7 +120,7 @@ private fun SubscriptionContent(
     Box {
         Image(
             modifier = Modifier.fillMaxSize(),
-            painter = painterResource(R.drawable.img_social_networks),
+            painter = painterResource(R.drawable.bg_social_networks),
             contentScale = ContentScale.Crop,
             contentDescription = "Background"
         )
@@ -184,12 +184,18 @@ private fun SubscriptionContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 state.timer?.let { timer ->
-                    Text(
-                        text = stringResource(R.string.subscription_offer_ends, timer),
-                        color = FakeLiveTheme.colors.onBackground,
-                        style = FakeLiveTheme.typography.titleSmall,
-                        textAlign = TextAlign.Center
-                    )
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(color = blurredBackground)
+                            .padding(8.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.subscription_offer_ends, timer),
+                            color = FakeLiveTheme.colors.onBackground,
+                            style = FakeLiveTheme.typography.bodySmall.bold,
+                        )
+                    }
                 }
 
                 state.subscriptions.forEach { subscriptionItem ->
@@ -201,18 +207,20 @@ private fun SubscriptionContent(
             }
         }
 
-        Icon(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(16.dp)
-                .size(24.dp)
-                .clickableWithoutIndication {
-                    onAction(Subscription.Action.CloseClicked)
-                },
-            painter = painterResource(R.drawable.ic_close),
-            tint = FakeLiveTheme.colors.onSurface,
-            contentDescription = "Top icon"
-        )
+        if (state.isCrossIconVisible) {
+            Icon(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp)
+                    .size(24.dp)
+                    .clickableWithoutIndication {
+                        onAction(Subscription.Action.CloseClicked)
+                    },
+                painter = painterResource(R.drawable.ic_close),
+                tint = FakeLiveTheme.colors.onSurface,
+                contentDescription = "Top icon"
+            )
+        }
 
         FakeLivePrimaryButton(
             modifier = Modifier
@@ -338,9 +346,7 @@ private fun Label(
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
-            .background(
-                FakeLiveTheme.colors.interactive.copy(alpha = 0.1f)
-            )
+            .background(color = FakeLiveTheme.colors.interactive.copy(alpha = 0.1f))
             .padding(
                 horizontal = 6.dp,
                 vertical = 2.dp
@@ -382,7 +388,8 @@ private fun SubscriptionScreenPreview() {
                         isSelected = false
                     )
                 ),
-                timer = "12:00:00"
+                timer = "12:00:00",
+                isCrossIconVisible = true
             ),
             onAction = {}
         )

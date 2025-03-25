@@ -85,6 +85,12 @@
     <string name="stream_direct_body">Directo no disponible</string>
     <string name="stream_direct_description">No hay forma de enviar esta transmisión en vivo.</string>
 
+    <string name="progress_stream_more">Transmite en vivo\ny sube de nivel</string>
+    <string name="progress_new_level">¡Felicitaciones!\nHas alcanzado un nuevo nivel</string>
+    <string name="progress_level">Nivel %d</string>
+    <string name="progress_points">Puntos</string>
+    <string name="progress_minute_equals_point">1 minuto en vivo = 1 punto</string>
+
     <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">
         <item>M</item>
         <item>O</item>

@@ -15,6 +15,9 @@ interface NavigationRote {
     )
 
     @Serializable
+    data object Progress
+
+    @Serializable
     data class CropImage(val uri: String)
 
     @Serializable
