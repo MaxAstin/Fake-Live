@@ -9,13 +9,11 @@ this app provides a platform to create realistic fake Lives.
 
 
 ## Features
-✅ Setting custom username and avatar </br>
-✅ Setting preferred number of viewers </br>
-✅ Launching a fake Live stream </br>
-✅ Endless stream of fake comments </br>
-✅ Endless stream of reactions </br>
-✅ Questions from fake fans </br>
-✅ Generating comments by AI </br>
+✅ Setting profile </br>
+✅ Launching simulation of Live stream </br>
+✅ Endless flow of comments & reactions </br>
+✅ AI-generated comments and questions </br>
+✅ Gamification </br>
 
 ## Platforms
 ✅ Instagram – supported </br>
