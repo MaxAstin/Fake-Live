@@ -83,7 +83,7 @@ fun FeedbackDialog(
                     .padding(16.dp)
                     .width(160.dp)
                     .align(Alignment.CenterHorizontally),
-                painter = painterResource(R.drawable.shy_emoji),
+                painter = painterResource(R.drawable.img_shy_emoji),
                 contentDescription = "feedback emoji"
             )
             Row(
@@ -96,7 +96,7 @@ fun FeedbackDialog(
                     modifier = Modifier.weight(1f),
                     text = stringResource(R.string.feedback_yes),
                     background = Color(0xFF5BC589),
-                    iconId = R.drawable.thumbs_up,
+                    iconId = R.drawable.img_thumbs_up,
                     onClick = {
                         onAction(
                             Preparation.Action.FeedbackClick(isPositive = true)
@@ -107,7 +107,7 @@ fun FeedbackDialog(
                     modifier = Modifier.weight(1f),
                     text = stringResource(R.string.feedback_no),
                     background = Color(0xFFDD6962),
-                    iconId = R.drawable.thumbs_down,
+                    iconId = R.drawable.img_thumbs_down,
                     onClick = {
                         onAction(
                             Preparation.Action.FeedbackClick(isPositive = false)

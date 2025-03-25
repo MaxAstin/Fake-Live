@@ -42,6 +42,7 @@ import com.bunbeauty.tiptoplive.common.ui.components.CachedImage
 import com.bunbeauty.tiptoplive.common.ui.components.FakeLiveTextField
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLiveGradientButton
+import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLiveIconButton
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLivePrimaryButton
 import com.bunbeauty.tiptoplive.common.ui.noEffectClickable
 import com.bunbeauty.tiptoplive.common.ui.rippleClickable
@@ -89,6 +90,10 @@ fun PreparationScreen(
     LaunchedEffect(Unit) {
         viewModel.event.onEach { event ->
             when (event) {
+                Preparation.Event.NavigateToProgress -> {
+                    navController.navigate(NavigationRote.Progress)
+                }
+
                 Preparation.Event.OpenStream -> {
                     onStartStreamClick()
                 }
@@ -155,6 +160,15 @@ private fun PreparationContent(
             .background(FakeLiveTheme.colors.background)
             .padding(16.dp)
     ) {
+        FakeLiveIconButton(
+            iconId = R.drawable.ic_cup,
+            contentDescription = "Progress",
+            onClick = {
+                onAction(Preparation.Action.ProgressClick)
+            },
+            hasMarker = state.newLevel
+        )
+
         Premium(
             modifier = Modifier.align(Alignment.TopEnd),
             status = state.status,
@@ -266,8 +280,8 @@ private fun PreparationContent(
                 onAction(Preparation.Action.StartStreamClick)
             }
         ) {
-            val startLiveText =  stringResource(R.string.preparation_start_live)
-            val secondsText =  stringResource(R.string.preparation_seconds, TIME_LIMIT_FOR_FREE_VERSION)
+            val startLiveText = stringResource(R.string.preparation_start_live)
+            val secondsText = stringResource(R.string.preparation_seconds, TIME_LIMIT_FOR_FREE_VERSION)
             val text = remember(state.status) {
                 if (state.status == Preparation.Status.FREE) {
                     "$startLiveText $secondsText"
@@ -355,6 +369,7 @@ private fun PreparationFreePreview() {
     FakeLiveTheme {
         PreparationContent(
             state = Preparation.State(
+                newLevel = true,
                 image = ImageSource.ResId(R.drawable.img_default_avatar),
                 username = "",
                 viewerCount = ViewerCount.V_100_200,
@@ -374,6 +389,7 @@ private fun PreparationPremiumPreview() {
     FakeLiveTheme {
         PreparationContent(
             state = Preparation.State(
+                newLevel = false,
                 image = ImageSource.ResId(R.drawable.img_default_avatar),
                 username = "",
                 viewerCount = ViewerCount.V_100_200,

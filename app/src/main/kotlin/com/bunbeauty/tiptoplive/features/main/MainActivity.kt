@@ -43,6 +43,7 @@ import com.bunbeauty.tiptoplive.features.main.presentation.Main
 import com.bunbeauty.tiptoplive.features.main.presentation.MainViewModel
 import com.bunbeauty.tiptoplive.features.main.view.CameraIsRequiredDialog
 import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
+import com.bunbeauty.tiptoplive.features.progress.ProgressScreen
 import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
 import com.bunbeauty.tiptoplive.features.subscription.view.PurchaseFailedScreen
 import com.bunbeauty.tiptoplive.features.subscription.view.SubscriptionScreen
@@ -197,6 +198,9 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 )
+            }
+            composable<NavigationRote.Progress> {
+                ProgressScreen(navController = navController)
             }
             composable<NavigationRote.Stream> {
                 StreamScreen(navController = navController)

@@ -7,6 +7,7 @@ import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.common.util.Seconds
 import com.bunbeauty.tiptoplive.common.util.getCurrentTimeSeconds
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
+import com.bunbeauty.tiptoplive.features.progress.domain.usecase.IncreaseProgressPointsUseCase
 import com.bunbeauty.tiptoplive.features.stream.CameraUtil
 import com.bunbeauty.tiptoplive.features.stream.domain.GetCommentsUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.GetQuestionUseCase
@@ -33,6 +34,7 @@ class StreamViewModel @Inject constructor(
     private val getUsernameUseCase: GetUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
     private val isPremiumAvailableUseCase: IsPremiumAvailableUseCase,
+    private val increaseProgressPointsUseCase: IncreaseProgressPointsUseCase,
     private val updateCurrentPictureUseCase: UpdateCurrentPictureUseCase,
     private val getCommentsUseCase: GetCommentsUseCase,
     private val getQuestionUseCase: GetQuestionUseCase,
@@ -281,16 +283,30 @@ class StreamViewModel @Inject constructor(
 
     private fun checkPremiumStatus() {
         viewModelScope.launch {
-            if (!isPremiumAvailableUseCase()) {
-                delay(TIME_LIMIT_FOR_FREE_VERSION * 1_000L)
-                analyticsManager.trackStreamAutoFinish()
-                sendEvent(
-                    Stream.Event.NavigateBack(
-                        type = Stream.Event.NavigateBack.Type.Auto
-                    )
-                )
+            if (isPremiumAvailableUseCase()) {
+                startPremiumTimer()
+            } else {
+                startDemoTimer()
             }
         }
+    }
+
+    private suspend fun startPremiumTimer() {
+        while (true) {
+            delay(60_000L)
+            increaseProgressPointsUseCase(points = 1)
+        }
+    }
+
+    private suspend fun startDemoTimer() {
+        delay(TIME_LIMIT_FOR_FREE_VERSION * 1_000L)
+        increaseProgressPointsUseCase(points = 1)
+        analyticsManager.trackStreamAutoFinish()
+        sendEvent(
+            Stream.Event.NavigateBack(
+                type = Stream.Event.NavigateBack.Type.Auto
+            )
+        )
     }
 
     private fun startGenerateReactions() {
