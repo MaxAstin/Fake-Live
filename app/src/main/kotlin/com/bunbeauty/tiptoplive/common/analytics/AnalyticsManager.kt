@@ -32,6 +32,7 @@ private const val PREMIUM_QUITE_EVENT = "premium_quite"
 private const val CHECKOUT_CLICK_PREFIX = "checkout_click_"
 
 private const val USED_DAYS_PREFIX = "used_day_"
+private const val NEW_LEVEL_PREFIX = "new_level_"
 
 private const val BILLING_CONNECTION_SUCCESS_EVENT = "billing_connection_success"
 private const val BILLING_CONNECTION_FAILED_EVENT = "billing_connection_failed_"
@@ -168,6 +169,10 @@ class AnalyticsManager @Inject constructor(
             else -> "8_and_more"
         }
         trackEvent(event = "$USED_DAYS_PREFIX$eventPostfix")
+    }
+
+    fun trackNewLevel(level: Int) {
+        trackEvent(event = "$NEW_LEVEL_PREFIX$level")
     }
 
     fun trackError(throwable: Throwable) {
