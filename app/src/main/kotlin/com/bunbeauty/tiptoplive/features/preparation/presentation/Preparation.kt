@@ -32,6 +32,7 @@ interface Preparation {
 
     sealed interface Action: Base.Action {
         data object StartScreen: Action
+        data object SetupNotification: Action
         data object ProgressClick: Action
         data class ViewerCountSelect(val item: ViewerCountItem): Action
         data class UsernameUpdate(val username: String): Action

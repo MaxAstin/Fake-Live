@@ -133,6 +133,9 @@ dependencies {
     // Lottie
     implementation(libs.lottie)
 
+    // Work manager
+    implementation(libs.work)
+
     // Testing
     testImplementation(libs.junit)
     testImplementation(libs.junit.jupiter)
