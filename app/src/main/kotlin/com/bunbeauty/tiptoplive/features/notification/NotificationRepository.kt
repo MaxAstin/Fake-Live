@@ -16,7 +16,7 @@ class NotificationRepository @Inject constructor(
 
     fun setupNotification() {
         val notificationRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-            .setInitialDelay(1, TimeUnit.MINUTES)
+            .setInitialDelay(24, TimeUnit.HOURS)
             .build()
         WorkManager.getInstance(context)
             .beginUniqueWork(
