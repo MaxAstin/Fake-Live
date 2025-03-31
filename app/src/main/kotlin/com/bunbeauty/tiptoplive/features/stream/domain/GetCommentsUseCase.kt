@@ -2,6 +2,7 @@ package com.bunbeauty.tiptoplive.features.stream.domain
 
 import com.bunbeauty.tiptoplive.common.util.chance
 import com.bunbeauty.tiptoplive.common.util.percent
+import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
 import com.bunbeauty.tiptoplive.features.stream.data.comment.CommentRepository
 import com.bunbeauty.tiptoplive.features.stream.data.user.UserRepository
 import com.bunbeauty.tiptoplive.features.stream.domain.model.Comment
@@ -22,14 +23,15 @@ import kotlin.random.Random
 
 private const val COMMENT_LIST_SIZE = 100
 private const val PREFETCH_THRESHOLD = 20
-private const val THRESHOLD_CHECK_PERIOD = 1_000L
+private const val THRESHOLD_CHECK_PERIOD = 2_000L
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GetCommentsUseCase @Inject constructor(
     private val getViewerCountUseCase: GetViewerCountUseCase,
+    private val getRandomCommentText: GetRandomCommentTextUseCase,
+    private val isPremiumAvailableUseCase: IsPremiumAvailableUseCase,
     private val commentRepository: CommentRepository,
     private val userRepository: UserRepository,
-    private val getRandomCommentText: GetRandomCommentTextUseCase,
     private val getRandomUsernameUseCase: GetRandomUsernameUseCase,
 ) {
 
@@ -41,6 +43,7 @@ class GetCommentsUseCase @Inject constructor(
 
     operator fun invoke(): Flow<List<Comment>> {
         return channelFlow {
+            val isPremium = isPremiumAvailableUseCase()
             val viewerCount = getViewerCountUseCase()
             val aiCommentChannel = Channel<String>(Channel.UNLIMITED)
             val aiCommentSize = MutableStateFlow(0)
@@ -51,7 +54,7 @@ class GetCommentsUseCase @Inject constructor(
 
                     val chunkSize = getChunkSize(viewerCount = viewerCount)
                     val comments = List(chunkSize) {
-                        val aiGenerated = !aiCommentChannel.isEmpty && chance(60.percent)
+                        val aiGenerated = isPremium && !aiCommentChannel.isEmpty && chance(70.percent)
                         val commentText = if (aiGenerated) {
                             aiCommentSize.update { size -> size - 1 }
                             aiCommentChannel.receive()
@@ -63,20 +66,22 @@ class GetCommentsUseCase @Inject constructor(
                     send(comments)
                 }
             }
-            launch {
-                while (isActive) {
-                    delay(THRESHOLD_CHECK_PERIOD)
+            if (isPremium) {
+                launch {
+                    while (isActive) {
+                        delay(THRESHOLD_CHECK_PERIOD)
 
-                    if (aiCommentSize.value < PREFETCH_THRESHOLD) {
-                        commentRepository.getComments(
-                            count = COMMENT_LIST_SIZE
-                        ).onSuccess { comments ->
-                            comments.shuffled()
-                                .forEach { aiCommentText ->
-                                    aiCommentChannel.send(aiCommentText)
+                        if (aiCommentSize.value < PREFETCH_THRESHOLD) {
+                            commentRepository.getComments(
+                                count = COMMENT_LIST_SIZE
+                            ).onSuccess { comments ->
+                                comments.shuffled()
+                                    .forEach { aiCommentText ->
+                                        aiCommentChannel.send(aiCommentText)
+                                    }
+                                aiCommentSize.update { size ->
+                                    size + comments.size
                                 }
-                            aiCommentSize.update { size ->
-                                size + comments.size
                             }
                         }
                     }
