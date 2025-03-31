@@ -28,6 +28,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.bunbeauty.tiptoplive.R
+import com.bunbeauty.tiptoplive.common.Constants.NOTIFICATION_MESSAGE_KEY
 import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
@@ -35,6 +36,7 @@ import com.bunbeauty.tiptoplive.common.ui.util.showToast
 import com.bunbeauty.tiptoplive.common.util.launchInAppReview
 import com.bunbeauty.tiptoplive.common.util.openSettings
 import com.bunbeauty.tiptoplive.common.util.openSharing
+import com.bunbeauty.tiptoplive.common.util.serializable
 import com.bunbeauty.tiptoplive.features.billing.BillingService
 import com.bunbeauty.tiptoplive.features.billing.model.PurchaseData
 import com.bunbeauty.tiptoplive.features.cropimage.CropImageScreen
@@ -42,6 +44,7 @@ import com.bunbeauty.tiptoplive.features.intro.view.IntroScreen
 import com.bunbeauty.tiptoplive.features.main.presentation.Main
 import com.bunbeauty.tiptoplive.features.main.presentation.MainViewModel
 import com.bunbeauty.tiptoplive.features.main.view.CameraIsRequiredDialog
+import com.bunbeauty.tiptoplive.features.notification.NotificationMessage
 import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
 import com.bunbeauty.tiptoplive.features.progress.ProgressScreen
 import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
@@ -82,6 +85,15 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
+
+        intent.extras?.serializable<NotificationMessage>(NOTIFICATION_MESSAGE_KEY)
+            ?.let { notificationMessage ->
+                mainViewModel.onAction(
+                    Main.Action.NotificationClick(
+                        notificationMessage = notificationMessage
+                    )
+                )
+            }
 
         setContent {
             FakeLiveTheme {

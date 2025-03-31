@@ -2,6 +2,7 @@ package com.bunbeauty.tiptoplive.features.main.presentation
 
 import android.net.Uri
 import com.bunbeauty.tiptoplive.common.presentation.Base
+import com.bunbeauty.tiptoplive.features.notification.NotificationMessage
 
 interface Main {
 
@@ -10,6 +11,7 @@ interface Main {
     ): Base.State
 
     sealed interface Action: Base.Action {
+        data class NotificationClick(val notificationMessage: NotificationMessage): Action
         data object AppStart: Action
         data object AppStop: Action
         data object CameraPermissionDeny: Action
