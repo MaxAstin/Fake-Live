@@ -1,4 +1,4 @@
-package com.bunbeauty.tiptoplive.features.main
+package com.bunbeauty.tiptoplive.features.cropimage.view
 
 import android.graphics.Color
 import com.canhub.cropper.CropImageOptions

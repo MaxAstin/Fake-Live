@@ -9,7 +9,6 @@ interface NavigationRote {
 
     @Serializable
     data class Preparation(
-        val uri: String? = null,
         val showStreamDurationLimits: Boolean = false
     )
 

@@ -39,7 +39,7 @@ import com.bunbeauty.tiptoplive.common.util.openSharing
 import com.bunbeauty.tiptoplive.common.util.serializable
 import com.bunbeauty.tiptoplive.features.billing.BillingService
 import com.bunbeauty.tiptoplive.features.billing.model.PurchaseData
-import com.bunbeauty.tiptoplive.features.cropimage.CropImageScreen
+import com.bunbeauty.tiptoplive.features.cropimage.view.CropImageScreen
 import com.bunbeauty.tiptoplive.features.intro.view.IntroScreen
 import com.bunbeauty.tiptoplive.features.main.presentation.Main
 import com.bunbeauty.tiptoplive.features.main.presentation.MainViewModel
@@ -186,7 +186,6 @@ class MainActivity : ComponentActivity() {
                 val preparationRoute: NavigationRote.Preparation = navBackStackEntry.toRoute()
                 PreparationScreen(
                     navController = navController,
-                    croppedImageUri = preparationRoute.uri?.toUri(),
                     showStreamDurationLimits = preparationRoute.showStreamDurationLimits,
                     onStartStreamClick = {
                         requestCameraPermission()

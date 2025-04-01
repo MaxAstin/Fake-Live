@@ -8,18 +8,17 @@ import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SetupNotificationUseCase
-import com.bunbeauty.tiptoplive.shared.feedback.domain.ShouldAskFeedbackUseCase
 import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation.ViewerCountItem
 import com.bunbeauty.tiptoplive.features.progress.domain.usecase.GetNewLevelUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetImageUriFlowUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetUsernameUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetViewerCountUseCase
-import com.bunbeauty.tiptoplive.shared.domain.SaveImageUriUseCase
-import com.bunbeauty.tiptoplive.shared.feedback.domain.SaveShouldAskFeedbackUseCase
 import com.bunbeauty.tiptoplive.shared.domain.SaveUsernameUseCase
 import com.bunbeauty.tiptoplive.shared.domain.SaveViewerCountUseCase
 import com.bunbeauty.tiptoplive.shared.domain.model.ViewerCount
 import com.bunbeauty.tiptoplive.shared.feedback.domain.SaveFeedbackProvidedUseCase
+import com.bunbeauty.tiptoplive.shared.feedback.domain.SaveShouldAskFeedbackUseCase
+import com.bunbeauty.tiptoplive.shared.feedback.domain.ShouldAskFeedbackUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -37,7 +36,6 @@ import javax.inject.Inject
 @HiltViewModel
 class PreparationViewModel @Inject constructor(
     private val getImageUriFlowUseCase: GetImageUriFlowUseCase,
-    private val saveImageUriUseCase: SaveImageUriUseCase,
     private val getNewLevelUseCase: GetNewLevelUseCase,
     private val shouldAskFeedbackUseCase: ShouldAskFeedbackUseCase,
     private val saveShouldAskFeedbackUseCase: SaveShouldAskFeedbackUseCase,
@@ -104,17 +102,6 @@ class PreparationViewModel @Inject constructor(
 
             Preparation.Action.AvatarClick -> {
                 sendEvent(Preparation.Event.HandleAvatarClick)
-            }
-
-            is Preparation.Action.ImageSelect -> {
-                action.uri?.let { imageUri ->
-                    viewModelScope.launch {
-                        saveImageUriUseCase(uri = imageUri.toString())
-                    }
-                    mutableState.update { state ->
-                        state.copy(image = ImageSource.Device(imageUri))
-                    }
-                }
             }
 
             Preparation.Action.ShowStreamDurationLimits -> {

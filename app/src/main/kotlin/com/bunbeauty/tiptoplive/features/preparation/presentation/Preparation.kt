@@ -1,6 +1,5 @@
 package com.bunbeauty.tiptoplive.features.preparation.presentation
 
-import android.net.Uri
 import com.bunbeauty.tiptoplive.common.presentation.Base
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.shared.domain.model.ViewerCount
@@ -37,7 +36,6 @@ interface Preparation {
         data class ViewerCountSelect(val item: ViewerCountItem): Action
         data class UsernameUpdate(val username: String): Action
         data object AvatarClick: Action
-        data class ImageSelect(val uri: Uri?): Action
         data object ShowStreamDurationLimits: Action
         data object StartStreamClick: Action
         data object CloseFeedbackDialogClick: Action

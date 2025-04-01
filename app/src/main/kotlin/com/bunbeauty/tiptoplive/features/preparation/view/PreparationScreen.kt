@@ -1,6 +1,5 @@
 package com.bunbeauty.tiptoplive.features.preparation.view
 
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -61,7 +60,6 @@ private const val IMAGE = "image/*"
 @Composable
 fun PreparationScreen(
     navController: NavHostController,
-    croppedImageUri: Uri?,
     showStreamDurationLimits: Boolean,
     onStartStreamClick: () -> Unit,
     onPositiveFeedbackClick: () -> Unit,
@@ -118,12 +116,6 @@ fun PreparationScreen(
                 }
             }
         }.launchIn(this)
-    }
-
-    LaunchedEffect(Unit) {
-        if (croppedImageUri != null) {
-            viewModel.onAction(Preparation.Action.ImageSelect(uri = croppedImageUri))
-        }
     }
 
     LaunchedEffect(Unit) {
