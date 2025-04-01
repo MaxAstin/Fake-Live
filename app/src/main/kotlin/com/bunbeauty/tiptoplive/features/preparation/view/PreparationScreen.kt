@@ -61,7 +61,6 @@ private const val IMAGE = "image/*"
 @Composable
 fun PreparationScreen(
     navController: NavHostController,
-    streamDurationInSeconds: Int?,
     croppedImageUri: Uri?,
     showStreamDurationLimits: Boolean,
     onStartStreamClick: () -> Unit,
@@ -119,12 +118,6 @@ fun PreparationScreen(
                 }
             }
         }.launchIn(this)
-    }
-
-    LaunchedEffect(Unit) {
-        if (streamDurationInSeconds != null) {
-            viewModel.onAction(Preparation.Action.StreamFinished(durationInSeconds = streamDurationInSeconds))
-        }
     }
 
     LaunchedEffect(Unit) {

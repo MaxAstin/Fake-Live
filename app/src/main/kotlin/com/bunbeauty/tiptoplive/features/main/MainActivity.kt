@@ -187,7 +187,6 @@ class MainActivity : ComponentActivity() {
                 PreparationScreen(
                     navController = navController,
                     croppedImageUri = preparationRoute.uri?.toUri(),
-                    streamDurationInSeconds = preparationRoute.durationInSeconds,
                     showStreamDurationLimits = preparationRoute.showStreamDurationLimits,
                     onStartStreamClick = {
                         requestCameraPermission()

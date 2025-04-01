@@ -146,9 +146,7 @@ private fun handleEvent(
                 }
 
                 is Stream.Event.NavigateBack.Type.User -> {
-                    NavigationRote.Preparation(
-                        durationInSeconds = event.type.duration.value
-                    )
+                    NavigationRote.Preparation()
                 }
             }
             navController.navigate(route = route) {

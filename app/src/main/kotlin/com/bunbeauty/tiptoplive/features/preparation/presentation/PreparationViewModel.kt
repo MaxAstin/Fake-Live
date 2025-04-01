@@ -7,18 +7,19 @@ import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
-import com.bunbeauty.tiptoplive.features.preparation.domain.SaveShouldAskFeedbackUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SetupNotificationUseCase
-import com.bunbeauty.tiptoplive.features.preparation.domain.ShouldAskFeedbackUseCase
+import com.bunbeauty.tiptoplive.shared.feedback.domain.ShouldAskFeedbackUseCase
 import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation.ViewerCountItem
 import com.bunbeauty.tiptoplive.features.progress.domain.usecase.GetNewLevelUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetImageUriFlowUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetUsernameUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetViewerCountUseCase
 import com.bunbeauty.tiptoplive.shared.domain.SaveImageUriUseCase
+import com.bunbeauty.tiptoplive.shared.feedback.domain.SaveShouldAskFeedbackUseCase
 import com.bunbeauty.tiptoplive.shared.domain.SaveUsernameUseCase
 import com.bunbeauty.tiptoplive.shared.domain.SaveViewerCountUseCase
 import com.bunbeauty.tiptoplive.shared.domain.model.ViewerCount
+import com.bunbeauty.tiptoplive.shared.feedback.domain.SaveFeedbackProvidedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -38,13 +39,14 @@ class PreparationViewModel @Inject constructor(
     private val getImageUriFlowUseCase: GetImageUriFlowUseCase,
     private val saveImageUriUseCase: SaveImageUriUseCase,
     private val getNewLevelUseCase: GetNewLevelUseCase,
+    private val shouldAskFeedbackUseCase: ShouldAskFeedbackUseCase,
+    private val saveShouldAskFeedbackUseCase: SaveShouldAskFeedbackUseCase,
+    private val saveFeedbackProvidedUseCase: SaveFeedbackProvidedUseCase,
     private val getUsernameUseCase: GetUsernameUseCase,
     private val saveUsernameUseCase: SaveUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
     private val saveViewerCountUseCase: SaveViewerCountUseCase,
     private val isPremiumAvailableUseCase: IsPremiumAvailableUseCase,
-    private val shouldAskFeedbackUseCase: ShouldAskFeedbackUseCase,
-    private val saveShouldAskFeedbackUseCase: SaveShouldAskFeedbackUseCase,
     private val setupNotificationUseCase: SetupNotificationUseCase,
     private val analyticsManager: AnalyticsManager
 ) : BaseViewModel<Preparation.State, Preparation.Action, Preparation.Event>(
@@ -72,6 +74,7 @@ class PreparationViewModel @Inject constructor(
             Preparation.Action.StartScreen -> {
                 checkPremiumStatus()
                 updateNewLevel()
+                checkShouldAskFeedback()
             }
             Preparation.Action.SetupNotification -> {
                 setupNotificationUseCase()
@@ -133,16 +136,6 @@ class PreparationViewModel @Inject constructor(
                 }
             }
 
-            is Preparation.Action.StreamFinished -> {
-                viewModelScope.launch {
-                    if (shouldAskFeedbackUseCase() && (action.durationInSeconds > 30)) {
-                        setState {
-                            copy(showFeedbackDialog = true)
-                        }
-                    }
-                }
-            }
-
             Preparation.Action.CloseFeedbackDialogClick -> {
                 setState {
                     copy(showFeedbackDialog = false)
@@ -154,7 +147,7 @@ class PreparationViewModel @Inject constructor(
                     copy(showFeedbackDialog = false)
                 }
                 viewModelScope.launch {
-                    saveShouldAskFeedbackUseCase(shouldAsk = false)
+                    saveFeedbackProvidedUseCase(feedbackProvided = true)
                 }
                 analyticsManager.trackFeedback(action.isPositive)
                 if (action.isPositive) {
@@ -172,12 +165,6 @@ class PreparationViewModel @Inject constructor(
                 analyticsManager.trackPremiumLaterClick()
                 setState {
                     copy(showStreamDurationLimitsDialog = false)
-                }
-            }
-
-            is Preparation.Action.NotShowFeedbackChecked -> {
-                viewModelScope.launch {
-                    saveShouldAskFeedbackUseCase(shouldAsk = !action.checked)
                 }
             }
 
@@ -226,6 +213,17 @@ class PreparationViewModel @Inject constructor(
             val newLevel = getNewLevelUseCase()
             setState {
                 copy(newLevel = newLevel)
+            }
+        }
+    }
+
+    private fun checkShouldAskFeedback() {
+        viewModelScope.launch {
+            if (shouldAskFeedbackUseCase()) {
+                setState {
+                    copy(showFeedbackDialog = true)
+                }
+                saveShouldAskFeedbackUseCase(shouldAsk = false)
             }
         }
     }

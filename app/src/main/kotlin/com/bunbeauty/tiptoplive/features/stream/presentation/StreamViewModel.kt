@@ -16,6 +16,8 @@ import com.bunbeauty.tiptoplive.features.stream.domain.model.Question
 import com.bunbeauty.tiptoplive.shared.domain.GetImageUriFlowUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetUsernameUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetViewerCountUseCase
+import com.bunbeauty.tiptoplive.shared.feedback.domain.IsFeedbackProvidedUseCase
+import com.bunbeauty.tiptoplive.shared.feedback.domain.SaveShouldAskFeedbackUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
@@ -27,6 +29,7 @@ import kotlin.math.min
 import kotlin.random.Random
 
 const val TIME_LIMIT_FOR_FREE_VERSION = 60 // sec
+const val STREAM_DURATION_TO_ASK_FEEDBACK = 30 // sec
 
 @HiltViewModel
 class StreamViewModel @Inject constructor(
@@ -38,6 +41,8 @@ class StreamViewModel @Inject constructor(
     private val updateCurrentPictureUseCase: UpdateCurrentPictureUseCase,
     private val getCommentsUseCase: GetCommentsUseCase,
     private val getQuestionUseCase: GetQuestionUseCase,
+    private val isFeedbackProvidedUseCase: IsFeedbackProvidedUseCase,
+    private val saveShouldAskFeedbackUseCase: SaveShouldAskFeedbackUseCase,
     private val analyticsManager: AnalyticsManager,
     private val cameraUtil: CameraUtil,
 ) : BaseViewModel<Stream.State, Stream.Action, Stream.Event>(
@@ -238,13 +243,17 @@ class StreamViewModel @Inject constructor(
             Stream.Action.FinishStreamClick -> {
                 val duration = getStreamDuration()
                 analyticsManager.trackStreamFinish(duration = duration)
-                sendEvent(
-                    Stream.Event.NavigateBack(
-                        type = Stream.Event.NavigateBack.Type.User(
-                            duration = duration
+                viewModelScope.launch {
+                    if (duration.value >= STREAM_DURATION_TO_ASK_FEEDBACK && !isFeedbackProvidedUseCase()) {
+                        saveShouldAskFeedbackUseCase(shouldAsk = true)
+                    }
+
+                    sendEvent(
+                        Stream.Event.NavigateBack(
+                            type = Stream.Event.NavigateBack.Type.User
                         )
                     )
-                )
+                }
             }
 
             is Stream.Action.PreviewIsReady -> {

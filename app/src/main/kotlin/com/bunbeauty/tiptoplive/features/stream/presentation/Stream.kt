@@ -74,7 +74,7 @@ interface Stream {
         data class NavigateBack(val type: Type) : Event {
             sealed interface Type {
                 data object Auto: Type
-                data class User(val duration: Seconds): Type
+                data object User: Type
             }
         }
         data object ShowFilterNotAvailable : Event

@@ -40,12 +40,10 @@ interface Preparation {
         data class ImageSelect(val uri: Uri?): Action
         data object ShowStreamDurationLimits: Action
         data object StartStreamClick: Action
-        data class StreamFinished(val durationInSeconds: Int): Action
         data object CloseFeedbackDialogClick: Action
         data class FeedbackClick(val isPositive: Boolean): Action
         data object CloseStreamDurationLimitsDialogClick: Action
         data object PremiumLaterClick: Action
-        data class NotShowFeedbackChecked(val checked: Boolean): Action
         data object ShareClick: Action
         data object PremiumClick: Action
     }
