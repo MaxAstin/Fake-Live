@@ -4,11 +4,13 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
+import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class CameraUtil @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val analyticsManager: AnalyticsManager
 ) {
 
     fun hasCamera(): Boolean {
@@ -22,10 +24,16 @@ class CameraUtil @Inject constructor(
     fun hasBackCamera(): Boolean {
         val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         return cameraManager.cameraIdList.any { cameraId ->
-            val characteristics = cameraManager.getCameraCharacteristics(cameraId)
-            val lensFacing = characteristics.get(CameraCharacteristics.LENS_FACING)
+            try {
+                val characteristics = cameraManager.getCameraCharacteristics(cameraId)
+                val lensFacing = characteristics.get(CameraCharacteristics.LENS_FACING)
 
-            lensFacing == CameraCharacteristics.LENS_FACING_BACK
+                lensFacing == CameraCharacteristics.LENS_FACING_BACK
+            } catch (exception: Exception) {
+                analyticsManager.trackError(throwable = exception)
+                false
+            }
         }
     }
+
 }
