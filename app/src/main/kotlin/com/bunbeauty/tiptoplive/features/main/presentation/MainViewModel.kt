@@ -1,6 +1,7 @@
 package com.bunbeauty.tiptoplive.features.main.presentation
 
 import androidx.lifecycle.viewModelScope
+import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.features.main.domain.Timer
 import com.bunbeauty.tiptoplive.features.main.domain.UpdateUsedDaysUseCase
@@ -13,6 +14,7 @@ private const val SECONDS_30 = 30_000L
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    private val analyticsManager: AnalyticsManager,
     private val saveImageUriUseCase: SaveImageUriUseCase,
     private val updateUsedDaysUseCase: UpdateUsedDaysUseCase,
     private val timer: Timer
@@ -24,6 +26,10 @@ class MainViewModel @Inject constructor(
 
     override fun onAction(action: Main.Action) {
         when (action) {
+            is Main.Action.NotificationClick -> {
+                analyticsManager.trackNotificationClick(notificationMessage = action.notificationMessage)
+            }
+
             Main.Action.AppStart -> {
                 viewModelScope.launch {
                     timer.start(SECONDS_30)

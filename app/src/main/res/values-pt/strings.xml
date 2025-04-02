@@ -10,6 +10,12 @@
 
     <string name="sharing_text">Olá! Confira o aplicativo %s no Google Play: %s</string>
 
+    <string name="notification_title">Mensagem de um fã</string>
+    <string name="notification_body_waiting">Oi! Estamos esperando sua Live!</string>
+    <string name="notification_body_start_your_live">Por favor, comece sua Live agora!</string>
+    <string name="notification_body_will_you_go">Vai entrar ao vivo?</string>
+    <string name="notification_body_when_next">Quando é a próxima Live?</string>
+
     <string name="stream_live">AO VIVO</string>
     <string name="stream_thousands_viewers_count">%s.%sK</string>
     <string name="stream_add_comment">Adicione um comentário…</string>

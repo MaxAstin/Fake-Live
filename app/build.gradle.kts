@@ -19,8 +19,8 @@ android {
         applicationId = "com.bunbeauty.tiptoplive"
         minSdk = 27
         targetSdk = 35
-        versionCode = 360
-        versionName = "3.6.0"
+        versionCode = 370
+        versionName = "3.7.0"
         multiDexEnabled = true
         setProperty("archivesBaseName", "FakeLive-$versionName")
 
@@ -132,6 +132,9 @@ dependencies {
 
     // Lottie
     implementation(libs.lottie)
+
+    // Work manager
+    implementation(libs.work)
 
     // Testing
     testImplementation(libs.junit)

@@ -47,6 +47,7 @@ import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLivePrimaryButto
 import com.bunbeauty.tiptoplive.common.ui.noEffectClickable
 import com.bunbeauty.tiptoplive.common.ui.rippleClickable
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
+import com.bunbeauty.tiptoplive.features.preparation.RequestNotificationsPermission
 import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation
 import com.bunbeauty.tiptoplive.features.preparation.presentation.PreparationViewModel
 import com.bunbeauty.tiptoplive.features.stream.presentation.TIME_LIMIT_FOR_FREE_VERSION
@@ -84,6 +85,9 @@ fun PreparationScreen(
         )
     }
 
+    RequestNotificationsPermission {
+        viewModel.onAction(Preparation.Action.SetupNotification)
+    }
     LaunchedEffect(Unit) {
         viewModel.onAction(Preparation.Action.StartScreen)
     }

@@ -277,14 +277,14 @@ private fun NotEmptyQuestionsBottomSheetPreview() {
                     notAnsweredQuestions = persistentListOf(
                         QuestionUi(
                             uuid = "1",
-                            picture = ImageSource.ResId(R.drawable.a1),
+                            picture = ImageSource.ResId(R.drawable.a33),
                             username = "user.name",
                             text = "short question",
                             isSelected = true,
                         ),
                         QuestionUi(
                             uuid = "2",
-                            picture = ImageSource.ResId(R.drawable.a2),
+                            picture = ImageSource.ResId(R.drawable.a42),
                             username = "user.name2",
                             text = "Looooooooooooooooooooooooooooooooooooo ooooo ooo ooong question",
 
@@ -294,7 +294,7 @@ private fun NotEmptyQuestionsBottomSheetPreview() {
                     answeredQuestions = persistentListOf(
                         QuestionUi(
                             uuid = "3",
-                            picture = ImageSource.ResId(R.drawable.a3),
+                            picture = ImageSource.ResId(R.drawable.a53),
                             username = "user.name3",
                             text = "short question",
                             isSelected = false,

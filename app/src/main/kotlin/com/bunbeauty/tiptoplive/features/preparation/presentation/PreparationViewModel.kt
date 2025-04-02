@@ -8,6 +8,7 @@ import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SaveShouldAskFeedbackUseCase
+import com.bunbeauty.tiptoplive.features.preparation.domain.SetupNotificationUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.ShouldAskFeedbackUseCase
 import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation.ViewerCountItem
 import com.bunbeauty.tiptoplive.features.progress.domain.usecase.GetNewLevelUseCase
@@ -44,7 +45,8 @@ class PreparationViewModel @Inject constructor(
     private val isPremiumAvailableUseCase: IsPremiumAvailableUseCase,
     private val shouldAskFeedbackUseCase: ShouldAskFeedbackUseCase,
     private val saveShouldAskFeedbackUseCase: SaveShouldAskFeedbackUseCase,
-    private val analyticsManager: AnalyticsManager,
+    private val setupNotificationUseCase: SetupNotificationUseCase,
+    private val analyticsManager: AnalyticsManager
 ) : BaseViewModel<Preparation.State, Preparation.Action, Preparation.Event>(
     initState = {
         Preparation.State(
@@ -70,6 +72,9 @@ class PreparationViewModel @Inject constructor(
             Preparation.Action.StartScreen -> {
                 checkPremiumStatus()
                 updateNewLevel()
+            }
+            Preparation.Action.SetupNotification -> {
+                setupNotificationUseCase()
             }
             Preparation.Action.ProgressClick -> {
                 sendEvent(Preparation.Event.NavigateToProgress)

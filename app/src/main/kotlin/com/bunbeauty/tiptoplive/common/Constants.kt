@@ -2,6 +2,7 @@ package com.bunbeauty.tiptoplive.common
 
 object Constants {
 
-    const val DEFAULT_AVATAR_CACHE_KEY = "Default avatar"
-    const val AVATAR_CACHE_KEY = "Avatar"
+    const val MAIN_CHANNEL_ID = "main"
+    const val NOTIFICATION_MESSAGE_KEY = "notification message"
+
 }
