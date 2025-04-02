@@ -11,6 +11,7 @@ import com.bunbeauty.tiptoplive.features.progress.domain.usecase.IncreaseProgres
 import com.bunbeauty.tiptoplive.features.stream.CameraUtil
 import com.bunbeauty.tiptoplive.features.stream.domain.GetCommentsUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.GetQuestionUseCase
+import com.bunbeauty.tiptoplive.features.stream.domain.SaveShowStreamDurationLimitUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.UpdateCurrentPictureUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.model.Question
 import com.bunbeauty.tiptoplive.shared.domain.GetImageUriFlowUseCase
@@ -43,6 +44,7 @@ class StreamViewModel @Inject constructor(
     private val getQuestionUseCase: GetQuestionUseCase,
     private val isFeedbackProvidedUseCase: IsFeedbackProvidedUseCase,
     private val saveShouldAskFeedbackUseCase: SaveShouldAskFeedbackUseCase,
+    private val saveShowStreamDurationLimitUseCase: SaveShowStreamDurationLimitUseCase,
     private val analyticsManager: AnalyticsManager,
     private val cameraUtil: CameraUtil,
 ) : BaseViewModel<Stream.State, Stream.Action, Stream.Event>(
@@ -248,11 +250,7 @@ class StreamViewModel @Inject constructor(
                         saveShouldAskFeedbackUseCase(shouldAsk = true)
                     }
 
-                    sendEvent(
-                        Stream.Event.NavigateBack(
-                            type = Stream.Event.NavigateBack.Type.User
-                        )
-                    )
+                    sendEvent(Stream.Event.NavigateBack)
                 }
             }
 
@@ -310,12 +308,9 @@ class StreamViewModel @Inject constructor(
     private suspend fun startDemoTimer() {
         delay(TIME_LIMIT_FOR_FREE_VERSION * 1_000L)
         increaseProgressPointsUseCase(points = 1)
+        saveShowStreamDurationLimitUseCase(show = true)
         analyticsManager.trackStreamAutoFinish()
-        sendEvent(
-            Stream.Event.NavigateBack(
-                type = Stream.Event.NavigateBack.Type.Auto
-            )
-        )
+        sendEvent(Stream.Event.NavigateBack)
     }
 
     private fun startGenerateReactions() {

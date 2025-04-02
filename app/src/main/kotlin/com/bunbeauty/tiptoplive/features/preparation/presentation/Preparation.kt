@@ -36,7 +36,6 @@ interface Preparation {
         data class ViewerCountSelect(val item: ViewerCountItem): Action
         data class UsernameUpdate(val username: String): Action
         data object AvatarClick: Action
-        data object ShowStreamDurationLimits: Action
         data object StartStreamClick: Action
         data object CloseFeedbackDialogClick: Action
         data class FeedbackClick(val isPositive: Boolean): Action

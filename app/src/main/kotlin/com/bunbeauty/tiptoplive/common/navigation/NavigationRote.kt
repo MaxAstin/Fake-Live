@@ -8,9 +8,7 @@ interface NavigationRote {
     data object Intro
 
     @Serializable
-    data class Preparation(
-        val showStreamDurationLimits: Boolean = false
-    )
+    data object Preparation
 
     @Serializable
     data object Progress

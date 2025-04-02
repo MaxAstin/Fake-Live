@@ -64,9 +64,7 @@ fun CropImageScreen(
         viewModel.event.onEach { event ->
             when (event) {
                 CropImage.Event.NavigateBack -> {
-                    navController.navigate(
-                        route = NavigationRote.Preparation()
-                    ) {
+                    navController.navigate(route = NavigationRote.Preparation) {
                         popUpTo<NavigationRote.Preparation> {
                             inclusive = true
                         }

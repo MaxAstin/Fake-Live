@@ -182,11 +182,9 @@ class MainActivity : ComponentActivity() {
             composable<NavigationRote.Intro> {
                 IntroScreen(navController = navController)
             }
-            composable<NavigationRote.Preparation> { navBackStackEntry ->
-                val preparationRoute: NavigationRote.Preparation = navBackStackEntry.toRoute()
+            composable<NavigationRote.Preparation> {
                 PreparationScreen(
                     navController = navController,
-                    showStreamDurationLimits = preparationRoute.showStreamDurationLimits,
                     onStartStreamClick = {
                         requestCameraPermission()
                     },

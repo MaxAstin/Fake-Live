@@ -140,16 +140,7 @@ private fun handleEvent(
 ) {
     when (event) {
         is Stream.Event.NavigateBack -> {
-            val route = when (event.type) {
-                Stream.Event.NavigateBack.Type.Auto -> {
-                    NavigationRote.Preparation(showStreamDurationLimits = true)
-                }
-
-                is Stream.Event.NavigateBack.Type.User -> {
-                    NavigationRote.Preparation()
-                }
-            }
-            navController.navigate(route = route) {
+            navController.navigate(route = NavigationRote.Preparation) {
                 popUpTo<NavigationRote.Preparation> {
                     inclusive = true
                 }

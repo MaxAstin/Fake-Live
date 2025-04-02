@@ -60,7 +60,6 @@ private const val IMAGE = "image/*"
 @Composable
 fun PreparationScreen(
     navController: NavHostController,
-    showStreamDurationLimits: Boolean,
     onStartStreamClick: () -> Unit,
     onPositiveFeedbackClick: () -> Unit,
     onShareClick: () -> Unit,
@@ -116,12 +115,6 @@ fun PreparationScreen(
                 }
             }
         }.launchIn(this)
-    }
-
-    LaunchedEffect(Unit) {
-        if (showStreamDurationLimits) {
-            viewModel.onAction(Preparation.Action.ShowStreamDurationLimits)
-        }
     }
 
     PreparationContent(

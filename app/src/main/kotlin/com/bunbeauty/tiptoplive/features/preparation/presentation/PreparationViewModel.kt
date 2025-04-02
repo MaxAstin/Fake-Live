@@ -7,9 +7,11 @@ import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
+import com.bunbeauty.tiptoplive.features.preparation.domain.GetShowStreamDurationLimitUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SetupNotificationUseCase
 import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation.ViewerCountItem
 import com.bunbeauty.tiptoplive.features.progress.domain.usecase.GetNewLevelUseCase
+import com.bunbeauty.tiptoplive.features.stream.domain.SaveShowStreamDurationLimitUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetImageUriFlowUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetUsernameUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetViewerCountUseCase
@@ -40,6 +42,8 @@ class PreparationViewModel @Inject constructor(
     private val shouldAskFeedbackUseCase: ShouldAskFeedbackUseCase,
     private val saveShouldAskFeedbackUseCase: SaveShouldAskFeedbackUseCase,
     private val saveFeedbackProvidedUseCase: SaveFeedbackProvidedUseCase,
+    private val getShowStreamDurationLimitUseCase: GetShowStreamDurationLimitUseCase,
+    private val saveShowStreamDurationLimitUseCase: SaveShowStreamDurationLimitUseCase,
     private val getUsernameUseCase: GetUsernameUseCase,
     private val saveUsernameUseCase: SaveUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
@@ -73,10 +77,13 @@ class PreparationViewModel @Inject constructor(
                 checkPremiumStatus()
                 updateNewLevel()
                 checkShouldAskFeedback()
+                checkShowStreamDurationLimit()
             }
+
             Preparation.Action.SetupNotification -> {
                 setupNotificationUseCase()
             }
+
             Preparation.Action.ProgressClick -> {
                 sendEvent(Preparation.Event.NavigateToProgress)
             }
@@ -102,14 +109,6 @@ class PreparationViewModel @Inject constructor(
 
             Preparation.Action.AvatarClick -> {
                 sendEvent(Preparation.Event.HandleAvatarClick)
-            }
-
-            Preparation.Action.ShowStreamDurationLimits -> {
-                if (currentState.showStreamDurationLimitsDialog == null) {
-                    setState {
-                        copy(showStreamDurationLimitsDialog = true)
-                    }
-                }
             }
 
             Preparation.Action.StartStreamClick -> {
@@ -146,12 +145,18 @@ class PreparationViewModel @Inject constructor(
                 setState {
                     copy(showStreamDurationLimitsDialog = false)
                 }
+                viewModelScope.launch {
+                    saveShowStreamDurationLimitUseCase(show = false)
+                }
             }
 
             is Preparation.Action.PremiumLaterClick -> {
                 analyticsManager.trackPremiumLaterClick()
                 setState {
                     copy(showStreamDurationLimitsDialog = false)
+                }
+                viewModelScope.launch {
+                    saveShowStreamDurationLimitUseCase(show = false)
                 }
             }
 
@@ -162,6 +167,9 @@ class PreparationViewModel @Inject constructor(
 
             Preparation.Action.PremiumClick -> {
                 setState { copy(showStreamDurationLimitsDialog = false) }
+                viewModelScope.launch {
+                    saveShowStreamDurationLimitUseCase(show = false)
+                }
                 analyticsManager.trackPremiumClick()
                 sendEvent(Preparation.Event.NavigateToSubscription)
             }
@@ -211,6 +219,16 @@ class PreparationViewModel @Inject constructor(
                     copy(showFeedbackDialog = true)
                 }
                 saveShouldAskFeedbackUseCase(shouldAsk = false)
+            }
+        }
+    }
+
+    private fun checkShowStreamDurationLimit() {
+        viewModelScope.launch {
+            if (getShowStreamDurationLimitUseCase()) {
+                setState {
+                    copy(showStreamDurationLimitsDialog = true)
+                }
             }
         }
     }

@@ -21,6 +21,7 @@ private const val USED_DAY_COUNT_KEY = "used day count"
 private const val PROGRESS_POINTS_KEY = "progress points"
 private const val SHOULD_SHOW_PROGRESS_HINT_KEY = "should show progress hint"
 private const val NEW_LEVEL_KEY = "new level"
+private const val SHOW_STREAM_DURATION_LIMIT_KEY = "show stream duration limit"
 
 class SharedPreferencesStorage @Inject constructor(
     @ApplicationContext private val context: Context
@@ -102,6 +103,12 @@ class SharedPreferencesStorage @Inject constructor(
         }
     }
 
+    override suspend fun saveShowStreamDurationLimit(show: Boolean) {
+        sharedPreferences.edit {
+            putBoolean(SHOW_STREAM_DURATION_LIMIT_KEY, show)
+        }
+    }
+
     override fun getImageUriFlow(): Flow<String?> {
         return mutableImageUriFlow.asStateFlow()
     }
@@ -148,6 +155,10 @@ class SharedPreferencesStorage @Inject constructor(
 
     override suspend fun getNewLevel(defaultValue: Boolean): Boolean {
         return sharedPreferences.getBoolean(NEW_LEVEL_KEY, defaultValue)
+    }
+
+    override suspend fun getShowStreamDurationLimit(defaultValue: Boolean): Boolean {
+        return sharedPreferences.getBoolean(SHOW_STREAM_DURATION_LIMIT_KEY, defaultValue)
     }
 
     private fun getImageUri(): String? {

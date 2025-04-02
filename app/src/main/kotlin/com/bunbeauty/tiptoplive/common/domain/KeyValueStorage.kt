@@ -16,6 +16,7 @@ interface KeyValueStorage {
     suspend fun saveProgressPoints(points: Int)
     suspend fun saveShouldShowProgressHint(shouldShowProgressHint: Boolean)
     suspend fun saveNewLevel(newLevel: Boolean)
+    suspend fun saveShowStreamDurationLimit(show: Boolean)
 
     fun getImageUriFlow(): Flow<String?>
     suspend fun getUsername(): String?
@@ -29,5 +30,6 @@ interface KeyValueStorage {
     suspend fun getProgressPoints(defaultValue: Int): Int
     suspend fun getShouldShowProgressHint(defaultValue: Boolean): Boolean
     suspend fun getNewLevel(defaultValue: Boolean): Boolean
+    suspend fun getShowStreamDurationLimit(defaultValue: Boolean): Boolean
 
 }

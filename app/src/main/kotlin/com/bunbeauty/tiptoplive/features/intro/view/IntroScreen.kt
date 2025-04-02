@@ -51,9 +51,7 @@ fun IntroScreen(navController: NavHostController) {
         viewModel.event.onEach { event ->
             when (event) {
                 is Intro.Event.OpenPreparation -> {
-                    navController.navigate(
-                        route = NavigationRote.Preparation()
-                    ) {
+                    navController.navigate(route = NavigationRote.Preparation) {
                         popUpTo(NavigationRote.Intro) {
                             inclusive = true
                         }
