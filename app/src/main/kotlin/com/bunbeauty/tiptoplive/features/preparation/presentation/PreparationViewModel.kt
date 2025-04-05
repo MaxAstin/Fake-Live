@@ -173,6 +173,20 @@ class PreparationViewModel @Inject constructor(
                 analyticsManager.trackPremiumClick()
                 sendEvent(Preparation.Event.NavigateToSubscription)
             }
+
+            Preparation.Action.PremiumClick -> {
+                setState { copy(showStreamDurationLimitsDialog = false) }
+                viewModelScope.launch {
+                    saveShowStreamDurationLimitUseCase(show = false)
+                }
+                analyticsManager.trackPremiumClick()
+                sendEvent(Preparation.Event.NavigateToSubscription)
+            }
+
+            Preparation.Action.PurchasedPremiumClick -> {
+                analyticsManager.trackPurchasedPremiumClick()
+                sendEvent(Preparation.Event.NavigateToPremiumDetails)
+            }
         }
     }
 

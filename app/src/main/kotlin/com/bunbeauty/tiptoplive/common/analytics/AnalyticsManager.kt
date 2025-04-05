@@ -29,6 +29,7 @@ private const val SELECT_QUESTION_EVENT = "select_question"
 private const val SHARE_EVENT = "share"
 private const val PREMIUM_LATER_CLICK_EVENT = "premium_later_click"
 private const val PREMIUM_CLICK_EVENT = "premium_click"
+private const val PURCHASED_PREMIUM_CLICK_EVENT = "purchased_premium_click"
 private const val PREMIUM_QUITE_EVENT = "premium_quite"
 private const val CHECKOUT_CLICK_PREFIX = "checkout_click_"
 
@@ -115,6 +116,10 @@ class AnalyticsManager @Inject constructor(
 
     fun trackPremiumClick() {
         trackEvent(event = PREMIUM_CLICK_EVENT)
+    }
+
+    fun trackPurchasedPremiumClick() {
+        trackEvent(event = PURCHASED_PREMIUM_CLICK_EVENT)
     }
 
     fun trackPremiumQuite() {

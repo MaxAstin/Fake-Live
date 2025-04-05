@@ -23,6 +23,9 @@ interface NavigationRote {
     data object Subscription
 
     @Serializable
+    data object PremiumDetails
+
+    @Serializable
     data object SuccessfullyPurchased
 
     @Serializable

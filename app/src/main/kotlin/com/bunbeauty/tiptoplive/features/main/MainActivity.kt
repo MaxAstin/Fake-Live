@@ -45,6 +45,7 @@ import com.bunbeauty.tiptoplive.features.main.presentation.Main
 import com.bunbeauty.tiptoplive.features.main.presentation.MainViewModel
 import com.bunbeauty.tiptoplive.features.main.view.CameraIsRequiredDialog
 import com.bunbeauty.tiptoplive.features.notification.NotificationMessage
+import com.bunbeauty.tiptoplive.features.premiumdetails.PremiumDetailsScreen
 import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
 import com.bunbeauty.tiptoplive.features.progress.ProgressScreen
 import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
@@ -229,6 +230,9 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     startCheckout = ::startCheckout
                 )
+            }
+            composable<NavigationRote.PremiumDetails> {
+                PremiumDetailsScreen(navController = navController)
             }
             composable<NavigationRote.SuccessfullyPurchased> {
                 SuccessfullyPurchasedScreen(navController = navController)

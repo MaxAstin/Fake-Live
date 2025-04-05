@@ -47,6 +47,7 @@
 
     <string name="crop_image_next">Próximo</string>
 
+    <string name="subscription_current">Actual</string>
     <string name="subscription_unlimited_possibilities">Desbloquea posibilidades ilimitadas</string>
     <string name="subscription_unlimited_time_title">Tiempo de transmisión ilimitado</string>
     <string name="subscription_unlimited_time_description">Transmite tanto como quieras sin interrupciones</string>
@@ -61,14 +62,24 @@
     <string name="subscription_use_forever">Paga una vez y úsalo para siempre</string>
     <string name="subscription_save">Ahorre %s</string>
     <string name="subscription_checkout_failed">No se pudo completar la operación</string>
-
+    <!-- Success -->
     <string name="subscription_success_title">Suscripción activada con éxito</string>
     <string name="subscription_success_description">Ahora puedes disfrutar de todas las funciones premium y aprovechar al máximo tu experiencia</string>
     <string name="subscription_success_start_using">Empezar a usar</string>
-
+    <!-- Failed -->
     <string name="subscription_failed_title">Algo salió mal</string>
     <string name="subscription_failed_description">Por favor, verifique su pago o comuníquese con soporte para obtener ayuda</string>
     <string name="subscription_failed_retry">Reintentar</string>
+    <!-- Premium -->
+    <string name="subscription_live_time_title">Tiempo de transmisión</string>
+    <string name="subscription_unlimited_live_time_description">Transmite tanto como quieras, sin interrupciones</string>
+    <string name="subscription_unlimited_label">Ilimitado</string>
+    <string name="subscription_viewers_title">Espectadores</string>
+    <string name="subscription_1m_label">Hasta 1 M+</string>
+    <string name="subscription_ai_features_title">Funciones de IA</string>
+    <string name="subscription_ai_features_description">Haz que tus transmisiones sean aún más realistas con comentarios y preguntas impulsados por IA</string>
+    <string name="subscription_other_premium_features_title">Otras funciones</string>
+    <string name="subscription_other_premium_features_description">Nuevas herramientas premium se añaden regularmente para mejorar tu experiencia</string>
 
     <string name="stream_join_requests_title">Solicitudes para unirse</string>
     <string name="stream_join_requests_body">Aún no hay solicitudes</string>

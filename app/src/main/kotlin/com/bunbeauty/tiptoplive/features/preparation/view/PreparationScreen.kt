@@ -37,6 +37,7 @@ import androidx.navigation.NavHostController
 import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
 import com.bunbeauty.tiptoplive.common.ui.LocalePreview
+import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
 import com.bunbeauty.tiptoplive.common.ui.components.CachedImage
 import com.bunbeauty.tiptoplive.common.ui.components.FakeLiveTextField
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
@@ -112,6 +113,10 @@ fun PreparationScreen(
 
                 Preparation.Event.NavigateToSubscription -> {
                     navController.navigate(NavigationRote.Subscription)
+                }
+
+                Preparation.Event.NavigateToPremiumDetails -> {
+                    navController.navigate(NavigationRote.PremiumDetails)
                 }
             }
         }.launchIn(this)
@@ -325,7 +330,9 @@ private fun Premium(
                     .padding(
                         horizontal = 12.dp,
                         vertical = 6.dp
-                    ),
+                    ).clickableWithoutIndication {
+                        onAction(Preparation.Action.PurchasedPremiumClick)
+                    },
                 horizontalArrangement = spacedBy(6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -337,7 +344,7 @@ private fun Premium(
                 Icon(
                     modifier = Modifier.size(20.dp),
                     imageVector = ImageVector.vectorResource(R.drawable.ic_infinity),
-                    contentDescription = "Star",
+                    contentDescription = "Infinity",
                     tint = FakeLiveTheme.colors.onSurface,
                 )
             }

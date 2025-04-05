@@ -47,6 +47,7 @@
 
     <string name="crop_image_next">Далее</string>
 
+    <string name="subscription_current">Текущий</string>
     <string name="subscription_unlimited_possibilities">Откройте безграничные возможности</string>
     <string name="subscription_unlimited_time_title">Неограниченное время трансляции</string>
     <string name="subscription_unlimited_time_description">Ведите стрим столько, сколько захотите, без прерываний</string>
@@ -61,14 +62,24 @@
     <string name="subscription_use_forever">Заплатите один раз и пользуйтесь навсегда</string>
     <string name="subscription_save">Сэкономьте %s</string>
     <string name="subscription_checkout_failed">Не удалось выполнить операцию</string>
-
+    <!-- Success -->
     <string name="subscription_success_title">Подписка успешно активирована</string>
     <string name="subscription_success_description">Теперь вы можете пользоваться всеми Премиум функциями</string>
     <string name="subscription_success_start_using">Начать использовать</string>
-
+    <!-- Failed -->
     <string name="subscription_failed_title">Что-то пошло не так</string>
     <string name="subscription_failed_description">Пожалуйста, проверьте оплату или обратитесь в поддержку за помощью</string>
     <string name="subscription_failed_retry">Повторить</string>
+    <!-- Premium -->
+    <string name="subscription_live_time_title">Время эфира</string>
+    <string name="subscription_unlimited_live_time_description">Ведите стрим столько, сколько захотите, без прерываний</string>
+    <string name="subscription_unlimited_label">Неограниченно</string>
+    <string name="subscription_viewers_title">Зрители</string>
+    <string name="subscription_1m_label">До 1 млн+</string>
+    <string name="subscription_ai_features_title">AI функции</string>
+    <string name="subscription_ai_features_description">Сделайте ваши эфиры еще реалистичнее с помощью AI комментариев и вопросов</string>
+    <string name="subscription_other_premium_features_title">Прочие функции</string>
+    <string name="subscription_other_premium_features_description">Новые премиум инструменты регулярно добавляются для улучшения вашего опыта</string>
 
     <string name="stream_join_requests_title">Запросы на присоединение</string>
     <string name="stream_join_requests_body">Запросов пока нет</string>

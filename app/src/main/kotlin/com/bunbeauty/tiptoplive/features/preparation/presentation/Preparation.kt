@@ -43,6 +43,7 @@ interface Preparation {
         data object PremiumLaterClick: Action
         data object ShareClick: Action
         data object PremiumClick: Action
+        data object PurchasedPremiumClick: Action
     }
 
     sealed interface Event: Base.Event {
@@ -52,6 +53,7 @@ interface Preparation {
         data object HandleAvatarClick: Event
         data object HandleShareClick: Event
         data object NavigateToSubscription: Event
+        data object NavigateToPremiumDetails: Event
     }
 
 }
