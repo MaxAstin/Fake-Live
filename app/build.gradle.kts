@@ -94,6 +94,7 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.coil.compose)
+    implementation(libs.compose.animation)
 
     // Camera
     implementation(libs.bundles.camera2)

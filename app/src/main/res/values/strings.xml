@@ -48,6 +48,7 @@
 
     <string name="crop_image_next">Next</string>
 
+    <string name="subscription_free">Free</string>
     <string name="subscription_current">Current</string>
     <string name="subscription_unlimited_possibilities">Unlock unlimited possibilities</string>
     <string name="subscription_unlimited_time_title">Unlimited Live time</string>
@@ -75,8 +76,10 @@
     <string name="subscription_live_time_title">Live time</string>
     <string name="subscription_unlimited_live_time_description">Stream for as long as you want without interruptions</string>
     <string name="subscription_unlimited_label">Unlimited</string>
+    <string name="subscription_60s_label">60 sec</string>
     <string name="subscription_viewers_title">Viewers</string>
     <string name="subscription_1m_label">Up to 1M+</string>
+    <string name="subscription_100_200_label">100–200</string>
     <string name="subscription_ai_features_title">AI features</string>
     <string name="subscription_ai_features_description">Make your Live even more realistic with AI comments and questions</string>
     <string name="subscription_other_premium_features_title">Other features</string>
