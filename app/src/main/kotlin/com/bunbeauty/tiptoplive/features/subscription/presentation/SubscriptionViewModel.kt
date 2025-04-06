@@ -5,6 +5,7 @@ import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.features.billing.BillingService
 import com.bunbeauty.tiptoplive.features.billing.PurchaseResultListener
+import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
 import com.bunbeauty.tiptoplive.features.billing.model.PurchaseData
 import com.bunbeauty.tiptoplive.features.billing.model.PurchaseResult
 import com.bunbeauty.tiptoplive.features.subscription.domain.GetOfferTimerFlowUseCase
@@ -21,12 +22,23 @@ class SubscriptionViewModel @Inject constructor(
     private val analyticsManager: AnalyticsManager,
     private val billingService: BillingService,
     private val purchaseResultListener: PurchaseResultListener,
-    private val getOfferTimerFlowUseCase: GetOfferTimerFlowUseCase
+    private val getOfferTimerFlowUseCase: GetOfferTimerFlowUseCase,
+    private val isPremiumAvailableUseCase: IsPremiumAvailableUseCase
 ) : BaseViewModel<Subscription.State, Subscription.Action, Subscription.Event>(
     initState = {
         Subscription.State(
-            subscriptions = emptyList(),
-            timer = null,
+            freePlan = Subscription.Plan(
+                isSelected = false,
+                isCurrent = false,
+                subscriptions = emptyList(),
+                timer = null
+            ),
+            premiumPlan = Subscription.Plan(
+                isSelected = true,
+                isCurrent = false,
+                subscriptions = emptyList(),
+                timer = null
+            ),
             isCrossIconVisible = false
         )
     }
@@ -34,6 +46,7 @@ class SubscriptionViewModel @Inject constructor(
 
     init {
         loadSubscriptions()
+        checkPremium()
         showCrossIcon()
     }
 
@@ -44,16 +57,23 @@ class SubscriptionViewModel @Inject constructor(
                 sendEvent(Subscription.Event.NavigateBack)
             }
 
+            is Subscription.Action.SelectPlan -> {
+                setState {
+                    copy(
+                        freePlan = freePlan.copy(isSelected = action.index == 0),
+                        premiumPlan = premiumPlan.copy(isSelected = action.index == 1)
+                    )
+                }
+            }
+
             is Subscription.Action.SubscriptionClick -> {
                 setState {
                     copy(
-                        subscriptions = subscriptions.map {
-                            if (it.id == action.id) {
-                                it.copy(isSelected = true)
-                            } else {
-                                it.copy(isSelected = false)
+                        premiumPlan = premiumPlan.copy(
+                            subscriptions = premiumPlan.subscriptions.map { subscription ->
+                                subscription.copy(isSelected = subscription.id == action.id)
                             }
-                        }
+                        )
                     )
                 }
             }
@@ -80,12 +100,28 @@ class SubscriptionViewModel @Inject constructor(
                 listOf("monthly", "lifetime")
             ).toSubscriptions()
             setState {
-                copy(subscriptions = subscriptions)
+                copy(
+                    premiumPlan = premiumPlan.copy(
+                        subscriptions = subscriptions
+                    )
+                )
             }
 
             if (subscriptions.isNotEmpty()) {
                 startOfferTimer()
                 subscribeOnPurchaseFlow()
+            }
+        }
+    }
+
+    private fun checkPremium() {
+        viewModelScope.launch {
+            val isPremium = isPremiumAvailableUseCase()
+            setState {
+                copy(
+                    freePlan = freePlan.copy(isCurrent = !isPremium),
+                    premiumPlan = premiumPlan.copy(isCurrent = isPremium)
+                )
             }
         }
     }
@@ -102,7 +138,11 @@ class SubscriptionViewModel @Inject constructor(
     private fun startOfferTimer() {
         getOfferTimerFlowUseCase().onEach { timer ->
             setState {
-                copy(timer = timer)
+                copy(
+                    premiumPlan = premiumPlan.copy(
+                        timer = timer
+                    )
+                )
             }
         }.launchIn(viewModelScope)
     }

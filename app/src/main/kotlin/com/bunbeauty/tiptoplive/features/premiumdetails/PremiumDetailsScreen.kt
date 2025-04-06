@@ -28,9 +28,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -42,6 +40,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.tiptoplive.R
@@ -52,25 +52,45 @@ import com.bunbeauty.tiptoplive.common.ui.components.SegmentedControlButton
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLivePrimaryButton
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.bold
+import com.bunbeauty.tiptoplive.features.subscription.presentation.Subscription
+import com.bunbeauty.tiptoplive.features.subscription.presentation.SubscriptionViewModel
 import kotlinx.collections.immutable.persistentListOf
 
 private val surfaceColor = Color(0x66332D3B)
 private val highlightColor = Color(0x1AFFFFFF)
 
 // TODO
-// Add view model and state
+// (+) Add view model and state
 // Change descriptions for FREE
 // Add subscriptions cards
 // Move logic from subscriptions
+// Think about gradient: top black - Inst colors bottom
 
 @Composable
 fun PremiumDetailsScreen(
     navController: NavHostController
 ) {
-    var selectedSegmentIndex by remember { mutableIntStateOf(1) }
-    val isPremium = remember(selectedSegmentIndex) { selectedSegmentIndex == 1 }
-    val isCurrentPremium = false
+    val viewModel: SubscriptionViewModel = hiltViewModel()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val onAction = remember {
+        { action: Subscription.Action ->
+            viewModel.onAction(action)
+        }
+    }
 
+    PremiumDetailsContent(
+        navController = navController,
+        state = state,
+        onAction = onAction
+    )
+}
+
+@Composable
+fun PremiumDetailsContent(
+    navController: NavHostController,
+    state: Subscription.State,
+    onAction: (Subscription.Action) -> Unit
+) {
     val backgroundTop = Color(0xFF060606)
     val backgroundBottom = Color(0xFF39205D)
     val brush = Brush.verticalGradient(
@@ -86,7 +106,7 @@ fun PremiumDetailsScreen(
         containerColor = Color.Unspecified,
         contentColor = Color.Unspecified,
         floatingActionButton = {
-            if (!isCurrentPremium) {
+            if (state.freePlan.isCurrent) {
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
@@ -97,7 +117,7 @@ fun PremiumDetailsScreen(
                     FakeLivePrimaryButton(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        text = if (isPremium) {
+                        text = if (state.isPremiumSelected) {
                             "Continue to checkout"
                         } else {
                             "Get Premium"
@@ -108,8 +128,10 @@ fun PremiumDetailsScreen(
                         ),
                         contentPadding = PaddingValues(12.dp),
                         onClick = {
-                            if (selectedSegmentIndex == 0) {
-                                selectedSegmentIndex = 1
+                            if (state.isFreeSelected) {
+                                onAction(
+                                    Subscription.Action.SelectPlan(index = 1)
+                                )
                             }
                         }
                     )
@@ -132,7 +154,7 @@ fun PremiumDetailsScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = spacedBy(8.dp)
                 ) {
-                    val textId = if (isPremium) {
+                    val textId = if (state.isPremiumSelected) {
                         R.string.preparation_premium
                     } else {
                         R.string.subscription_free
@@ -145,7 +167,7 @@ fun PremiumDetailsScreen(
                     )
 
                     val animatedAlpha by animateFloatAsState(
-                        targetValue = if (isPremium && isCurrentPremium || !isPremium && !isCurrentPremium) 1f else 0f,
+                        targetValue = if (state.selectedPlan.isCurrent) 1f else 0f,
                         label = "CurrentAlpha"
                     )
                     Text(
@@ -170,9 +192,13 @@ fun PremiumDetailsScreen(
                         stringResource(R.string.preparation_premium)
                     ).forEachIndexed { index, text ->
                         SegmentedControlButton(
-                            onClick = { selectedSegmentIndex = index },
+                            onClick = {
+                                onAction(
+                                    Subscription.Action.SelectPlan(index = index)
+                                )
+                            },
                             text = text,
-                            selected = index == selectedSegmentIndex,
+                            selected = index == state.selectedIndex,
                             selectedColor = FakeLiveTheme.colors.onSurface,
                             unselectedColor = FakeLiveTheme.colors.onSurfaceVariant,
                         )
@@ -191,7 +217,7 @@ fun PremiumDetailsScreen(
                             iconId = R.drawable.ic_time,
                             title = stringResource(R.string.subscription_live_time_title),
                             description = stringResource(R.string.subscription_unlimited_live_time_description),
-                            label = if (isPremium) {
+                            label = if (state.isPremiumSelected) {
                                 stringResource(R.string.subscription_unlimited_label)
                             } else {
                                 stringResource(R.string.subscription_60s_label)
@@ -204,7 +230,7 @@ fun PremiumDetailsScreen(
                             iconId = R.drawable.ic_view,
                             title = stringResource(R.string.subscription_viewers_title),
                             description = stringResource(R.string.subscription_1m_viewers_description),
-                            label = if (isPremium) {
+                            label = if (state.isPremiumSelected) {
                                 stringResource(R.string.subscription_1m_label)
                             } else {
                                 stringResource(R.string.subscription_100_200_label)
@@ -212,7 +238,7 @@ fun PremiumDetailsScreen(
                         )
                     }
                     val animatedAlpha by animateFloatAsState(
-                        targetValue = if (isPremium) 1f else 0f,
+                        targetValue = if (state.isPremiumSelected) 1f else 0f,
                         label = "FeaturesAlpha"
                     )
                     Row(
@@ -243,8 +269,13 @@ fun PremiumDetailsScreen(
                 Spacer(modifier = Modifier.weight(1f))
             }
 
+            val crossIconAlpha by animateFloatAsState(
+                targetValue = if (state.isCrossIconVisible) 1f else 0f,
+                label = "CrossIconAlpha"
+            )
             Icon(
                 modifier = Modifier
+                    .alpha(crossIconAlpha)
                     .align(Alignment.TopEnd)
                     .padding(16.dp)
                     .size(24.dp)

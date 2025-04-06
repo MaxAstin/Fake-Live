@@ -7,27 +7,44 @@ import com.bunbeauty.tiptoplive.features.subscription.view.SubscriptionItem
 interface Subscription {
 
     data class State(
-        val subscriptions: List<SubscriptionItem>,
-        val timer: String?,
+        val freePlan: Plan,
+        val premiumPlan: Plan,
         val isCrossIconVisible: Boolean
-    ): Base.State {
+    ) : Base.State {
 
-        val selectedSubscription: SubscriptionItem?
-            get() = subscriptions.find { it.isSelected }
+        val isPremiumSelected: Boolean = premiumPlan.isSelected
+        val isFreeSelected: Boolean = freePlan.isSelected
+        val selectedIndex: Int = if (isPremiumSelected) 1 else 0
+        val selectedPlan: Plan = if (premiumPlan.isSelected) {
+            premiumPlan
+        } else {
+            freePlan
+        }
+        val selectedSubscription: SubscriptionItem? = premiumPlan.subscriptions.find { subscription ->
+            subscription.isSelected
+        }
 
     }
 
-    sealed interface Action: Base.Action {
-        data object CloseClicked: Action
-        data class SubscriptionClick(val id: String): Action
-        data object CheckoutClick: Action
+    data class Plan(
+        val isSelected: Boolean,
+        val isCurrent: Boolean,
+        val subscriptions: List<SubscriptionItem>,
+        val timer: String?
+    )
+
+    sealed interface Action : Base.Action {
+        data object CloseClicked : Action
+        data class SelectPlan(val index: Int) : Action
+        data class SubscriptionClick(val id: String) : Action
+        data object CheckoutClick : Action
     }
 
-    sealed interface Event: Base.Event {
-        data object NavigateBack: Event
-        data class StartCheckout(val purchaseData: PurchaseData): Event
-        data object NavigateToPurchase: Event
-        data object NavigateToPurchaseFailed: Event
+    sealed interface Event : Base.Event {
+        data object NavigateBack : Event
+        data class StartCheckout(val purchaseData: PurchaseData) : Event
+        data object NavigateToPurchase : Event
+        data object NavigateToPurchaseFailed : Event
     }
 
 }

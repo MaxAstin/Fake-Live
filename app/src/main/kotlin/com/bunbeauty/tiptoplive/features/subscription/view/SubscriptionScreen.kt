@@ -39,7 +39,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
-import com.bunbeauty.tiptoplive.common.ui.LocalePreview
 import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLivePrimaryButton
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
@@ -183,27 +182,27 @@ private fun SubscriptionContent(
                 verticalArrangement = spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                state.timer?.let { timer ->
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(color = blurredBackground)
-                            .padding(8.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.subscription_offer_ends, timer),
-                            color = FakeLiveTheme.colors.onBackground,
-                            style = FakeLiveTheme.typography.bodySmall.bold,
-                        )
-                    }
-                }
-
-                state.subscriptions.forEach { subscriptionItem ->
-                    SubscriptionItem(
-                        subscriptionItem = subscriptionItem,
-                        onAction = onAction
-                    )
-                }
+//                state.timer?.let { timer ->
+//                    Box(
+//                        modifier = Modifier
+//                            .clip(RoundedCornerShape(16.dp))
+//                            .background(color = blurredBackground)
+//                            .padding(8.dp)
+//                    ) {
+//                        Text(
+//                            text = stringResource(R.string.subscription_offer_ends, timer),
+//                            color = FakeLiveTheme.colors.onBackground,
+//                            style = FakeLiveTheme.typography.bodySmall.bold,
+//                        )
+//                    }
+//                }
+//
+//                state.subscriptions.forEach { subscriptionItem ->
+//                    SubscriptionItem(
+//                        subscriptionItem = subscriptionItem,
+//                        onAction = onAction
+//                    )
+//                }
             }
         }
 
@@ -360,38 +359,38 @@ private fun Label(
     }
 }
 
-@LocalePreview
-@Composable
-private fun SubscriptionScreenPreview() {
-    FakeLiveTheme {
-        SubscriptionContent(
-            state = Subscription.State(
-                subscriptions = listOf(
-                    SubscriptionItem(
-                        id = "1",
-                        offerToken = "",
-                        name = "Weekly",
-                        currentPrice = "$2,99/week",
-                        previousPrice = "$10,99/month",
-                        discountPercent = "Save 70%",
-                        isLifetime = false,
-                        isSelected = true
-                    ),
-                    SubscriptionItem(
-                        id = "2",
-                        offerToken = null,
-                        name = "Lifetime",
-                        currentPrice = "$6,99",
-                        previousPrice = "$20,99/month",
-                        discountPercent = "$20,99/month",
-                        isLifetime = true,
-                        isSelected = false
-                    )
-                ),
-                timer = "12:00:00",
-                isCrossIconVisible = true
-            ),
-            onAction = {}
-        )
-    }
-}
+//@LocalePreview
+//@Composable
+//private fun SubscriptionScreenPreview() {
+//    FakeLiveTheme {
+//        SubscriptionContent(
+//            state = Subscription.State(
+//                subscriptions = listOf(
+//                    SubscriptionItem(
+//                        id = "1",
+//                        offerToken = "",
+//                        name = "Weekly",
+//                        currentPrice = "$2,99/week",
+//                        previousPrice = "$10,99/month",
+//                        discountPercent = "Save 70%",
+//                        isLifetime = false,
+//                        isSelected = true
+//                    ),
+//                    SubscriptionItem(
+//                        id = "2",
+//                        offerToken = null,
+//                        name = "Lifetime",
+//                        currentPrice = "$6,99",
+//                        previousPrice = "$20,99/month",
+//                        discountPercent = "$20,99/month",
+//                        isLifetime = true,
+//                        isSelected = false
+//                    )
+//                ),
+//                timer = "12:00:00",
+//                isCrossIconVisible = true
+//            ),
+//            onAction = {}
+//        )
+//    }
+//}
