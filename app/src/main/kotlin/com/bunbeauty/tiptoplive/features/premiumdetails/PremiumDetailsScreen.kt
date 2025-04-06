@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,11 +25,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -36,9 +41,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -54,6 +62,7 @@ import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.bold
 import com.bunbeauty.tiptoplive.features.subscription.presentation.Subscription
 import com.bunbeauty.tiptoplive.features.subscription.presentation.SubscriptionViewModel
+import com.bunbeauty.tiptoplive.features.subscription.view.SubscriptionItem
 import kotlinx.collections.immutable.persistentListOf
 
 private val surfaceColor = Color(0x66332D3B)
@@ -62,7 +71,7 @@ private val highlightColor = Color(0x1AFFFFFF)
 // TODO
 // (+) Add view model and state
 // Change descriptions for FREE
-// Add subscriptions cards
+// (+) Add subscriptions cards
 // Move logic from subscriptions
 // Think about gradient: top black - Inst colors bottom
 
@@ -100,6 +109,9 @@ fun PremiumDetailsContent(
             backgroundBottom
         )
     )
+    var bottomHeightPx by remember {
+        mutableIntStateOf(0)
+    }
 
     Scaffold(
         modifier = Modifier.background(brush),
@@ -107,46 +119,27 @@ fun PremiumDetailsContent(
         contentColor = Color.Unspecified,
         floatingActionButton = {
             if (state.freePlan.isCurrent) {
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(highlightColor)
-                        .padding(horizontal = 8.dp, vertical = 6.dp)
-                ) {
-                    FakeLivePrimaryButton(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        text = if (state.isPremiumSelected) {
-                            "Continue to checkout"
-                        } else {
-                            "Get Premium"
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = FakeLiveTheme.colors.background,
-                            contentColor = Color(0xFF1E053B)
-                        ),
-                        contentPadding = PaddingValues(12.dp),
-                        onClick = {
-                            if (state.isFreeSelected) {
-                                onAction(
-                                    Subscription.Action.SelectPlan(index = 1)
-                                )
-                            }
-                        }
-                    )
-                }
+                BottomBlock(
+                    modifier = Modifier.onSizeChanged { size ->
+                        bottomHeightPx = size.height
+                    },
+                    state = state,
+                    onAction = onAction
+                )
             }
         },
         floatingActionButtonPosition = FabPosition.Center
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
+            val bottomHeightDp = with(LocalDensity.current) { bottomHeightPx.toDp() }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp)
-                    .padding(top = 16.dp, bottom = 80.dp),
+                    .padding(
+                        top = 16.dp,
+                        bottom = bottomHeightDp + 16.dp
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = spacedBy(32.dp)
             ) {
@@ -181,8 +174,6 @@ fun PremiumDetailsContent(
                         style = FakeLiveTheme.typography.bodySmall
                     )
                 }
-                Spacer(modifier = Modifier.weight(1f))
-
                 SegmentedControl(
                     backgroundColor = surfaceColor,
                     selectedContainerColor = highlightColor,
@@ -205,7 +196,12 @@ fun PremiumDetailsContent(
                     }
                 }
 
-                Column(verticalArrangement = spacedBy(8.dp)) {
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(bottom = 16.dp),
+                    verticalArrangement = spacedBy(8.dp)
+                ) {
                     Row(
                         modifier = Modifier.height(IntrinsicSize.Min),
                         horizontalArrangement = spacedBy(8.dp)
@@ -265,8 +261,6 @@ fun PremiumDetailsContent(
                         )
                     }
                 }
-
-                Spacer(modifier = Modifier.weight(1f))
             }
 
             val crossIconAlpha by animateFloatAsState(
@@ -285,6 +279,53 @@ fun PremiumDetailsContent(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_close),
                 tint = FakeLiveTheme.colors.onSurface.copy(alpha = 0.6f),
                 contentDescription = "Top icon"
+            )
+        }
+    }
+}
+
+@Composable
+private fun BottomBlock(
+    modifier: Modifier = Modifier,
+    state: Subscription.State,
+    onAction: (Subscription.Action) -> Unit
+) {
+    Column(
+        modifier = modifier.padding(horizontal = 16.dp),
+        verticalArrangement = spacedBy(8.dp)
+    ) {
+        state.selectedPlan.subscriptions.forEach { subscriptionItem ->
+            SubscriptionItem(
+                subscriptionItem = subscriptionItem,
+                onAction = onAction
+            )
+        }
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(12.dp))
+                .background(highlightColor)
+                .padding(horizontal = 8.dp, vertical = 6.dp)
+        ) {
+            FakeLivePrimaryButton(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = if (state.isPremiumSelected) {
+                    "Continue to checkout"
+                } else {
+                    "Get Premium"
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = FakeLiveTheme.colors.background,
+                    contentColor = Color(0xFF1E053B)
+                ),
+                contentPadding = PaddingValues(12.dp),
+                onClick = {
+                    if (state.isFreeSelected) {
+                        onAction(
+                            Subscription.Action.SelectPlan(index = 1)
+                        )
+                    }
+                }
             )
         }
     }
@@ -346,6 +387,104 @@ private fun FeatureTile(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun SubscriptionItem(
+    subscriptionItem: SubscriptionItem,
+    onAction: (Subscription.Action) -> Unit,
+) {
+    val borderColor = if (subscriptionItem.isSelected) {
+        FakeLiveTheme.colors.interactive
+    } else {
+        Color.Transparent
+    }
+    val shape = RoundedCornerShape(8.dp)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(shape)
+            .background(highlightColor)
+            .border(
+                width = 1.5.dp,
+                color = borderColor,
+                shape = shape
+            )
+            .clickableWithoutIndication {
+                onAction(Subscription.Action.SubscriptionClick(subscriptionItem.id))
+            }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Text(
+                text = subscriptionItem.name,
+                color = FakeLiveTheme.colors.onBackgroundVariant,
+                style = FakeLiveTheme.typography.bodyMedium.bold,
+            )
+            Column(modifier = Modifier.padding(top = 8.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = subscriptionItem.currentPrice,
+                        color = FakeLiveTheme.colors.onBackground,
+                        style = FakeLiveTheme.typography.titleMedium,
+                    )
+                    if (subscriptionItem.isLifetime) {
+                        Label(
+                            modifier = Modifier.padding(start = 8.dp),
+                            text = stringResource(R.string.subscription_use_forever)
+                        )
+                    } else {
+                        Label(
+                            modifier = Modifier.padding(start = 8.dp),
+                            text = stringResource(R.string.subscription_save, subscriptionItem.discountPercent)
+                        )
+                    }
+                }
+                Text(
+                    modifier = Modifier.padding(top = 2.dp),
+                    text = subscriptionItem.previousPrice,
+                    color = FakeLiveTheme.colors.onBackgroundVariant,
+                    style = FakeLiveTheme.typography.bodyMedium.copy(
+                        textDecoration = TextDecoration.LineThrough
+                    )
+                )
+            }
+        }
+        RadioButton(
+            modifier = Modifier.align(Alignment.TopEnd),
+            selected = subscriptionItem.isSelected,
+            colors = RadioButtonDefaults.colors(
+                selectedColor = FakeLiveTheme.colors.interactive,
+                unselectedColor = FakeLiveTheme.colors.onSurfaceVariant,
+            ),
+            onClick = {},
+        )
+    }
+}
+
+@Composable
+private fun Label(
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(color = FakeLiveTheme.colors.interactive.copy(alpha = 0.1f))
+            .padding(
+                horizontal = 6.dp,
+                vertical = 2.dp
+            )
+    ) {
+        Text(
+            text = text,
+            color = FakeLiveTheme.colors.interactive,
+            style = FakeLiveTheme.typography.bodySmall,
+        )
     }
 }
 

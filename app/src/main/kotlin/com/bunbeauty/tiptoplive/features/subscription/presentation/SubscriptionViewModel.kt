@@ -29,7 +29,7 @@ class SubscriptionViewModel @Inject constructor(
         Subscription.State(
             freePlan = Subscription.Plan(
                 isSelected = false,
-                isCurrent = false,
+                isCurrent = true, // TODO false
                 subscriptions = emptyList(),
                 timer = null
             ),
@@ -46,7 +46,7 @@ class SubscriptionViewModel @Inject constructor(
 
     init {
         loadSubscriptions()
-        checkPremium()
+        // checkPremium() // TODO fix
         showCrossIcon()
     }
 
