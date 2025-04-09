@@ -301,7 +301,7 @@ private fun Premium(
                 modifier = modifier,
                 text = stringResource(R.string.preparation_premium),
                 onClick = {
-                    onAction(Preparation.Action.PremiumClick)
+                    onAction(Preparation.Action.PurchasedPremiumClick)
                 },
                 contentPadding = PaddingValues(
                     horizontal = 12.dp,

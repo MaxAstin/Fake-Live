@@ -33,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +48,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -64,13 +66,14 @@ import com.bunbeauty.tiptoplive.features.subscription.presentation.Subscription
 import com.bunbeauty.tiptoplive.features.subscription.presentation.SubscriptionViewModel
 import com.bunbeauty.tiptoplive.features.subscription.view.SubscriptionItem
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
 
 private val surfaceColor = Color(0x66332D3B)
 private val highlightColor = Color(0x1AFFFFFF)
 
 // TODO
 // (+) Add view model and state
-// Change descriptions for FREE
+// (+) Change descriptions for FREE
 // (+) Add subscriptions cards
 // Move logic from subscriptions
 // Think about gradient: top black - Inst colors bottom
@@ -135,11 +138,8 @@ fun PremiumDetailsContent(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp)
-                    .padding(
-                        top = 16.dp,
-                        bottom = bottomHeightDp + 16.dp
-                    ),
+                    .padding(top = 16.dp)
+                    .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = spacedBy(32.dp)
             ) {
@@ -174,6 +174,10 @@ fun PremiumDetailsContent(
                         style = FakeLiveTheme.typography.bodySmall
                     )
                 }
+
+                val scrollState = rememberScrollState()
+                val scope = rememberCoroutineScope()
+
                 SegmentedControl(
                     backgroundColor = surfaceColor,
                     selectedContainerColor = highlightColor,
@@ -184,6 +188,9 @@ fun PremiumDetailsContent(
                     ).forEachIndexed { index, text ->
                         SegmentedControlButton(
                             onClick = {
+                                scope.launch {
+                                    scrollState.animateScrollTo(0)
+                                }
                                 onAction(
                                     Subscription.Action.SelectPlan(index = index)
                                 )
@@ -198,8 +205,8 @@ fun PremiumDetailsContent(
 
                 Column(
                     modifier = Modifier
-                        .verticalScroll(rememberScrollState())
-                        .padding(bottom = 16.dp),
+                        .verticalScroll(scrollState)
+                        .padding(bottom = 16.dp + bottomHeightDp + 16.dp),
                     verticalArrangement = spacedBy(8.dp)
                 ) {
                     Row(
@@ -212,7 +219,11 @@ fun PremiumDetailsContent(
                                 .fillMaxHeight(),
                             iconId = R.drawable.ic_time,
                             title = stringResource(R.string.subscription_live_time_title),
-                            description = stringResource(R.string.subscription_unlimited_live_time_description),
+                            description = if (state.isPremiumSelected) {
+                                stringResource(R.string.subscription_unlimited_live_time_description)
+                            } else {
+                                stringResource(R.string.subscription_limited_live_time_description)
+                            },
                             label = if (state.isPremiumSelected) {
                                 stringResource(R.string.subscription_unlimited_label)
                             } else {
@@ -225,7 +236,11 @@ fun PremiumDetailsContent(
                                 .fillMaxHeight(),
                             iconId = R.drawable.ic_view,
                             title = stringResource(R.string.subscription_viewers_title),
-                            description = stringResource(R.string.subscription_1m_viewers_description),
+                            description = if (state.isPremiumSelected) {
+                                stringResource(R.string.subscription_1m_viewers_description)
+                            } else {
+                                stringResource(R.string.subscription_limited_viewers_description)
+                            },
                             label = if (state.isPremiumSelected) {
                                 stringResource(R.string.subscription_1m_label)
                             } else {
@@ -256,8 +271,8 @@ fun PremiumDetailsContent(
                                 .weight(1f)
                                 .fillMaxHeight(),
                             iconId = R.drawable.ic_crown,
-                            title = stringResource(R.string.subscription_other_premium_features_title),
-                            description = stringResource(R.string.subscription_other_premium_features_description)
+                            title = stringResource(R.string.subscription_even_more_title),
+                            description = stringResource(R.string.subscription_even_more_description)
                         )
                     }
                 }
@@ -310,9 +325,9 @@ private fun BottomBlock(
                 modifier = Modifier
                     .fillMaxWidth(),
                 text = if (state.isPremiumSelected) {
-                    "Continue to checkout"
+                    stringResource(R.string.subscription_checkout)
                 } else {
-                    "Get Premium"
+                    stringResource(R.string.subscription_get_premium)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = FakeLiveTheme.colors.background,
@@ -383,7 +398,9 @@ private fun FeatureTile(
                         .animateContentSize(),
                     text = label,
                     color = FakeLiveTheme.colors.onSurfaceVariant,
-                    style = FakeLiveTheme.typography.bodyMedium.bold
+                    style = FakeLiveTheme.typography.bodyMedium.bold,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
                 )
             }
         }
