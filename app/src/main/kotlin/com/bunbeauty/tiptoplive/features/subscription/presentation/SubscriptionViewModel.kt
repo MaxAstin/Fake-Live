@@ -29,7 +29,7 @@ class SubscriptionViewModel @Inject constructor(
         Subscription.State(
             freePlan = Subscription.Plan(
                 isSelected = false,
-                isCurrent = true, // TODO false
+                isCurrent = false,
                 subscriptions = emptyList(),
                 timer = null
             ),
@@ -45,8 +45,7 @@ class SubscriptionViewModel @Inject constructor(
 ) {
 
     init {
-        loadSubscriptions()
-        // checkPremium() // TODO fix
+        checkPremium()
         showCrossIcon()
     }
 
@@ -94,6 +93,29 @@ class SubscriptionViewModel @Inject constructor(
         }
     }
 
+    private fun checkPremium() {
+        viewModelScope.launch {
+            val isPremium = isPremiumAvailableUseCase()
+            if (!isPremium) {
+                loadSubscriptions()
+            }
+
+            setState {
+                copy(
+                    freePlan = freePlan.copy(isCurrent = !isPremium),
+                    premiumPlan = premiumPlan.copy(
+                        isCurrent = isPremium,
+                        subscriptions = if (isPremium) {
+                            emptyList()
+                        } else {
+                            premiumPlan.subscriptions
+                        }
+                    )
+                )
+            }
+        }
+    }
+
     private fun loadSubscriptions() {
         viewModelScope.launch {
             val subscriptions = billingService.getProducts(
@@ -110,18 +132,6 @@ class SubscriptionViewModel @Inject constructor(
             if (subscriptions.isNotEmpty()) {
                 startOfferTimer()
                 subscribeOnPurchaseFlow()
-            }
-        }
-    }
-
-    private fun checkPremium() {
-        viewModelScope.launch {
-            val isPremium = isPremiumAvailableUseCase()
-            setState {
-                copy(
-                    freePlan = freePlan.copy(isCurrent = !isPremium),
-                    premiumPlan = premiumPlan.copy(isCurrent = isPremium)
-                )
             }
         }
     }

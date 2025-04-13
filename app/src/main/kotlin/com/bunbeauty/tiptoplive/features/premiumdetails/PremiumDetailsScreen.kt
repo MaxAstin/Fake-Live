@@ -1,6 +1,7 @@
 package com.bunbeauty.tiptoplive.features.premiumdetails
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -39,8 +40,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -62,21 +65,19 @@ import com.bunbeauty.tiptoplive.common.ui.components.SegmentedControlButton
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLivePrimaryButton
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.bold
+import com.bunbeauty.tiptoplive.common.ui.util.meshGradient
 import com.bunbeauty.tiptoplive.features.subscription.presentation.Subscription
 import com.bunbeauty.tiptoplive.features.subscription.presentation.SubscriptionViewModel
 import com.bunbeauty.tiptoplive.features.subscription.view.SubscriptionItem
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
-private val surfaceColor = Color(0x66332D3B)
-private val highlightColor = Color(0x1AFFFFFF)
+private val surfaceColor = Color(0xFF262036)
+private val highlightColor = Color(0x33FFFFFF)
 
-// TODO
-// (+) Add view model and state
-// (+) Change descriptions for FREE
-// (+) Add subscriptions cards
-// Move logic from subscriptions
-// Think about gradient: top black - Inst colors bottom
+private val logo1 = Color(0xFF9C20FA)
+private val logo2 = Color(0xFFFF207E)
+private val logo3 = Color(0xFFFFBF01)
 
 @Composable
 fun PremiumDetailsScreen(
@@ -103,21 +104,12 @@ fun PremiumDetailsContent(
     state: Subscription.State,
     onAction: (Subscription.Action) -> Unit
 ) {
-    val backgroundTop = Color(0xFF060606)
-    val backgroundBottom = Color(0xFF39205D)
-    val brush = Brush.verticalGradient(
-        colors = listOf(
-            backgroundTop,
-            backgroundTop,
-            backgroundBottom
-        )
-    )
     var bottomHeightPx by remember {
         mutableIntStateOf(0)
     }
 
     Scaffold(
-        modifier = Modifier.background(brush),
+        modifier = Modifier.premiumGradient(),
         containerColor = Color.Unspecified,
         contentColor = Color.Unspecified,
         floatingActionButton = {
@@ -141,19 +133,19 @@ fun PremiumDetailsContent(
                     .padding(top = 16.dp)
                     .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = spacedBy(32.dp)
+                verticalArrangement = spacedBy(16.dp)
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = spacedBy(8.dp)
                 ) {
-                    val textId = if (state.isPremiumSelected) {
+                    val titleTextId = if (state.isPremiumSelected) {
                         R.string.preparation_premium
                     } else {
                         R.string.subscription_free
                     }
                     Text(
-                        text = stringResource(textId),
+                        text = stringResource(titleTextId),
                         color = FakeLiveTheme.colors.onSurface,
                         style = FakeLiveTheme.typography.titleLarge.bold,
                         textAlign = TextAlign.Center
@@ -292,7 +284,7 @@ fun PremiumDetailsContent(
                         navController.popBackStack()
                     },
                 imageVector = ImageVector.vectorResource(R.drawable.ic_close),
-                tint = FakeLiveTheme.colors.onSurface.copy(alpha = 0.6f),
+                tint = FakeLiveTheme.colors.onSurfaceVariant,
                 contentDescription = "Top icon"
             )
         }
@@ -319,11 +311,10 @@ private fun BottomBlock(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
                 .background(highlightColor)
-                .padding(horizontal = 8.dp, vertical = 6.dp)
+                .padding(horizontal = 8.dp, vertical = 5.dp)
         ) {
             FakeLivePrimaryButton(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 text = if (state.isPremiumSelected) {
                     stringResource(R.string.subscription_checkout)
                 } else {
@@ -331,7 +322,7 @@ private fun BottomBlock(
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = FakeLiveTheme.colors.background,
-                    contentColor = Color(0xFF1E053B)
+                    contentColor = FakeLiveTheme.colors.onBackground
                 ),
                 contentPadding = PaddingValues(12.dp),
                 onClick = {
@@ -339,6 +330,8 @@ private fun BottomBlock(
                         onAction(
                             Subscription.Action.SelectPlan(index = 1)
                         )
+                    } else {
+                        onAction(Subscription.Action.CheckoutClick)
                     }
                 }
             )
@@ -358,13 +351,13 @@ private fun FeatureTile(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
             .background(surfaceColor)
-            .padding(16.dp),
-        verticalArrangement = spacedBy(6.dp),
+            .padding(12.dp),
+        verticalArrangement = spacedBy(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
             modifier = Modifier
-                .padding(bottom = 8.dp)
+                .padding(bottom = 4.dp)
                 .clip(CircleShape)
                 .background(color = highlightColor)
                 .padding(12.dp)
@@ -380,7 +373,6 @@ private fun FeatureTile(
             textAlign = TextAlign.Center
         )
         Text(
-            modifier = Modifier.padding(top = 2.dp),
             text = description,
             color = FakeLiveTheme.colors.onSurfaceVariant,
             style = FakeLiveTheme.typography.bodyMedium,
@@ -391,7 +383,7 @@ private fun FeatureTile(
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     modifier = Modifier
-                        .padding(top = 8.dp)
+                        .padding(top = 4.dp)
                         .clip(RoundedCornerShape(6.dp))
                         .background(color = highlightColor)
                         .padding(horizontal = 8.dp, vertical = 6.dp)
@@ -413,19 +405,21 @@ private fun SubscriptionItem(
     onAction: (Subscription.Action) -> Unit,
 ) {
     val borderColor = if (subscriptionItem.isSelected) {
-        FakeLiveTheme.colors.interactive
+        Brush.horizontalGradient(
+            colors = listOf(logo1, logo2, logo3)
+        )
     } else {
-        Color.Transparent
+        SolidColor(Color.Transparent)
     }
     val shape = RoundedCornerShape(8.dp)
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clip(shape)
-            .background(highlightColor)
+            .background(surfaceColor)
             .border(
                 width = 1.5.dp,
-                color = borderColor,
+                brush = borderColor,
                 shape = shape
             )
             .clickableWithoutIndication {
@@ -446,20 +440,19 @@ private fun SubscriptionItem(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = subscriptionItem.currentPrice,
-                        color = FakeLiveTheme.colors.onBackground,
+                        color = FakeLiveTheme.colors.onSurface,
                         style = FakeLiveTheme.typography.titleMedium,
                     )
-                    if (subscriptionItem.isLifetime) {
-                        Label(
-                            modifier = Modifier.padding(start = 8.dp),
-                            text = stringResource(R.string.subscription_use_forever)
-                        )
+                    val labelText = if (subscriptionItem.isLifetime) {
+                        stringResource(R.string.subscription_use_forever)
                     } else {
-                        Label(
-                            modifier = Modifier.padding(start = 8.dp),
-                            text = stringResource(R.string.subscription_save, subscriptionItem.discountPercent)
-                        )
+                        stringResource(R.string.subscription_save, subscriptionItem.discountPercent)
                     }
+                    Label(
+                        modifier = Modifier.padding(start = 8.dp),
+                        text = labelText,
+                        isSelected = subscriptionItem.isSelected
+                    )
                 }
                 Text(
                     modifier = Modifier.padding(top = 2.dp),
@@ -475,7 +468,7 @@ private fun SubscriptionItem(
             modifier = Modifier.align(Alignment.TopEnd),
             selected = subscriptionItem.isSelected,
             colors = RadioButtonDefaults.colors(
-                selectedColor = FakeLiveTheme.colors.interactive,
+                selectedColor = logo3.copy(alpha = 0.8f),
                 unselectedColor = FakeLiveTheme.colors.onSurfaceVariant,
             ),
             onClick = {},
@@ -486,23 +479,67 @@ private fun SubscriptionItem(
 @Composable
 private fun Label(
     text: String,
+    isSelected: Boolean,
     modifier: Modifier = Modifier
 ) {
+    val labelBackgroundColor by animateColorAsState(
+        if (isSelected) {
+            logo3
+        } else {
+            FakeLiveTheme.colors.onSurfaceVariant
+        },
+        label = "LabelBackground"
+    )
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
-            .background(color = FakeLiveTheme.colors.interactive.copy(alpha = 0.1f))
+            .background(labelBackgroundColor)
             .padding(
                 horizontal = 6.dp,
                 vertical = 2.dp
             )
     ) {
+        val textColor by animateColorAsState(
+            if (isSelected) {
+                surfaceColor
+            } else {
+                Color(0xFF201F23)
+            },
+            label = "LabelTextColor"
+        )
         Text(
             text = text,
-            color = FakeLiveTheme.colors.interactive,
-            style = FakeLiveTheme.typography.bodySmall,
+            color = textColor,
+            style = FakeLiveTheme.typography.bodySmall
         )
     }
+}
+
+@Composable
+private fun Modifier.premiumGradient(): Modifier {
+    val topBlack = Color(0xFF000000)
+    val middleBlack = Color(0xFF0F061F)
+    return meshGradient(
+        points = listOf(
+            listOf(
+                Offset(0f, 0f) to topBlack,
+                Offset(0.5f, 0f) to topBlack,
+                Offset(1f, 0f) to topBlack
+            ),
+            listOf(
+                Offset(0f, 0.2f) to middleBlack,
+                Offset(0.5f, 0.2f) to middleBlack,
+                Offset(1f, 0.2f) to middleBlack
+            ),
+            listOf(
+                Offset(0f, 1f) to logo1,
+                Offset(0.5f, 1f) to logo2,
+                Offset(1f, 1f) to logo3,
+            )
+        ),
+        resolutionX = 16,
+        resolutionY = 16,
+    )
 }
 
 @LocalePreview
