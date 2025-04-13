@@ -310,7 +310,7 @@ private fun BottomBlock(
         ) {
             state.timer?.let { timer ->
                 Text(
-                    text = stringResource(R.string.subscription_offer_ends, timer),
+                    text = "\uD83D\uDD25   ${stringResource(R.string.subscription_offer_ends, timer)}   \uD83D\uDD25",
                     color = FakeLiveTheme.colors.onSurface,
                     style = FakeLiveTheme.typography.bodySmall.bold,
                 )

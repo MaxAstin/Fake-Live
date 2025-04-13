@@ -59,7 +59,7 @@
     <string name="subscription_ai_generated_description">Experimente interações de fãs realistas que parecem uma transmissão ao vivo de verdade</string>
     <string name="subscription_other_features_title">Muitos outros recursos exclusivos</string>
     <string name="subscription_other_features_description">Novas ferramentas premium são adicionadas regularmente para melhorar sua experiência</string>
-    <string name="subscription_offer_ends">🔥 Oferta termina em: %s 🔥</string>
+    <string name="subscription_offer_ends">Oferta termina em: %s</string>
     <string name="subscription_checkout">Continuar para o pagamento</string>
     <string name="subscription_use_forever">Pague uma vez e use para sempre</string>
     <string name="subscription_save">Economize %s</string>
