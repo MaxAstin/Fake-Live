@@ -347,13 +347,13 @@ private fun BottomBlock(
         verticalArrangement = spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(16.dp))
-                .background(color = surfaceColor.copy(alpha = 0.5f))
-                .padding(8.dp)
-        ) {
-            state.timer?.let { timer ->
+        state.timer?.let { timer ->
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(color = surfaceColor.copy(alpha = 0.5f))
+                    .padding(8.dp)
+            ) {
                 Text(
                     text = "\uD83D\uDD25   ${stringResource(R.string.subscription_offer_ends, timer)}   \uD83D\uDD25",
                     color = FakeLiveTheme.colors.onSurface,
