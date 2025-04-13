@@ -30,15 +30,14 @@ class SubscriptionViewModel @Inject constructor(
             freePlan = Subscription.Plan(
                 isSelected = false,
                 isCurrent = false,
-                subscriptions = emptyList(),
-                timer = null
+                subscriptions = emptyList()
             ),
             premiumPlan = Subscription.Plan(
                 isSelected = true,
                 isCurrent = false,
-                subscriptions = emptyList(),
-                timer = null
+                subscriptions = emptyList()
             ),
+            timer = null,
             isCrossIconVisible = false
         )
     }
@@ -148,11 +147,7 @@ class SubscriptionViewModel @Inject constructor(
     private fun startOfferTimer() {
         getOfferTimerFlowUseCase().onEach { timer ->
             setState {
-                copy(
-                    premiumPlan = premiumPlan.copy(
-                        timer = timer
-                    )
-                )
+                copy(timer = timer)
             }
         }.launchIn(viewModelScope)
     }

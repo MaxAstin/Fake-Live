@@ -9,6 +9,7 @@ interface Subscription {
     data class State(
         val freePlan: Plan,
         val premiumPlan: Plan,
+        val timer: String?,
         val isCrossIconVisible: Boolean
     ) : Base.State {
 
@@ -29,8 +30,7 @@ interface Subscription {
     data class Plan(
         val isSelected: Boolean,
         val isCurrent: Boolean,
-        val subscriptions: List<SubscriptionItem>,
-        val timer: String?
+        val subscriptions: List<SubscriptionItem>
     )
 
     sealed interface Action : Base.Action {

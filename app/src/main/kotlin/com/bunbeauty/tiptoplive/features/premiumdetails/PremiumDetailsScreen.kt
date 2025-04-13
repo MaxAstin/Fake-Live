@@ -299,8 +299,23 @@ private fun BottomBlock(
 ) {
     Column(
         modifier = modifier.padding(horizontal = 16.dp),
-        verticalArrangement = spacedBy(8.dp)
+        verticalArrangement = spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(16.dp))
+                .background(color = surfaceColor.copy(alpha = 0.5f))
+                .padding(8.dp)
+        ) {
+            state.timer?.let { timer ->
+                Text(
+                    text = stringResource(R.string.subscription_offer_ends, timer),
+                    color = FakeLiveTheme.colors.onSurface,
+                    style = FakeLiveTheme.typography.bodySmall.bold,
+                )
+            }
+        }
         state.selectedPlan.subscriptions.forEach { subscriptionItem ->
             SubscriptionItem(
                 subscriptionItem = subscriptionItem,
