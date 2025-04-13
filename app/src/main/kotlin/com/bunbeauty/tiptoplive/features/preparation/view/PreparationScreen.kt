@@ -1,6 +1,5 @@
 package com.bunbeauty.tiptoplive.features.preparation.view
 
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -38,6 +37,7 @@ import androidx.navigation.NavHostController
 import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
 import com.bunbeauty.tiptoplive.common.ui.LocalePreview
+import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
 import com.bunbeauty.tiptoplive.common.ui.components.CachedImage
 import com.bunbeauty.tiptoplive.common.ui.components.FakeLiveTextField
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
@@ -61,9 +61,6 @@ private const val IMAGE = "image/*"
 @Composable
 fun PreparationScreen(
     navController: NavHostController,
-    streamDurationInSeconds: Int?,
-    croppedImageUri: Uri?,
-    showStreamDurationLimits: Boolean,
     onStartStreamClick: () -> Unit,
     onPositiveFeedbackClick: () -> Unit,
     onShareClick: () -> Unit,
@@ -114,29 +111,11 @@ fun PreparationScreen(
                     onShareClick()
                 }
 
-                Preparation.Event.NavigateToSubscription -> {
-                    navController.navigate(NavigationRote.Subscription)
+                Preparation.Event.NavigateToPremiumDetails -> {
+                    navController.navigate(NavigationRote.PremiumDetails)
                 }
             }
         }.launchIn(this)
-    }
-
-    LaunchedEffect(Unit) {
-        if (streamDurationInSeconds != null) {
-            viewModel.onAction(Preparation.Action.StreamFinished(durationInSeconds = streamDurationInSeconds))
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        if (croppedImageUri != null) {
-            viewModel.onAction(Preparation.Action.ImageSelect(uri = croppedImageUri))
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        if (showStreamDurationLimits) {
-            viewModel.onAction(Preparation.Action.ShowStreamDurationLimits)
-        }
     }
 
     PreparationContent(
@@ -347,7 +326,9 @@ private fun Premium(
                     .padding(
                         horizontal = 12.dp,
                         vertical = 6.dp
-                    ),
+                    ).clickableWithoutIndication {
+                        onAction(Preparation.Action.PremiumClick)
+                    },
                 horizontalArrangement = spacedBy(6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -359,7 +340,7 @@ private fun Premium(
                 Icon(
                     modifier = Modifier.size(20.dp),
                     imageVector = ImageVector.vectorResource(R.drawable.ic_infinity),
-                    contentDescription = "Star",
+                    contentDescription = "Infinity",
                     tint = FakeLiveTheme.colors.onSurface,
                 )
             }

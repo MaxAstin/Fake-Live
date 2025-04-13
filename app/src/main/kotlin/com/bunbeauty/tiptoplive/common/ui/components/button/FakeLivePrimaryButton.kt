@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +20,10 @@ fun FakeLivePrimaryButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    colors: ButtonColors =  ButtonDefaults.buttonColors(
+        containerColor = FakeLiveTheme.colors.interactive
+    ),
+    contentPadding: PaddingValues = PaddingValues(),
     leadingIcon: @Composable () -> Unit = {},
 ) {
     val multipleEventsCutter = rememberMultipleEventsCutter()
@@ -27,9 +31,7 @@ fun FakeLivePrimaryButton(
     Button(
         modifier = modifier,
         shape = RoundedCornerShape(6.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = FakeLiveTheme.colors.interactive
-        ),
+        colors = colors,
         onClick = {
             multipleEventsCutter.processEvent(onClick)
         },
@@ -39,7 +41,6 @@ fun FakeLivePrimaryButton(
             leadingIcon()
             Text(
                 text = text,
-                color = FakeLiveTheme.colors.onSurface,
                 style = FakeLiveTheme.typography.titleSmall,
             )
         }

@@ -47,25 +47,36 @@
 
     <string name="crop_image_next">Próximo</string>
 
-    <string name="subscription_unlimited_possibilities">Desbloquea posibilidades ilimitadas</string>
-    <string name="subscription_unlimited_time_title">Tiempo de transmisión ilimitado</string>
-    <string name="subscription_unlimited_time_description">Transmite tanto como quieras sin interrupciones</string>
-    <string name="subscription_1m_viewers_title">Hasta 1M+ de espectadores</string>
-    <string name="subscription_1m_viewers_description">Aumenta tu popularidad con grandes audiencias virtuales</string>
-    <string name="subscription_ai_generated_title">Comentarios y preguntas generados por IA</string>
-    <string name="subscription_ai_generated_description">Experimenta interacciones de fans realistas que se sienten como una transmisión en vivo auténtica</string>
-    <string name="subscription_other_features_title">Muchas otras funciones exclusivas</string>
-    <string name="subscription_other_features_description">Nuevas herramientas premium se añaden regularmente para mejorar tu experiencia</string>
-    <string name="subscription_offer_ends">🔥 La oferta acaba en: %s 🔥</string>
+    <!-- Premium -->
+    <string name="subscription_free">Gratis</string>
+    <string name="subscription_current">Actual</string>
+    <string name="subscription_get_premium">Hazte Premium</string>
     <string name="subscription_checkout">Continuar al pago</string>
+    <string name="subscription_live_time_title">Tiempo de transmisión</string>
+    <string name="subscription_unlimited_live_time_description">Transmite tanto como quieras, sin interrupciones</string>
+    <string name="subscription_limited_live_time_description">Prueba la transmisión en vivo con una duración limitada</string>
+    <string name="subscription_unlimited_label">Ilimitado</string>
+    <string name="subscription_60s_label">60 seg</string>
+    <string name="subscription_viewers_title">Espectadores</string>
+    <string name="subscription_1m_viewers_description">Aumenta tu popularidad con grandes audiencias virtuales</string>
+    <string name="subscription_limited_viewers_description">Empieza con un grupo pequeño de espectadores</string>
+    <string name="subscription_1m_label">Hasta 1 M+</string>
+    <string name="subscription_100_200_label">100–200</string>
+    <string name="subscription_ai_features_title">Funciones de IA</string>
+    <string name="subscription_ai_features_description">Haz que tus transmisiones sean aún más realistas con comentarios y preguntas impulsados por IA</string>
+    <string name="subscription_even_more_title">Aún más</string>
+    <string name="subscription_even_more_description">Nuevas herramientas premium se añaden regularmente para mejorar tu experiencia</string>
+    <string name="subscription_offer_ends">La oferta acaba en: %s</string>
     <string name="subscription_use_forever">Paga una vez y úsalo para siempre</string>
     <string name="subscription_save">Ahorre %s</string>
     <string name="subscription_checkout_failed">No se pudo completar la operación</string>
 
+    <!-- Success -->
     <string name="subscription_success_title">Suscripción activada con éxito</string>
     <string name="subscription_success_description">Ahora puedes disfrutar de todas las funciones premium y aprovechar al máximo tu experiencia</string>
     <string name="subscription_success_start_using">Empezar a usar</string>
 
+    <!-- Failed -->
     <string name="subscription_failed_title">Algo salió mal</string>
     <string name="subscription_failed_description">Por favor, verifique su pago o comuníquese con soporte para obtener ayuda</string>
     <string name="subscription_failed_retry">Reintentar</string>

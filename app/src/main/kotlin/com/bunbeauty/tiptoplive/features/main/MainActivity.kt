@@ -39,18 +39,18 @@ import com.bunbeauty.tiptoplive.common.util.openSharing
 import com.bunbeauty.tiptoplive.common.util.serializable
 import com.bunbeauty.tiptoplive.features.billing.BillingService
 import com.bunbeauty.tiptoplive.features.billing.model.PurchaseData
-import com.bunbeauty.tiptoplive.features.cropimage.CropImageScreen
+import com.bunbeauty.tiptoplive.features.cropimage.view.CropImageScreen
 import com.bunbeauty.tiptoplive.features.intro.view.IntroScreen
 import com.bunbeauty.tiptoplive.features.main.presentation.Main
 import com.bunbeauty.tiptoplive.features.main.presentation.MainViewModel
 import com.bunbeauty.tiptoplive.features.main.view.CameraIsRequiredDialog
 import com.bunbeauty.tiptoplive.features.notification.NotificationMessage
+import com.bunbeauty.tiptoplive.features.premiumdetails.view.PremiumDetailsScreen
 import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
 import com.bunbeauty.tiptoplive.features.progress.ProgressScreen
 import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
-import com.bunbeauty.tiptoplive.features.subscription.view.PurchaseFailedScreen
-import com.bunbeauty.tiptoplive.features.subscription.view.SubscriptionScreen
-import com.bunbeauty.tiptoplive.features.subscription.view.SuccessfullyPurchasedScreen
+import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseFailedScreen
+import com.bunbeauty.tiptoplive.features.premiumdetails.view.SuccessfullyPurchasedScreen
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -182,13 +182,9 @@ class MainActivity : ComponentActivity() {
             composable<NavigationRote.Intro> {
                 IntroScreen(navController = navController)
             }
-            composable<NavigationRote.Preparation> { navBackStackEntry ->
-                val preparationRoute: NavigationRote.Preparation = navBackStackEntry.toRoute()
+            composable<NavigationRote.Preparation> {
                 PreparationScreen(
                     navController = navController,
-                    croppedImageUri = preparationRoute.uri?.toUri(),
-                    streamDurationInSeconds = preparationRoute.durationInSeconds,
-                    showStreamDurationLimits = preparationRoute.showStreamDurationLimits,
                     onStartStreamClick = {
                         requestCameraPermission()
                     },
@@ -228,8 +224,8 @@ class MainActivity : ComponentActivity() {
                     }
                 )
             }
-            composable<NavigationRote.Subscription> {
-                SubscriptionScreen(
+            composable<NavigationRote.PremiumDetails> {
+                PremiumDetailsScreen(
                     navController = navController,
                     startCheckout = ::startCheckout
                 )

@@ -13,6 +13,7 @@ private const val IMAGE_URI_KEY = "image uri"
 private const val USERNAME_KEY = "username"
 private const val VIEWER_COUNT_INDEX_KEY = "viewer count index"
 private const val SHOULD_ASK_FEEDBACK_KEY = "should ask feedback"
+private const val FEEDBACK_PROVIDED_KEY = "feedback provided"
 private const val SHOULD_HIGHLIGHT_DONATE_KEY = "should highlight donate"
 private const val IS_INTRO_VIEWED_KEY = "is intro viewed"
 private const val LAST_USED_DATE_KEY = "last used date"
@@ -20,6 +21,7 @@ private const val USED_DAY_COUNT_KEY = "used day count"
 private const val PROGRESS_POINTS_KEY = "progress points"
 private const val SHOULD_SHOW_PROGRESS_HINT_KEY = "should show progress hint"
 private const val NEW_LEVEL_KEY = "new level"
+private const val SHOW_STREAM_DURATION_LIMIT_KEY = "show stream duration limit"
 
 class SharedPreferencesStorage @Inject constructor(
     @ApplicationContext private val context: Context
@@ -50,6 +52,12 @@ class SharedPreferencesStorage @Inject constructor(
     override suspend fun saveShouldAskFeedback(shouldAsk: Boolean) {
         sharedPreferences.edit {
             putBoolean(SHOULD_ASK_FEEDBACK_KEY, shouldAsk)
+        }
+    }
+
+    override suspend fun saveFeedbackProvided(feedbackProvided: Boolean) {
+        sharedPreferences.edit {
+            putBoolean(FEEDBACK_PROVIDED_KEY, feedbackProvided)
         }
     }
 
@@ -95,6 +103,12 @@ class SharedPreferencesStorage @Inject constructor(
         }
     }
 
+    override suspend fun saveShowStreamDurationLimit(show: Boolean) {
+        sharedPreferences.edit {
+            putBoolean(SHOW_STREAM_DURATION_LIMIT_KEY, show)
+        }
+    }
+
     override fun getImageUriFlow(): Flow<String?> {
         return mutableImageUriFlow.asStateFlow()
     }
@@ -109,6 +123,10 @@ class SharedPreferencesStorage @Inject constructor(
 
     override suspend fun getShouldAskFeedback(defaultValue: Boolean): Boolean {
         return sharedPreferences.getBoolean(SHOULD_ASK_FEEDBACK_KEY, defaultValue)
+    }
+
+    override suspend fun getFeedbackProvided(defaultValue: Boolean): Boolean {
+        return sharedPreferences.getBoolean(FEEDBACK_PROVIDED_KEY, defaultValue)
     }
 
     override suspend fun getShouldHighlightDonate(defaultValue: Boolean): Boolean {
@@ -137,6 +155,10 @@ class SharedPreferencesStorage @Inject constructor(
 
     override suspend fun getNewLevel(defaultValue: Boolean): Boolean {
         return sharedPreferences.getBoolean(NEW_LEVEL_KEY, defaultValue)
+    }
+
+    override suspend fun getShowStreamDurationLimit(defaultValue: Boolean): Boolean {
+        return sharedPreferences.getBoolean(SHOW_STREAM_DURATION_LIMIT_KEY, defaultValue)
     }
 
     private fun getImageUri(): String? {

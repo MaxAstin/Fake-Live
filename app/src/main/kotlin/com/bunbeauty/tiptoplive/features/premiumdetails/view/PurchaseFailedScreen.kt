@@ -1,4 +1,4 @@
-package com.bunbeauty.tiptoplive.features.subscription.view
+package com.bunbeauty.tiptoplive.features.premiumdetails.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

@@ -71,12 +71,7 @@ interface Stream {
     }
 
     sealed interface Event : Base.Event {
-        data class NavigateBack(val type: Type) : Event {
-            sealed interface Type {
-                data object Auto: Type
-                data class User(val duration: Seconds): Type
-            }
-        }
+        data object NavigateBack : Event
         data object ShowFilterNotAvailable : Event
         data object TakePicture : Event
     }

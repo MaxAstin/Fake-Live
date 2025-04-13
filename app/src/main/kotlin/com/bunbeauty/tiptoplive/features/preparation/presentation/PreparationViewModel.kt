@@ -7,18 +7,20 @@ import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
-import com.bunbeauty.tiptoplive.features.preparation.domain.SaveShouldAskFeedbackUseCase
+import com.bunbeauty.tiptoplive.features.preparation.domain.GetShowStreamDurationLimitUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SetupNotificationUseCase
-import com.bunbeauty.tiptoplive.features.preparation.domain.ShouldAskFeedbackUseCase
 import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation.ViewerCountItem
 import com.bunbeauty.tiptoplive.features.progress.domain.usecase.GetNewLevelUseCase
+import com.bunbeauty.tiptoplive.features.stream.domain.SaveShowStreamDurationLimitUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetImageUriFlowUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetUsernameUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetViewerCountUseCase
-import com.bunbeauty.tiptoplive.shared.domain.SaveImageUriUseCase
 import com.bunbeauty.tiptoplive.shared.domain.SaveUsernameUseCase
 import com.bunbeauty.tiptoplive.shared.domain.SaveViewerCountUseCase
 import com.bunbeauty.tiptoplive.shared.domain.model.ViewerCount
+import com.bunbeauty.tiptoplive.shared.feedback.domain.SaveFeedbackProvidedUseCase
+import com.bunbeauty.tiptoplive.shared.feedback.domain.SaveShouldAskFeedbackUseCase
+import com.bunbeauty.tiptoplive.shared.feedback.domain.ShouldAskFeedbackUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -36,15 +38,17 @@ import javax.inject.Inject
 @HiltViewModel
 class PreparationViewModel @Inject constructor(
     private val getImageUriFlowUseCase: GetImageUriFlowUseCase,
-    private val saveImageUriUseCase: SaveImageUriUseCase,
     private val getNewLevelUseCase: GetNewLevelUseCase,
+    private val shouldAskFeedbackUseCase: ShouldAskFeedbackUseCase,
+    private val saveShouldAskFeedbackUseCase: SaveShouldAskFeedbackUseCase,
+    private val saveFeedbackProvidedUseCase: SaveFeedbackProvidedUseCase,
+    private val getShowStreamDurationLimitUseCase: GetShowStreamDurationLimitUseCase,
+    private val saveShowStreamDurationLimitUseCase: SaveShowStreamDurationLimitUseCase,
     private val getUsernameUseCase: GetUsernameUseCase,
     private val saveUsernameUseCase: SaveUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
     private val saveViewerCountUseCase: SaveViewerCountUseCase,
     private val isPremiumAvailableUseCase: IsPremiumAvailableUseCase,
-    private val shouldAskFeedbackUseCase: ShouldAskFeedbackUseCase,
-    private val saveShouldAskFeedbackUseCase: SaveShouldAskFeedbackUseCase,
     private val setupNotificationUseCase: SetupNotificationUseCase,
     private val analyticsManager: AnalyticsManager
 ) : BaseViewModel<Preparation.State, Preparation.Action, Preparation.Event>(
@@ -72,10 +76,14 @@ class PreparationViewModel @Inject constructor(
             Preparation.Action.StartScreen -> {
                 checkPremiumStatus()
                 updateNewLevel()
+                checkShouldAskFeedback()
+                checkShowStreamDurationLimit()
             }
+
             Preparation.Action.SetupNotification -> {
                 setupNotificationUseCase()
             }
+
             Preparation.Action.ProgressClick -> {
                 sendEvent(Preparation.Event.NavigateToProgress)
             }
@@ -89,7 +97,7 @@ class PreparationViewModel @Inject constructor(
                         state.copy(viewerCount = action.item.viewerCount)
                     }
                 } else {
-                    sendEvent(Preparation.Event.NavigateToSubscription)
+                    sendEvent(Preparation.Event.NavigateToPremiumDetails)
                 }
             }
 
@@ -103,25 +111,6 @@ class PreparationViewModel @Inject constructor(
                 sendEvent(Preparation.Event.HandleAvatarClick)
             }
 
-            is Preparation.Action.ImageSelect -> {
-                action.uri?.let { imageUri ->
-                    viewModelScope.launch {
-                        saveImageUriUseCase(uri = imageUri.toString())
-                    }
-                    mutableState.update { state ->
-                        state.copy(image = ImageSource.Device(imageUri))
-                    }
-                }
-            }
-
-            Preparation.Action.ShowStreamDurationLimits -> {
-                if (currentState.showStreamDurationLimitsDialog == null) {
-                    setState {
-                        copy(showStreamDurationLimitsDialog = true)
-                    }
-                }
-            }
-
             Preparation.Action.StartStreamClick -> {
                 viewModelScope.launch {
                     analyticsManager.trackStreamStart(
@@ -130,16 +119,6 @@ class PreparationViewModel @Inject constructor(
                     )
                     saveUsernameUseCase(mutableState.value.username)
                     sendEvent(Preparation.Event.OpenStream)
-                }
-            }
-
-            is Preparation.Action.StreamFinished -> {
-                viewModelScope.launch {
-                    if (shouldAskFeedbackUseCase() && (action.durationInSeconds > 30)) {
-                        setState {
-                            copy(showFeedbackDialog = true)
-                        }
-                    }
                 }
             }
 
@@ -154,7 +133,7 @@ class PreparationViewModel @Inject constructor(
                     copy(showFeedbackDialog = false)
                 }
                 viewModelScope.launch {
-                    saveShouldAskFeedbackUseCase(shouldAsk = false)
+                    saveFeedbackProvidedUseCase(feedbackProvided = true)
                 }
                 analyticsManager.trackFeedback(action.isPositive)
                 if (action.isPositive) {
@@ -166,6 +145,9 @@ class PreparationViewModel @Inject constructor(
                 setState {
                     copy(showStreamDurationLimitsDialog = false)
                 }
+                viewModelScope.launch {
+                    saveShowStreamDurationLimitUseCase(show = false)
+                }
             }
 
             is Preparation.Action.PremiumLaterClick -> {
@@ -173,11 +155,8 @@ class PreparationViewModel @Inject constructor(
                 setState {
                     copy(showStreamDurationLimitsDialog = false)
                 }
-            }
-
-            is Preparation.Action.NotShowFeedbackChecked -> {
                 viewModelScope.launch {
-                    saveShouldAskFeedbackUseCase(shouldAsk = !action.checked)
+                    saveShowStreamDurationLimitUseCase(show = false)
                 }
             }
 
@@ -188,8 +167,11 @@ class PreparationViewModel @Inject constructor(
 
             Preparation.Action.PremiumClick -> {
                 setState { copy(showStreamDurationLimitsDialog = false) }
+                viewModelScope.launch {
+                    saveShowStreamDurationLimitUseCase(show = false)
+                }
                 analyticsManager.trackPremiumClick()
-                sendEvent(Preparation.Event.NavigateToSubscription)
+                sendEvent(Preparation.Event.NavigateToPremiumDetails)
             }
         }
     }
@@ -226,6 +208,27 @@ class PreparationViewModel @Inject constructor(
             val newLevel = getNewLevelUseCase()
             setState {
                 copy(newLevel = newLevel)
+            }
+        }
+    }
+
+    private fun checkShouldAskFeedback() {
+        viewModelScope.launch {
+            if (shouldAskFeedbackUseCase()) {
+                setState {
+                    copy(showFeedbackDialog = true)
+                }
+                saveShouldAskFeedbackUseCase(shouldAsk = false)
+            }
+        }
+    }
+
+    private fun checkShowStreamDurationLimit() {
+        viewModelScope.launch {
+            if (getShowStreamDurationLimitUseCase()) {
+                setState {
+                    copy(showStreamDurationLimitsDialog = true)
+                }
             }
         }
     }

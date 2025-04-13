@@ -8,11 +8,7 @@ interface NavigationRote {
     data object Intro
 
     @Serializable
-    data class Preparation(
-        val uri: String? = null,
-        val durationInSeconds: Int? = null,
-        val showStreamDurationLimits: Boolean = false
-    )
+    data object Preparation
 
     @Serializable
     data object Progress
@@ -24,7 +20,7 @@ interface NavigationRote {
     data object Stream
 
     @Serializable
-    data object Subscription
+    data object PremiumDetails
 
     @Serializable
     data object SuccessfullyPurchased
