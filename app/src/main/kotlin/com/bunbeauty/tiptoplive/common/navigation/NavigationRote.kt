@@ -20,9 +20,6 @@ interface NavigationRote {
     data object Stream
 
     @Serializable
-    data object Subscription
-
-    @Serializable
     data object PremiumDetails
 
     @Serializable

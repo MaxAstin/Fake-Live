@@ -48,45 +48,39 @@
 
     <string name="crop_image_next">Próximo</string>
 
+    <!-- Premium -->
     <string name="subscription_free">Grátis</string>
     <string name="subscription_current">Atual</string>
-    <string name="subscription_unlimited_possibilities">Desbloqueie possibilidades ilimitadas</string>
-    <string name="subscription_unlimited_time_title">Tempo de transmissão ilimitado</string>
-    <string name="subscription_unlimited_time_description">Transmita pelo tempo que quiser sem interrupções</string>
-    <string name="subscription_1m_viewers_title">Até 1M+ de espectadores</string>
-    <string name="subscription_1m_viewers_description">Aumente sua popularidade com enormes audiências virtuais</string>
-    <string name="subscription_ai_generated_title">Comentários e perguntas gerados por IA</string>
-    <string name="subscription_ai_generated_description">Experimente interações de fãs realistas que parecem uma transmissão ao vivo de verdade</string>
-    <string name="subscription_other_features_title">Muitos outros recursos exclusivos</string>
-    <string name="subscription_other_features_description">Novas ferramentas premium são adicionadas regularmente para melhorar sua experiência</string>
-    <string name="subscription_offer_ends">Oferta termina em: %s</string>
-    <string name="subscription_checkout">Continuar para o pagamento</string>
-    <string name="subscription_use_forever">Pague uma vez e use para sempre</string>
-    <string name="subscription_save">Economize %s</string>
-    <string name="subscription_checkout_failed">Falha ao concluir a operação</string>
-    <!-- Success -->
-    <string name="subscription_success_title">Assinatura ativada com sucesso</string>
-    <string name="subscription_success_description">Agora você pode aproveitar todos os recursos premium e tirar o máximo proveito da sua experiência</string>
-    <string name="subscription_success_start_using">Começar a usar</string>
-    <!-- Failed -->
-    <string name="subscription_failed_title">Algo deu errado</string>
-    <string name="subscription_failed_description">Verifique seu pagamento ou entre em contato com o suporte para obter ajuda</string>
-    <string name="subscription_failed_retry">Tentar novamente</string>
-    <!-- Premium -->
     <string name="subscription_get_premium">Seja Premium</string>
+    <string name="subscription_checkout">Continuar para o pagamento</string>
     <string name="subscription_live_time_title">Duração do Live</string>
     <string name="subscription_unlimited_live_time_description">Transmita o quanto quiser, sem interrupções</string>
-    <string name="subscription_unlimited_label">Ilimitado</string>
     <string name="subscription_limited_live_time_description">Experimente a transmissão ao vivo com tempo limitado</string>
+    <string name="subscription_unlimited_label">Ilimitado</string>
     <string name="subscription_60s_label">60 s</string>
     <string name="subscription_viewers_title">Visualizadores</string>
+    <string name="subscription_limited_viewers_description">Comece com um pequeno grupo de espectadores</string>
+    <string name="subscription_1m_viewers_description">Aumente sua popularidade com enormes audiências virtuais</string>
     <string name="subscription_1m_label">Até 1 M+</string>
     <string name="subscription_100_200_label">100–200</string>
-    <string name="subscription_limited_viewers_description">Comece com um pequeno grupo de espectadores</string>
     <string name="subscription_ai_features_title">Recursos de IA</string>
     <string name="subscription_ai_features_description">Torne suas transmissões ainda mais realistas com comentários e perguntas de IA</string>
     <string name="subscription_even_more_title">Ainda mais</string>
     <string name="subscription_even_more_description">Novas ferramentas premium são adicionadas regularmente para melhorar sua experiência</string>
+    <string name="subscription_offer_ends">Oferta termina em: %s</string>
+    <string name="subscription_use_forever">Pague uma vez e use para sempre</string>
+    <string name="subscription_save">Economize %s</string>
+    <string name="subscription_checkout_failed">Falha ao concluir a operação</string>
+
+    <!-- Success -->
+    <string name="subscription_success_title">Assinatura ativada com sucesso</string>
+    <string name="subscription_success_description">Agora você pode aproveitar todos os recursos premium e tirar o máximo proveito da sua experiência</string>
+    <string name="subscription_success_start_using">Começar a usar</string>
+
+    <!-- Failed -->
+    <string name="subscription_failed_title">Algo deu errado</string>
+    <string name="subscription_failed_description">Verifique seu pagamento ou entre em contato com o suporte para obter ajuda</string>
+    <string name="subscription_failed_retry">Tentar novamente</string>
 
     <string name="stream_join_requests_title">Solicitações para participar</string>
     <string name="stream_join_requests_body">Sem solicitações ainda</string>

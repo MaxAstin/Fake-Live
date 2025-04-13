@@ -1,10 +1,10 @@
-package com.bunbeauty.tiptoplive.features.subscription.presentation
+package com.bunbeauty.tiptoplive.features.premiumdetails.presentation
 
 import com.bunbeauty.tiptoplive.common.presentation.Base
 import com.bunbeauty.tiptoplive.features.billing.model.PurchaseData
-import com.bunbeauty.tiptoplive.features.subscription.view.SubscriptionItem
+import com.bunbeauty.tiptoplive.features.premiumdetails.view.SubscriptionItem
 
-interface Subscription {
+interface PremiumDetails {
 
     data class State(
         val freePlan: Plan,

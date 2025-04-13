@@ -1,4 +1,4 @@
-package com.bunbeauty.tiptoplive.features.subscription.presentation
+package com.bunbeauty.tiptoplive.features.premiumdetails.presentation
 
 import androidx.lifecycle.viewModelScope
 import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
@@ -8,8 +8,8 @@ import com.bunbeauty.tiptoplive.features.billing.PurchaseResultListener
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
 import com.bunbeauty.tiptoplive.features.billing.model.PurchaseData
 import com.bunbeauty.tiptoplive.features.billing.model.PurchaseResult
-import com.bunbeauty.tiptoplive.features.subscription.domain.GetOfferTimerFlowUseCase
-import com.bunbeauty.tiptoplive.features.subscription.mapper.toSubscriptions
+import com.bunbeauty.tiptoplive.features.premiumdetails.domain.GetOfferTimerFlowUseCase
+import com.bunbeauty.tiptoplive.features.premiumdetails.mapper.toSubscriptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
@@ -18,21 +18,21 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SubscriptionViewModel @Inject constructor(
+class PremiumDetailsViewModel @Inject constructor(
     private val analyticsManager: AnalyticsManager,
     private val billingService: BillingService,
     private val purchaseResultListener: PurchaseResultListener,
     private val getOfferTimerFlowUseCase: GetOfferTimerFlowUseCase,
     private val isPremiumAvailableUseCase: IsPremiumAvailableUseCase
-) : BaseViewModel<Subscription.State, Subscription.Action, Subscription.Event>(
+) : BaseViewModel<PremiumDetails.State, PremiumDetails.Action, PremiumDetails.Event>(
     initState = {
-        Subscription.State(
-            freePlan = Subscription.Plan(
+        PremiumDetails.State(
+            freePlan = PremiumDetails.Plan(
                 isSelected = false,
                 isCurrent = false,
                 subscriptions = emptyList()
             ),
-            premiumPlan = Subscription.Plan(
+            premiumPlan = PremiumDetails.Plan(
                 isSelected = true,
                 isCurrent = false,
                 subscriptions = emptyList()
@@ -48,14 +48,14 @@ class SubscriptionViewModel @Inject constructor(
         showCrossIcon()
     }
 
-    override fun onAction(action: Subscription.Action) {
+    override fun onAction(action: PremiumDetails.Action) {
         when (action) {
-            Subscription.Action.CloseClicked -> {
+            PremiumDetails.Action.CloseClicked -> {
                 analyticsManager.trackPremiumQuite()
-                sendEvent(Subscription.Event.NavigateBack)
+                sendEvent(PremiumDetails.Event.NavigateBack)
             }
 
-            is Subscription.Action.SelectPlan -> {
+            is PremiumDetails.Action.SelectPlan -> {
                 setState {
                     copy(
                         freePlan = freePlan.copy(isSelected = action.index == 0),
@@ -64,7 +64,7 @@ class SubscriptionViewModel @Inject constructor(
                 }
             }
 
-            is Subscription.Action.SubscriptionClick -> {
+            is PremiumDetails.Action.SubscriptionClick -> {
                 setState {
                     copy(
                         premiumPlan = premiumPlan.copy(
@@ -76,11 +76,11 @@ class SubscriptionViewModel @Inject constructor(
                 }
             }
 
-            Subscription.Action.CheckoutClick -> {
+            PremiumDetails.Action.CheckoutClick -> {
                 currentState.selectedSubscription?.let { subscription ->
                     analyticsManager.trackCheckoutClick(productId = subscription.id)
                     sendEvent(
-                        Subscription.Event.StartCheckout(
+                        PremiumDetails.Event.StartCheckout(
                             purchaseData = PurchaseData(
                                 productId = subscription.id,
                                 offerToken = subscription.offerToken
@@ -158,7 +158,7 @@ class SubscriptionViewModel @Inject constructor(
                 is PurchaseResult.Success -> {
                     billingService.acknowledgePurchase(purchasedProduct = result.product)
                         .onSuccess {
-                            sendEvent(Subscription.Event.NavigateToPurchase)
+                            sendEvent(PremiumDetails.Event.NavigateToPurchase)
                         }.onError {
                             handleError()
                         }
@@ -172,7 +172,7 @@ class SubscriptionViewModel @Inject constructor(
     }
 
     private fun handleError() {
-        sendEvent(Subscription.Event.NavigateToPurchaseFailed)
+        sendEvent(PremiumDetails.Event.NavigateToPurchaseFailed)
     }
 
 }

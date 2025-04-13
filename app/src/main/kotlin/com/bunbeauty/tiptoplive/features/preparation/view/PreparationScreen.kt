@@ -111,10 +111,6 @@ fun PreparationScreen(
                     onShareClick()
                 }
 
-                Preparation.Event.NavigateToSubscription -> {
-                    navController.navigate(NavigationRote.Subscription)
-                }
-
                 Preparation.Event.NavigateToPremiumDetails -> {
                     navController.navigate(NavigationRote.PremiumDetails)
                 }
@@ -301,7 +297,7 @@ private fun Premium(
                 modifier = modifier,
                 text = stringResource(R.string.preparation_premium),
                 onClick = {
-                    onAction(Preparation.Action.PurchasedPremiumClick)
+                    onAction(Preparation.Action.PremiumClick)
                 },
                 contentPadding = PaddingValues(
                     horizontal = 12.dp,
@@ -331,7 +327,7 @@ private fun Premium(
                         horizontal = 12.dp,
                         vertical = 6.dp
                     ).clickableWithoutIndication {
-                        onAction(Preparation.Action.PurchasedPremiumClick)
+                        onAction(Preparation.Action.PremiumClick)
                     },
                 horizontalArrangement = spacedBy(6.dp),
                 verticalAlignment = Alignment.CenterVertically

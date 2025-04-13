@@ -1,4 +1,4 @@
-package com.bunbeauty.tiptoplive.features.subscription.domain
+package com.bunbeauty.tiptoplive.features.premiumdetails.domain
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow

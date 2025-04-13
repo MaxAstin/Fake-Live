@@ -97,7 +97,7 @@ class PreparationViewModel @Inject constructor(
                         state.copy(viewerCount = action.item.viewerCount)
                     }
                 } else {
-                    sendEvent(Preparation.Event.NavigateToSubscription)
+                    sendEvent(Preparation.Event.NavigateToPremiumDetails)
                 }
             }
 
@@ -171,20 +171,6 @@ class PreparationViewModel @Inject constructor(
                     saveShowStreamDurationLimitUseCase(show = false)
                 }
                 analyticsManager.trackPremiumClick()
-                sendEvent(Preparation.Event.NavigateToSubscription)
-            }
-
-            Preparation.Action.PremiumClick -> {
-                setState { copy(showStreamDurationLimitsDialog = false) }
-                viewModelScope.launch {
-                    saveShowStreamDurationLimitUseCase(show = false)
-                }
-                analyticsManager.trackPremiumClick()
-                sendEvent(Preparation.Event.NavigateToSubscription)
-            }
-
-            Preparation.Action.PurchasedPremiumClick -> {
-                analyticsManager.trackPurchasedPremiumClick()
                 sendEvent(Preparation.Event.NavigateToPremiumDetails)
             }
         }

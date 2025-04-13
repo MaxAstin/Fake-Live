@@ -1,5 +1,6 @@
-package com.bunbeauty.tiptoplive.features.premiumdetails
+package com.bunbeauty.tiptoplive.features.premiumdetails.view
 
+import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
@@ -31,6 +32,7 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -58,6 +60,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.tiptoplive.R
+import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
 import com.bunbeauty.tiptoplive.common.ui.LocalePreview
 import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
 import com.bunbeauty.tiptoplive.common.ui.components.SegmentedControl
@@ -66,10 +69,12 @@ import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLivePrimaryButto
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.bold
 import com.bunbeauty.tiptoplive.common.ui.util.meshGradient
-import com.bunbeauty.tiptoplive.features.subscription.presentation.Subscription
-import com.bunbeauty.tiptoplive.features.subscription.presentation.SubscriptionViewModel
-import com.bunbeauty.tiptoplive.features.subscription.view.SubscriptionItem
+import com.bunbeauty.tiptoplive.features.billing.model.PurchaseData
+import com.bunbeauty.tiptoplive.features.premiumdetails.presentation.PremiumDetails
+import com.bunbeauty.tiptoplive.features.premiumdetails.presentation.PremiumDetailsViewModel
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 private val surfaceColor = Color(0xFF262036)
@@ -79,16 +84,56 @@ private val logo1 = Color(0xFF9C20FA)
 private val logo2 = Color(0xFFFF207E)
 private val logo3 = Color(0xFFFFBF01)
 
+data class SubscriptionItem(
+    val id: String,
+    val offerToken: String?,
+    val name: String,
+    val currentPrice: String,
+    val previousPrice: String,
+    val discountPercent: String,
+    val isLifetime: Boolean,
+    val isSelected: Boolean,
+)
+
 @Composable
 fun PremiumDetailsScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    startCheckout: (PurchaseData) -> Unit
 ) {
-    val viewModel: SubscriptionViewModel = hiltViewModel()
+    val viewModel: PremiumDetailsViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val onAction = remember {
-        { action: Subscription.Action ->
+        { action: PremiumDetails.Action ->
             viewModel.onAction(action)
         }
+    }
+
+    BackHandler {
+        onAction(PremiumDetails.Action.CloseClicked)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.event.onEach { event ->
+            when (event) {
+                PremiumDetails.Event.NavigateBack -> {
+                    navController.popBackStack()
+                }
+
+                is PremiumDetails.Event.StartCheckout -> {
+                    startCheckout(event.purchaseData)
+                }
+
+                is PremiumDetails.Event.NavigateToPurchase -> {
+                    navController.navigate(NavigationRote.SuccessfullyPurchased) {
+                        popUpTo<NavigationRote.Preparation> {}
+                    }
+                }
+
+                is PremiumDetails.Event.NavigateToPurchaseFailed -> {
+                    navController.navigate(NavigationRote.PurchaseFailed)
+                }
+            }
+        }.launchIn(this)
     }
 
     PremiumDetailsContent(
@@ -101,8 +146,8 @@ fun PremiumDetailsScreen(
 @Composable
 fun PremiumDetailsContent(
     navController: NavHostController,
-    state: Subscription.State,
-    onAction: (Subscription.Action) -> Unit
+    state: PremiumDetails.State,
+    onAction: (PremiumDetails.Action) -> Unit
 ) {
     var bottomHeightPx by remember {
         mutableIntStateOf(0)
@@ -184,7 +229,7 @@ fun PremiumDetailsContent(
                                     scrollState.animateScrollTo(0)
                                 }
                                 onAction(
-                                    Subscription.Action.SelectPlan(index = index)
+                                    PremiumDetails.Action.SelectPlan(index = index)
                                 )
                             },
                             text = text,
@@ -294,8 +339,8 @@ fun PremiumDetailsContent(
 @Composable
 private fun BottomBlock(
     modifier: Modifier = Modifier,
-    state: Subscription.State,
-    onAction: (Subscription.Action) -> Unit
+    state: PremiumDetails.State,
+    onAction: (PremiumDetails.Action) -> Unit
 ) {
     Column(
         modifier = modifier.padding(horizontal = 16.dp),
@@ -343,10 +388,10 @@ private fun BottomBlock(
                 onClick = {
                     if (state.isFreeSelected) {
                         onAction(
-                            Subscription.Action.SelectPlan(index = 1)
+                            PremiumDetails.Action.SelectPlan(index = 1)
                         )
                     } else {
-                        onAction(Subscription.Action.CheckoutClick)
+                        onAction(PremiumDetails.Action.CheckoutClick)
                     }
                 }
             )
@@ -417,7 +462,7 @@ private fun FeatureTile(
 @Composable
 private fun SubscriptionItem(
     subscriptionItem: SubscriptionItem,
-    onAction: (Subscription.Action) -> Unit,
+    onAction: (PremiumDetails.Action) -> Unit,
 ) {
     val borderColor = if (subscriptionItem.isSelected) {
         Brush.horizontalGradient(
@@ -438,7 +483,7 @@ private fun SubscriptionItem(
                 shape = shape
             )
             .clickableWithoutIndication {
-                onAction(Subscription.Action.SubscriptionClick(subscriptionItem.id))
+                onAction(PremiumDetails.Action.SubscriptionClick(subscriptionItem.id))
             }
     ) {
         Column(
@@ -561,6 +606,9 @@ private fun Modifier.premiumGradient(): Modifier {
 @Composable
 private fun PremiumDetailsScreenPreview() {
     FakeLiveTheme {
-        PremiumDetailsScreen(navController = rememberNavController())
+        PremiumDetailsScreen(
+            navController = rememberNavController(),
+            startCheckout = {}
+        )
     }
 }
