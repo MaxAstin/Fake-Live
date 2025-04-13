@@ -45,13 +45,12 @@ import com.bunbeauty.tiptoplive.features.main.presentation.Main
 import com.bunbeauty.tiptoplive.features.main.presentation.MainViewModel
 import com.bunbeauty.tiptoplive.features.main.view.CameraIsRequiredDialog
 import com.bunbeauty.tiptoplive.features.notification.NotificationMessage
-import com.bunbeauty.tiptoplive.features.premiumdetails.PremiumDetailsScreen
+import com.bunbeauty.tiptoplive.features.premiumdetails.view.PremiumDetailsScreen
 import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
 import com.bunbeauty.tiptoplive.features.progress.ProgressScreen
 import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
-import com.bunbeauty.tiptoplive.features.subscription.view.PurchaseFailedScreen
-import com.bunbeauty.tiptoplive.features.subscription.view.SubscriptionScreen
-import com.bunbeauty.tiptoplive.features.subscription.view.SuccessfullyPurchasedScreen
+import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseFailedScreen
+import com.bunbeauty.tiptoplive.features.premiumdetails.view.SuccessfullyPurchasedScreen
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -225,14 +224,11 @@ class MainActivity : ComponentActivity() {
                     }
                 )
             }
-            composable<NavigationRote.Subscription> {
-                SubscriptionScreen(
+            composable<NavigationRote.PremiumDetails> {
+                PremiumDetailsScreen(
                     navController = navController,
                     startCheckout = ::startCheckout
                 )
-            }
-            composable<NavigationRote.PremiumDetails> {
-                PremiumDetailsScreen(navController = navController)
             }
             composable<NavigationRote.SuccessfullyPurchased> {
                 SuccessfullyPurchasedScreen(navController = navController)

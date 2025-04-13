@@ -19,8 +19,8 @@ android {
         applicationId = "com.bunbeauty.tiptoplive"
         minSdk = 27
         targetSdk = 35
-        versionCode = 370
-        versionName = "3.7.0"
+        versionCode = 381
+        versionName = "3.8.1"
         multiDexEnabled = true
         setProperty("archivesBaseName", "FakeLive-$versionName")
 
@@ -94,6 +94,7 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.coil.compose)
+    implementation(libs.compose.animation)
 
     // Camera
     implementation(libs.bundles.camera2)

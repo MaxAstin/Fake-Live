@@ -1,7 +1,7 @@
-package com.bunbeauty.tiptoplive.features.subscription.mapper
+package com.bunbeauty.tiptoplive.features.premiumdetails.mapper
 
 import com.bunbeauty.tiptoplive.features.billing.model.Product
-import com.bunbeauty.tiptoplive.features.subscription.view.SubscriptionItem
+import com.bunbeauty.tiptoplive.features.premiumdetails.view.SubscriptionItem
 
 fun List<Product>.toSubscriptions(): List<SubscriptionItem> {
     return mapIndexed { index, product ->

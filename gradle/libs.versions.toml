@@ -4,7 +4,7 @@ application = "8.7.3"
 billingKtx = "7.1.1"
 camera2 = "1.4.1"
 coilCompose = "2.6.0"
-composeBom = "2025.03.00"
+composeBom = "2025.03.01"
 coreKtx = "1.15.0"
 coreSplashscreen = "1.0.1"
 firebase = "33.11.0"
@@ -49,6 +49,7 @@ compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeB
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-animation = { module = "androidx.compose.animation:animation", version="1.8.0-rc02" }
 
 # Camera
 camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camera2" }

@@ -48,39 +48,39 @@
 
     <string name="crop_image_next">Next</string>
 
+    <!-- Premium -->
+    <string name="subscription_free">Free</string>
     <string name="subscription_current">Current</string>
-    <string name="subscription_unlimited_possibilities">Unlock unlimited possibilities</string>
-    <string name="subscription_unlimited_time_title">Unlimited Live time</string>
-    <string name="subscription_unlimited_time_description">Stream for as long as you want without interruptions</string>
-    <string name="subscription_1m_viewers_title">Up to 1M+ viewers</string>
-    <string name="subscription_1m_viewers_description">Boost your popularity with massive virtual audiences</string>
-    <string name="subscription_ai_generated_title">AI-generated comments &amp; questions</string>
-    <string name="subscription_ai_generated_description">Experience authentic-looking fan interactions that feel just like a real Live stream</string>
-    <string name="subscription_other_features_title">Many other exclusive features</string>
-    <string name="subscription_other_features_description">New premium tools are added regularly to enhance your experience</string>
-    <string name="subscription_offer_ends">🔥 Offer ends in: %s 🔥</string>
+    <string name="subscription_get_premium">Get Premium</string>
     <string name="subscription_checkout">Continue to checkout</string>
+    <string name="subscription_live_time_title">Live time</string>
+    <string name="subscription_unlimited_live_time_description">Stream for as long as you want without interruptions</string>
+    <string name="subscription_limited_live_time_description">Try Live streaming with limited time access</string>
+    <string name="subscription_unlimited_label">Unlimited</string>
+    <string name="subscription_60s_label">60 sec</string>
+    <string name="subscription_viewers_title">Viewers</string>
+    <string name="subscription_1m_viewers_description">Boost your popularity with massive virtual audiences</string>
+    <string name="subscription_limited_viewers_description">Start with a small group of viewers</string>
+    <string name="subscription_1m_label">Up to 1M+</string>
+    <string name="subscription_100_200_label">100–200</string>
+    <string name="subscription_ai_features_title">AI features</string>
+    <string name="subscription_ai_features_description">Make your Live even more realistic with AI comments and questions</string>
+    <string name="subscription_even_more_title">Even more</string>
+    <string name="subscription_even_more_description">New premium tools are added regularly to enhance your experience</string>
+    <string name="subscription_offer_ends">Offer ends in: %s</string>
     <string name="subscription_use_forever">Pay once and use forever</string>
     <string name="subscription_save">Save %s</string>
     <string name="subscription_checkout_failed">Failed to complete the operation</string>
+
     <!-- Success -->
     <string name="subscription_success_title">Subscription successfully activated</string>
     <string name="subscription_success_description">Now you can enjoy all premium features and make the most of your experience</string>
     <string name="subscription_success_start_using">Start using</string>
+
     <!-- Failed -->
     <string name="subscription_failed_title">Something went wrong</string>
     <string name="subscription_failed_description">Please check your payment or contact support for assistance</string>
     <string name="subscription_failed_retry">Retry</string>
-    <!-- Premium -->
-    <string name="subscription_live_time_title">Live time</string>
-    <string name="subscription_unlimited_live_time_description">Stream for as long as you want without interruptions</string>
-    <string name="subscription_unlimited_label">Unlimited</string>
-    <string name="subscription_viewers_title">Viewers</string>
-    <string name="subscription_1m_label">Up to 1M+</string>
-    <string name="subscription_ai_features_title">AI features</string>
-    <string name="subscription_ai_features_description">Make your Live even more realistic with AI comments and questions</string>
-    <string name="subscription_other_premium_features_title">Other features</string>
-    <string name="subscription_other_premium_features_description">New premium tools are added regularly to enhance your experience</string>
 
     <string name="stream_join_requests_title">Requests to join</string>
     <string name="stream_join_requests_body">No Requests Yet</string>
