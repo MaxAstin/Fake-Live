@@ -9,16 +9,15 @@ import com.bunbeauty.tiptoplive.common.util.getCurrentTimeSeconds
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
 import com.bunbeauty.tiptoplive.features.progress.domain.usecase.IncreaseProgressPointsUseCase
 import com.bunbeauty.tiptoplive.features.stream.CameraUtil
+import com.bunbeauty.tiptoplive.features.stream.domain.FinishDemoStreamAutomaticallyUseCase
+import com.bunbeauty.tiptoplive.features.stream.domain.FinishStreamManuallyUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.GetCommentsUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.GetQuestionUseCase
-import com.bunbeauty.tiptoplive.features.stream.domain.SaveShowStreamDurationLimitUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.UpdateCurrentPictureUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.model.Question
 import com.bunbeauty.tiptoplive.shared.domain.GetImageUriFlowUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetUsernameUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetViewerCountUseCase
-import com.bunbeauty.tiptoplive.shared.feedback.domain.IsFeedbackProvidedUseCase
-import com.bunbeauty.tiptoplive.shared.feedback.domain.SaveShouldAskFeedbackUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
@@ -30,7 +29,6 @@ import kotlin.math.min
 import kotlin.random.Random
 
 const val TIME_LIMIT_FOR_FREE_VERSION = 60 // sec
-const val STREAM_DURATION_TO_ASK_FEEDBACK = 30 // sec
 
 @HiltViewModel
 class StreamViewModel @Inject constructor(
@@ -42,11 +40,10 @@ class StreamViewModel @Inject constructor(
     private val updateCurrentPictureUseCase: UpdateCurrentPictureUseCase,
     private val getCommentsUseCase: GetCommentsUseCase,
     private val getQuestionUseCase: GetQuestionUseCase,
-    private val isFeedbackProvidedUseCase: IsFeedbackProvidedUseCase,
-    private val saveShouldAskFeedbackUseCase: SaveShouldAskFeedbackUseCase,
-    private val saveShowStreamDurationLimitUseCase: SaveShowStreamDurationLimitUseCase,
+    private val finishDemoStreamAutomaticallyUseCase: FinishDemoStreamAutomaticallyUseCase,
+    private val finishStreamManuallyUseCase: FinishStreamManuallyUseCase,
     private val analyticsManager: AnalyticsManager,
-    private val cameraUtil: CameraUtil,
+    private val cameraUtil: CameraUtil
 ) : BaseViewModel<Stream.State, Stream.Action, Stream.Event>(
     initState = {
         Stream.State(
@@ -244,12 +241,8 @@ class StreamViewModel @Inject constructor(
 
             Stream.Action.FinishStreamClick -> {
                 val duration = getStreamDuration()
-                analyticsManager.trackStreamFinish(duration = duration)
                 viewModelScope.launch {
-                    if (duration.value >= STREAM_DURATION_TO_ASK_FEEDBACK && !isFeedbackProvidedUseCase()) {
-                        saveShouldAskFeedbackUseCase(shouldAsk = true)
-                    }
-
+                    finishStreamManuallyUseCase(duration = duration)
                     sendEvent(Stream.Event.NavigateBack)
                 }
             }
@@ -307,9 +300,7 @@ class StreamViewModel @Inject constructor(
 
     private suspend fun startDemoTimer() {
         delay(TIME_LIMIT_FOR_FREE_VERSION * 1_000L)
-        increaseProgressPointsUseCase(points = 1)
-        saveShowStreamDurationLimitUseCase(show = true)
-        analyticsManager.trackStreamAutoFinish()
+        finishDemoStreamAutomaticallyUseCase()
         sendEvent(Stream.Event.NavigateBack)
     }
 

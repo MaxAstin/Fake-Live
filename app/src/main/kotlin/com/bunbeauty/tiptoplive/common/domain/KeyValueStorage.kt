@@ -9,7 +9,6 @@ interface KeyValueStorage {
     suspend fun saveViewerCountIndex(index: Int)
     suspend fun saveShouldAskFeedback(shouldAsk: Boolean)
     suspend fun saveFeedbackProvided(feedbackProvided: Boolean)
-    suspend fun saveShouldHighlightDonate(shouldHighlight: Boolean)
     suspend fun saveIsIntroViewed(isIntroViewed: Boolean)
     suspend fun saveLastUsedDate(date: String)
     suspend fun saveUsedDayCount(count: Int)
@@ -17,13 +16,13 @@ interface KeyValueStorage {
     suspend fun saveShouldShowProgressHint(shouldShowProgressHint: Boolean)
     suspend fun saveNewLevel(newLevel: Boolean)
     suspend fun saveShowStreamDurationLimit(show: Boolean)
+    suspend fun saveNotifiedOfStreamDurationLimit(notified: Boolean)
 
     fun getImageUriFlow(): Flow<String?>
     suspend fun getUsername(): String?
     suspend fun getViewerCountIndex(defaultValue: Int): Int
     suspend fun getShouldAskFeedback(defaultValue: Boolean): Boolean
     suspend fun getFeedbackProvided(defaultValue: Boolean): Boolean
-    suspend fun getShouldHighlightDonate(defaultValue: Boolean): Boolean
     suspend fun getIsIntroViewed(defaultValue: Boolean): Boolean
     suspend fun getLastUsedDate(): String?
     suspend fun getUsedDayCount(defaultValue: Int): Int
@@ -31,5 +30,6 @@ interface KeyValueStorage {
     suspend fun getShouldShowProgressHint(defaultValue: Boolean): Boolean
     suspend fun getNewLevel(defaultValue: Boolean): Boolean
     suspend fun getShowStreamDurationLimit(defaultValue: Boolean): Boolean
+    suspend fun getNotifiedOfStreamDurationLimit(defaultValue: Boolean): Boolean
 
 }

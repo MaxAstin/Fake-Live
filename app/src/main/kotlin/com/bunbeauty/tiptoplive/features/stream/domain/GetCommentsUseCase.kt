@@ -70,18 +70,17 @@ class GetCommentsUseCase @Inject constructor(
                 launch {
                     while (isActive) {
                         delay(THRESHOLD_CHECK_PERIOD)
-
                         if (aiCommentSize.value < PREFETCH_THRESHOLD) {
                             commentRepository.getComments(
                                 count = COMMENT_LIST_SIZE
                             ).onSuccess { comments ->
+                                aiCommentSize.update { size ->
+                                    size + comments.size
+                                }
                                 comments.shuffled()
                                     .forEach { aiCommentText ->
                                         aiCommentChannel.send(aiCommentText)
                                     }
-                                aiCommentSize.update { size ->
-                                    size + comments.size
-                                }
                             }
                         }
                     }

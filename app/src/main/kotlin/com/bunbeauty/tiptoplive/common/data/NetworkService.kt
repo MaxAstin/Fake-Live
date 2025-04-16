@@ -30,7 +30,7 @@ class NetworkService @Inject constructor(
             content = listOf(
                 Message.Content(
                     type = TEXT_TYPE,
-                    text = SYSTEM_MESSAGE
+                    text = "$BASIC_PROMPT ${VIBE_DESCRIPTION_LIST.random()} $SYSTEM_MESSAGE_PARAMS"
                 )
             )
         )
@@ -112,18 +112,33 @@ class NetworkService @Inject constructor(
         private const val ROLE_SYSTEM = "system"
         private const val ROLE_USER = "user"
 
-        private val SYSTEM_MESSAGE = """
+        private val BASIC_PROMPT = """
             Create comments for Live stream where blogger is just talking about something.
             Ignore any people faces on the image and make up comments based on the background, clothes, objects and environment on the image from the Live stream.
-            Comments should contain a choice of either  1 interjection, 1 word or 2-6 words.
-            Comments must contain emoji with a probability of 50%.
+            Comments should contain a choice of either 1 interjection, 1 word or 2-6 words.
+            Comments can contain emoji (50% chance).
             Do not use exclamation marks.
-            
-            [
-              Comments count: n, 
-              Language: lang
-            ]
         """.trimIndent()
+        private val VIBE_DESCRIPTION_LIST = listOf(
+            """
+                Charisma: Calm, warm, always kind;
+                Verbal Style: Soft, poetic, relaxed tone;
+                Vibe: Your mellow friend who notices the little things;
+            """.trimIndent(),
+            """
+                Charisma: Energetic, playful, super friendly;
+                Verbal Style: Short, punchy, fun — like a party in the comments;
+                Vibe: The nice person in chat who hypes everyone up;
+            """.trimIndent(),
+            """
+                Charisma: Intelligent, oddball nice;
+                Verbal Style: Slightly robotic or analytical, but always respectful and intrigued;
+                Vibe: Curious AI that likes humans and enjoys nice things;
+            """.trimIndent()
+        )
+        private const val SYSTEM_MESSAGE_PARAMS = "[Comments count: n, Language: lang]"
+
+
 
     }
 }
