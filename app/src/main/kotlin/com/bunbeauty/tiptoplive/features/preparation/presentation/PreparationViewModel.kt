@@ -8,19 +8,20 @@ import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.GetShowStreamDurationLimitUseCase
+import com.bunbeauty.tiptoplive.features.preparation.domain.SaveNotifiedOfStreamDurationLimitUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SetupNotificationUseCase
 import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation.ViewerCountItem
 import com.bunbeauty.tiptoplive.features.progress.domain.usecase.GetNewLevelUseCase
-import com.bunbeauty.tiptoplive.features.stream.domain.SaveShowStreamDurationLimitUseCase
+import com.bunbeauty.tiptoplive.features.preparation.domain.SaveShowStreamDurationLimitUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetImageUriFlowUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetUsernameUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetViewerCountUseCase
 import com.bunbeauty.tiptoplive.shared.domain.SaveUsernameUseCase
 import com.bunbeauty.tiptoplive.shared.domain.SaveViewerCountUseCase
 import com.bunbeauty.tiptoplive.shared.domain.model.ViewerCount
-import com.bunbeauty.tiptoplive.shared.feedback.domain.SaveFeedbackProvidedUseCase
-import com.bunbeauty.tiptoplive.shared.feedback.domain.SaveShouldAskFeedbackUseCase
-import com.bunbeauty.tiptoplive.shared.feedback.domain.ShouldAskFeedbackUseCase
+import com.bunbeauty.tiptoplive.features.preparation.domain.SaveFeedbackProvidedUseCase
+import com.bunbeauty.tiptoplive.features.preparation.domain.SaveShouldAskFeedbackUseCase
+import com.bunbeauty.tiptoplive.features.preparation.domain.ShouldAskFeedbackUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -44,6 +45,7 @@ class PreparationViewModel @Inject constructor(
     private val saveFeedbackProvidedUseCase: SaveFeedbackProvidedUseCase,
     private val getShowStreamDurationLimitUseCase: GetShowStreamDurationLimitUseCase,
     private val saveShowStreamDurationLimitUseCase: SaveShowStreamDurationLimitUseCase,
+    private val saveNotifiedOfStreamDurationLimitUseCase: SaveNotifiedOfStreamDurationLimitUseCase,
     private val getUsernameUseCase: GetUsernameUseCase,
     private val saveUsernameUseCase: SaveUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
@@ -145,9 +147,6 @@ class PreparationViewModel @Inject constructor(
                 setState {
                     copy(showStreamDurationLimitsDialog = false)
                 }
-                viewModelScope.launch {
-                    saveShowStreamDurationLimitUseCase(show = false)
-                }
             }
 
             is Preparation.Action.PremiumLaterClick -> {
@@ -156,7 +155,7 @@ class PreparationViewModel @Inject constructor(
                     copy(showStreamDurationLimitsDialog = false)
                 }
                 viewModelScope.launch {
-                    saveShowStreamDurationLimitUseCase(show = false)
+                    saveNotifiedOfStreamDurationLimitUseCase(notified = true)
                 }
             }
 
@@ -168,7 +167,7 @@ class PreparationViewModel @Inject constructor(
             Preparation.Action.PremiumClick -> {
                 setState { copy(showStreamDurationLimitsDialog = false) }
                 viewModelScope.launch {
-                    saveShowStreamDurationLimitUseCase(show = false)
+                    saveNotifiedOfStreamDurationLimitUseCase(notified = true)
                 }
                 analyticsManager.trackPremiumClick()
                 sendEvent(Preparation.Event.NavigateToPremiumDetails)
@@ -229,6 +228,7 @@ class PreparationViewModel @Inject constructor(
                 setState {
                     copy(showStreamDurationLimitsDialog = true)
                 }
+                saveShowStreamDurationLimitUseCase(show = false)
             }
         }
     }
