@@ -19,7 +19,7 @@ this app provides a platform to create realistic fake Lives.
 ✅ Instagram – supported </br>
 🔜 TikTok – coming soon </br>
 
-## Technologies
+## Tech stack
 - [Kotlin](https://kotlinlang.org/): Programming language
 - [Jetpack compose](https://developer.android.com/jetpack/compose): UI
 - [CameraX](https://developer.android.com/media/camera/camerax): Camera management 
