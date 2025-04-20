@@ -1,11 +1,11 @@
-package com.bunbeauty.tiptoplive.common.data.model
+package com.bunbeauty.tiptoplive.shared.data.model
 
-import com.bunbeauty.tiptoplive.common.data.serialisation.CommentsResponseSerializer
+import com.bunbeauty.tiptoplive.shared.data.serialisation.OpenAiResponseSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable(CommentsResponseSerializer::class)
-sealed interface CommentsResponse {
+@Serializable(OpenAiResponseSerializer::class)
+sealed interface OpenAiResponse {
 
     @Serializable
     data class Success(
@@ -16,17 +16,17 @@ sealed interface CommentsResponse {
         @SerialName("choices") val choices: List<Choice>,
         @SerialName("usage") val usage: Usage,
         @SerialName("system_fingerprint") val systemFingerprint: String
-    ) : CommentsResponse
+    ) : OpenAiResponse
 
     @Serializable
-    data class Error(val error: ErrorDetails) : CommentsResponse {
+    data class Error(val error: ErrorDetails) : OpenAiResponse {
 
         @Serializable
         data class ErrorDetails(
             val message: String,
             val type: String,
             val param: String,
-            val code: String
+            val code: String?
         )
     }
 }

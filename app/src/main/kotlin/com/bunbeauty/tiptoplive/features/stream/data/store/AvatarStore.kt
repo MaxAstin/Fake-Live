@@ -1,8 +1,8 @@
-package com.bunbeauty.tiptoplive.features.stream.data.comment
+package com.bunbeauty.tiptoplive.features.stream.data.store
 
-private const val PICTURE_COUNT = 100
+private const val AVATAR_COUNT = 100
 
-class PictureStore {
+class AvatarStore {
 
     private var nextIndex = 0
     private var pictureNames = generatePictureNames()
@@ -21,7 +21,7 @@ class PictureStore {
     }
 
     private fun generatePictureNames(): List<String> {
-        return (1..PICTURE_COUNT)
+        return (1..AVATAR_COUNT)
             .shuffled()
             .map { i ->
                 "a$i"

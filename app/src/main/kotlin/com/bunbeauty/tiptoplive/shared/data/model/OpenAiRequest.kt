@@ -1,10 +1,10 @@
-package com.bunbeauty.tiptoplive.common.data.model
+package com.bunbeauty.tiptoplive.shared.data.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class CommentsRequest(
+class OpenAiRequest(
     @SerialName("model") val model: String,
     @SerialName("messages") val messages: List<Message>,
     @SerialName("temperature") val temperature: Int,
@@ -45,7 +45,7 @@ class ResponseFormat(
 class JsonSchema(
     val name: String,
     val strict: Boolean,
-    val schema: Schema,
+    val schema: Schema
 )
 
 @Serializable
@@ -57,17 +57,4 @@ class Schema(
 )
 
 @Serializable
-class Properties(
-    val comments: Comments
-)
-
-@Serializable
-class Comments(
-    val type: String,
-    val items: Items
-)
-
-@Serializable
-class Items(
-    val type: String
-)
+abstract class Properties

@@ -13,7 +13,7 @@ import com.bunbeauty.tiptoplive.features.stream.domain.FinishDemoStreamAutomatic
 import com.bunbeauty.tiptoplive.features.stream.domain.FinishStreamManuallyUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.GetCommentsUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.GetQuestionUseCase
-import com.bunbeauty.tiptoplive.features.stream.domain.UpdateCurrentPictureUseCase
+import com.bunbeauty.tiptoplive.features.stream.domain.UpdateCurrentLiveScreenUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.model.Question
 import com.bunbeauty.tiptoplive.shared.domain.GetImageUriFlowUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetUsernameUseCase
@@ -28,6 +28,7 @@ import javax.inject.Inject
 import kotlin.math.min
 import kotlin.random.Random
 
+private const val QUESTION_LIMIT = 3
 const val TIME_LIMIT_FOR_FREE_VERSION = 60 // sec
 
 @HiltViewModel
@@ -37,7 +38,7 @@ class StreamViewModel @Inject constructor(
     private val getViewerCountUseCase: GetViewerCountUseCase,
     private val isPremiumAvailableUseCase: IsPremiumAvailableUseCase,
     private val increaseProgressPointsUseCase: IncreaseProgressPointsUseCase,
-    private val updateCurrentPictureUseCase: UpdateCurrentPictureUseCase,
+    private val updateCurrentLiveScreenUseCase: UpdateCurrentLiveScreenUseCase,
     private val getCommentsUseCase: GetCommentsUseCase,
     private val getQuestionUseCase: GetQuestionUseCase,
     private val finishDemoStreamAutomaticallyUseCase: FinishDemoStreamAutomaticallyUseCase,
@@ -256,7 +257,7 @@ class StreamViewModel @Inject constructor(
             }
 
             is Stream.Action.HandlePicture -> {
-                updateCurrentPictureUseCase(bytes = action.bytes)
+                updateCurrentLiveScreenUseCase(bytes = action.bytes)
             }
         }
     }
@@ -372,9 +373,8 @@ class StreamViewModel @Inject constructor(
             delay(5_000)
             while (true) {
                 val questionCount = currentState.questionState.notAnsweredQuestions.size
-                val newQuestion = getQuestionUseCase(questionCount = questionCount)
-                if (newQuestion != null) {
-                    handleNewQuestion(question = newQuestion)
+                if (questionCount < QUESTION_LIMIT) {
+                    handleNewQuestion(question = getQuestionUseCase())
                 }
 
                 delay(Random.nextLong(20_000, 50_000))

@@ -61,10 +61,10 @@ fun Stream.State.toViewState(): ViewState {
 private fun Comment.toCommentUi(): CommentUi {
     return CommentUi(
         uuid = uuid,
-        picture = if (picture == null) {
+        picture = if (avatarName == null) {
             ImageSource.ResId(R.drawable.img_default_avatar)
         } else {
-            ImageSource.ResName(picture)
+            ImageSource.ResName(avatarName)
         },
         username = username,
         text = text,
@@ -74,10 +74,10 @@ private fun Comment.toCommentUi(): CommentUi {
 private fun Stream.SelectableQuestion.toQuestionUi(): QuestionUi {
     return QuestionUi(
         uuid = question.uuid,
-        picture = if (question.picture == null) {
+        picture = if (question.avatarName == null) {
             ImageSource.ResId(R.drawable.img_default_avatar)
         } else {
-            ImageSource.ResName(question.picture)
+            ImageSource.ResName(question.avatarName)
         },
         username = question.username,
         text = question.text,

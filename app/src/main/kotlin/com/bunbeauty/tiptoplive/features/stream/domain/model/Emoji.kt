@@ -1,4 +1,4 @@
-package com.bunbeauty.tiptoplive.features.stream.data
+package com.bunbeauty.tiptoplive.features.stream.domain.model
 
 val EMOJI = arrayOf(
     "😀",

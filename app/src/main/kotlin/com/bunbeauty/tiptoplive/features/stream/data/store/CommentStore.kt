@@ -1,4 +1,4 @@
-package com.bunbeauty.tiptoplive.features.stream.data.comment
+package com.bunbeauty.tiptoplive.features.stream.data.store
 
 class CommentStore(private val comments: Array<String>) {
 

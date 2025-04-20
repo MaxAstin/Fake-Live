@@ -3,8 +3,8 @@ package com.bunbeauty.tiptoplive.features.stream.domain
 import com.bunbeauty.tiptoplive.common.util.chance
 import com.bunbeauty.tiptoplive.common.util.percent
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
-import com.bunbeauty.tiptoplive.features.stream.data.comment.CommentRepository
-import com.bunbeauty.tiptoplive.features.stream.data.user.UserRepository
+import com.bunbeauty.tiptoplive.features.stream.data.repository.CommentRepository
+import com.bunbeauty.tiptoplive.features.stream.data.repository.UserRepository
 import com.bunbeauty.tiptoplive.features.stream.domain.model.Comment
 import com.bunbeauty.tiptoplive.shared.domain.GetViewerCountUseCase
 import com.bunbeauty.tiptoplive.shared.domain.model.ViewerCount
@@ -98,15 +98,15 @@ class GetCommentsUseCase @Inject constructor(
     }
 
     private fun String.toComment(aiGenerated: Boolean): Comment {
-        val picture = if (chance(10.percent)) {
+        val avatarName = if (chance(10.percent)) {
             null
         } else {
-            userRepository.getCommentPictureName()
+            userRepository.getCommentAvatarName()
         }
 
         return Comment(
             uuid = UUID.randomUUID().toString(),
-            picture = picture,
+            avatarName = avatarName,
             username = getRandomUsernameUseCase(),
             text = this,
             aiGenerated = aiGenerated

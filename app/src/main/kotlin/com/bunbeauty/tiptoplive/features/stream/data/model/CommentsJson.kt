@@ -1,4 +1,4 @@
-package com.bunbeauty.tiptoplive.common.data.model
+package com.bunbeauty.tiptoplive.features.stream.data.model
 
 import kotlinx.serialization.Serializable
 

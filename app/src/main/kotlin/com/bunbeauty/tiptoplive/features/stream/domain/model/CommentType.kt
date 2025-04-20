@@ -1,4 +1,4 @@
-package com.bunbeauty.tiptoplive.features.stream.domain
+package com.bunbeauty.tiptoplive.features.stream.domain.model
 
 enum class CommentType {
     ONE_LETTER,
