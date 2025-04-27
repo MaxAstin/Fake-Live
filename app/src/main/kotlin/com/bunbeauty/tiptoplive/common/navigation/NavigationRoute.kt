@@ -13,7 +13,7 @@ interface NavigationRoute {
     data object Preparation: BottomNavigationRoute
 
     @Serializable
-    data object Progress: BottomNavigationRoute
+    data object Awards: BottomNavigationRoute
 
     @Serializable
     data object More: BottomNavigationRoute

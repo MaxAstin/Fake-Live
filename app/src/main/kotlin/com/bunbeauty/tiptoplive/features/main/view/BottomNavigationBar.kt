@@ -36,7 +36,7 @@ import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializer
 
 private val bottomRoutes: List<BottomNavigationRoute> = listOf(
-    NavigationRoute.Progress,
+    NavigationRoute.Awards,
     NavigationRoute.Preparation,
     NavigationRoute.More
 )
@@ -149,7 +149,7 @@ fun BottomNavigationBarContent(
 private fun BottomNavigationRoute.icon(): Int {
     return when (this) {
         NavigationRoute.Preparation -> R.drawable.ic_stream
-        NavigationRoute.Progress -> R.drawable.ic_cup
+        NavigationRoute.Awards -> R.drawable.ic_cup
         NavigationRoute.More -> R.drawable.ic_more
     }
 }
@@ -157,7 +157,7 @@ private fun BottomNavigationRoute.icon(): Int {
 private fun BottomNavigationRoute.text(): Int {
     return when (this) {
         NavigationRoute.Preparation -> R.string.navigation_live
-        NavigationRoute.Progress -> R.string.navigation_awards
+        NavigationRoute.Awards -> R.string.navigation_awards
         NavigationRoute.More -> R.string.navigation_more
     }
 }
@@ -186,7 +186,7 @@ fun BottomNavigationBarPreview() {
             itemList = BottomNavigationItemList(
                 items = listOf(
                     BottomNavigationItem(
-                        route = NavigationRoute.Progress,
+                        route = NavigationRoute.Awards,
                         isSelected = false
                     ),
                     BottomNavigationItem(

@@ -50,7 +50,7 @@ import com.bunbeauty.tiptoplive.features.premiumdetails.view.PremiumDetailsScree
 import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseFailedScreen
 import com.bunbeauty.tiptoplive.features.premiumdetails.view.SuccessfullyPurchasedScreen
 import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
-import com.bunbeauty.tiptoplive.features.progress.ProgressScreen
+import com.bunbeauty.tiptoplive.features.progress.AwardsScreen
 import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
@@ -211,8 +211,8 @@ class MainActivity : ComponentActivity() {
                     }
                 )
             }
-            composable<NavigationRoute.Progress> {
-                ProgressScreen(navController = navController)
+            composable<NavigationRoute.Awards> {
+                AwardsScreen()
             }
             composable<NavigationRoute.Stream> {
                 StreamScreen(navController = navController)

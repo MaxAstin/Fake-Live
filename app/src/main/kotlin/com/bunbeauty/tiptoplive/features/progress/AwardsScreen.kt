@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,20 +28,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
-import com.bunbeauty.tiptoplive.common.ui.components.CloseIcon
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.bold
 import com.bunbeauty.tiptoplive.features.progress.view.SpeechBubbleShape
 
 @Composable
-fun ProgressScreen(navController: NavHostController) {
+fun AwardsScreen() {
     val viewModel: ProgressViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val onAction = remember {
@@ -50,17 +47,15 @@ fun ProgressScreen(navController: NavHostController) {
         }
     }
 
-    ProgressContent(
+    AwardsContent(
         state = state,
-        navController = navController,
         onAction = onAction
     )
 }
 
 @Composable
-private fun ProgressContent(
+private fun AwardsContent(
     state: Progress.State,
-    navController: NavHostController,
     onAction: (Progress.Action) -> Unit
 ) {
     Box(
@@ -69,19 +64,14 @@ private fun ProgressContent(
             .background(FakeLiveTheme.colors.background)
             .padding(16.dp)
     ) {
-        CloseIcon(
-            modifier = Modifier.align(Alignment.TopEnd),
-            onClick = { navController.popBackStack() }
-        )
-
         (state as? Progress.State.Success)?.let { successState ->
             CenterBlock(
                 modifier = Modifier.align(Alignment.Center),
-                state = state
+                state = successState
             )
             ProgressBlock(
                 modifier = Modifier.align(Alignment.BottomCenter),
-                state = state,
+                state = successState,
                 onAction = onAction
             )
         }
@@ -226,7 +216,7 @@ private fun HintBox(
 @Composable
 private fun ProgressScreenPreview() {
     FakeLiveTheme {
-        ProgressContent(
+        AwardsContent(
             state = Progress.State.Success(
                 showNewLevelAnimation = true,
                 showHint = false,
@@ -236,7 +226,6 @@ private fun ProgressScreenPreview() {
                 points = 100,
                 nextLevelPoints = 100,
             ),
-            navController = rememberNavController(),
             onAction = {}
         )
     }
