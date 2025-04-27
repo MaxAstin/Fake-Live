@@ -29,7 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.tiptoplive.R
-import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
+import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLiveDialogButton
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
@@ -64,8 +64,8 @@ fun CropImageScreen(
         viewModel.event.onEach { event ->
             when (event) {
                 CropImage.Event.NavigateBack -> {
-                    navController.navigate(route = NavigationRote.Preparation) {
-                        popUpTo<NavigationRote.Preparation> {
+                    navController.navigate(route = NavigationRoute.Preparation) {
+                        popUpTo<NavigationRoute.Preparation> {
                             inclusive = true
                         }
                     }

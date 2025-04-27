@@ -1,5 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <string name="navigation_live">Прямой эфир</string>
+    <string name="navigation_awards">Награды</string>
+    <string name="navigation_more">Ещё</string>
+
     <string name="common_under_development">Эта функция находится в стадии разработки</string>
     <string name="common_something_went_wrong">Что-то пошло не так</string>
 

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <string name="navigation_live">En vivo</string>
+    <string name="navigation_awards">Premios</string>
+    <string name="navigation_more">Más</string>
+
     <string name="common_under_development">Esta característica está en desarrollo</string>
     <string name="common_something_went_wrong">Algo salió mal</string>
 

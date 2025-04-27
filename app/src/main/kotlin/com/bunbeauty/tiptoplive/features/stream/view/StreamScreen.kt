@@ -57,7 +57,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.bunbeauty.tiptoplive.R
-import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
+import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.LocalePreview
 import com.bunbeauty.tiptoplive.common.ui.blurTop
 import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
@@ -140,8 +140,8 @@ private fun handleEvent(
 ) {
     when (event) {
         is Stream.Event.NavigateBack -> {
-            navController.navigate(route = NavigationRote.Preparation) {
-                popUpTo<NavigationRote.Preparation> {
+            navController.navigate(route = NavigationRoute.Preparation) {
+                popUpTo<NavigationRoute.Preparation> {
                     inclusive = true
                 }
             }

@@ -60,7 +60,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.tiptoplive.R
-import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
+import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.LocalePreview
 import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
 import com.bunbeauty.tiptoplive.common.ui.components.SegmentedControl
@@ -124,13 +124,13 @@ fun PremiumDetailsScreen(
                 }
 
                 is PremiumDetails.Event.NavigateToPurchase -> {
-                    navController.navigate(NavigationRote.SuccessfullyPurchased) {
-                        popUpTo<NavigationRote.Preparation> {}
+                    navController.navigate(NavigationRoute.SuccessfullyPurchased) {
+                        popUpTo<NavigationRoute.Preparation> {}
                     }
                 }
 
                 is PremiumDetails.Event.NavigateToPurchaseFailed -> {
-                    navController.navigate(NavigationRote.PurchaseFailed)
+                    navController.navigate(NavigationRoute.PurchaseFailed)
                 }
             }
         }.launchIn(this)

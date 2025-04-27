@@ -35,7 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.bunbeauty.tiptoplive.R
-import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
+import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.LocalePreview
 import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
 import com.bunbeauty.tiptoplive.common.ui.components.CachedImage
@@ -78,7 +78,7 @@ fun PreparationScreen(
     ) { uri ->
         val uriParam = uri?.toString() ?: return@rememberLauncherForActivityResult
         navController.navigate(
-            NavigationRote.CropImage(uri = uriParam)
+            NavigationRoute.CropImage(uri = uriParam)
         )
     }
 
@@ -92,7 +92,7 @@ fun PreparationScreen(
         viewModel.event.onEach { event ->
             when (event) {
                 Preparation.Event.NavigateToProgress -> {
-                    navController.navigate(NavigationRote.Progress)
+                    navController.navigate(NavigationRoute.Progress)
                 }
 
                 Preparation.Event.OpenStream -> {
@@ -112,7 +112,7 @@ fun PreparationScreen(
                 }
 
                 Preparation.Event.NavigateToPremiumDetails -> {
-                    navController.navigate(NavigationRote.PremiumDetails)
+                    navController.navigate(NavigationRoute.PremiumDetails)
                 }
             }
         }.launchIn(this)
