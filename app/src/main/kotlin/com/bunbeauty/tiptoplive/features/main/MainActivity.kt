@@ -100,7 +100,7 @@ class MainActivity : ComponentActivity() {
             FakeLiveTheme {
                 val state by mainViewModel.state.collectAsStateWithLifecycle()
 
-                AppContent()
+                AppContent(state = state)
 
                 val onAction = remember {
                     { action: Main.Action ->
@@ -140,14 +140,17 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun AppContent() {
+    private fun AppContent(state: Main.State) {
         val navController = rememberNavController()
         Scaffold(
             modifier = Modifier
                 .statusBarsPadding()
                 .navigationBarsPadding(),
             bottomBar = {
-                BottomNavigationBar(navController)
+                BottomNavigationBar(
+                    navController = navController,
+                    hasNewAwards = state.hasNewAwards
+                )
             }
         ) { padding ->
             LaunchedEffect(Unit) {

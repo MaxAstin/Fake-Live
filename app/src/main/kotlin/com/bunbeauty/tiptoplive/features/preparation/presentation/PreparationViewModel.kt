@@ -8,20 +8,19 @@ import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.GetShowStreamDurationLimitUseCase
+import com.bunbeauty.tiptoplive.features.preparation.domain.SaveFeedbackProvidedUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SaveNotifiedOfStreamDurationLimitUseCase
-import com.bunbeauty.tiptoplive.features.preparation.domain.SetupNotificationUseCase
-import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation.ViewerCountItem
-import com.bunbeauty.tiptoplive.features.progress.domain.usecase.GetNewLevelUseCase
+import com.bunbeauty.tiptoplive.features.preparation.domain.SaveShouldAskFeedbackUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SaveShowStreamDurationLimitUseCase
+import com.bunbeauty.tiptoplive.features.preparation.domain.SetupNotificationUseCase
+import com.bunbeauty.tiptoplive.features.preparation.domain.ShouldAskFeedbackUseCase
+import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation.ViewerCountItem
 import com.bunbeauty.tiptoplive.shared.domain.GetImageUriFlowUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetUsernameUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetViewerCountUseCase
 import com.bunbeauty.tiptoplive.shared.domain.SaveUsernameUseCase
 import com.bunbeauty.tiptoplive.shared.domain.SaveViewerCountUseCase
 import com.bunbeauty.tiptoplive.shared.domain.model.ViewerCount
-import com.bunbeauty.tiptoplive.features.preparation.domain.SaveFeedbackProvidedUseCase
-import com.bunbeauty.tiptoplive.features.preparation.domain.SaveShouldAskFeedbackUseCase
-import com.bunbeauty.tiptoplive.features.preparation.domain.ShouldAskFeedbackUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -39,7 +38,6 @@ import javax.inject.Inject
 @HiltViewModel
 class PreparationViewModel @Inject constructor(
     private val getImageUriFlowUseCase: GetImageUriFlowUseCase,
-    private val getNewLevelUseCase: GetNewLevelUseCase,
     private val shouldAskFeedbackUseCase: ShouldAskFeedbackUseCase,
     private val saveShouldAskFeedbackUseCase: SaveShouldAskFeedbackUseCase,
     private val saveFeedbackProvidedUseCase: SaveFeedbackProvidedUseCase,
@@ -77,7 +75,6 @@ class PreparationViewModel @Inject constructor(
         when (action) {
             Preparation.Action.StartScreen -> {
                 checkPremiumStatus()
-                updateNewLevel()
                 checkShouldAskFeedback()
                 checkShowStreamDurationLimit()
             }
@@ -200,15 +197,6 @@ class PreparationViewModel @Inject constructor(
                 )
             }
         }.launchIn(viewModelScope)
-    }
-
-    private fun updateNewLevel() {
-        viewModelScope.launch {
-            val newLevel = getNewLevelUseCase()
-            setState {
-                copy(newLevel = newLevel)
-            }
-        }
     }
 
     private fun checkShouldAskFeedback() {

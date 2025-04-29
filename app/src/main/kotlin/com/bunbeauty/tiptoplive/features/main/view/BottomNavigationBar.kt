@@ -2,6 +2,7 @@ package com.bunbeauty.tiptoplive.features.main.view
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
@@ -12,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -31,6 +33,7 @@ import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.navigation.BottomNavigationRoute
 import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.components.GradientIcon
+import com.bunbeauty.tiptoplive.common.ui.components.PulsingBadge
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializer
@@ -51,11 +54,15 @@ data class BottomNavigationItemList(
 
 data class BottomNavigationItem(
     val route: BottomNavigationRoute,
-    val isSelected: Boolean
+    val isSelected: Boolean,
+    val hasBadge: Boolean
 )
 
 @Composable
-fun BottomNavigationBar(navController: NavHostController) {
+fun BottomNavigationBar(
+    navController: NavHostController,
+    hasNewAwards: Boolean
+) {
     val backStack by navController.currentBackStackEntryAsState()
     val currentDestination = backStack?.destination
 
@@ -65,10 +72,11 @@ fun BottomNavigationBar(navController: NavHostController) {
 
     val itemList = remember(currentDestination) {
         BottomNavigationItemList(
-            items = bottomRoutes.map {
+            items = bottomRoutes.map { route ->
                 BottomNavigationItem(
-                    route = it,
-                    isSelected = currentDestination.same(it)
+                    route = route,
+                    isSelected = currentDestination.same(route),
+                    hasBadge = route == NavigationRoute.Awards && hasNewAwards
                 )
             }
         )
@@ -80,7 +88,7 @@ fun BottomNavigationBar(navController: NavHostController) {
 }
 
 @Composable
-fun BottomNavigationBarContent(
+private fun BottomNavigationBarContent(
     navController: NavHostController,
     itemList: BottomNavigationItemList
 ) {
@@ -109,12 +117,17 @@ fun BottomNavigationBarContent(
                 NavigationBarItem(
                     selected = item.isSelected,
                     icon = {
-                        GradientIcon(
-                            modifier = Modifier.size(24.dp),
-                            imageVector = ImageVector.vectorResource(route.icon()),
-                            brush = brush,
-                            contentDescription = route.javaClass.simpleName
-                        )
+                        Box {
+                            GradientIcon(
+                                modifier = Modifier.size(24.dp),
+                                imageVector = ImageVector.vectorResource(route.icon()),
+                                brush = brush,
+                                contentDescription = route.javaClass.simpleName
+                            )
+                            if (item.hasBadge) {
+                                PulsingBadge(modifier = Modifier.align(Alignment.TopStart))
+                            }
+                        }
                     },
                     label = {
                         Text(
@@ -179,7 +192,7 @@ private fun NavDestination?.isBottomNavigation(): Boolean {
 
 @Preview
 @Composable
-fun BottomNavigationBarPreview() {
+private fun BottomNavigationBarPreview() {
     FakeLiveTheme {
         BottomNavigationBarContent(
             navController = rememberNavController(),
@@ -187,15 +200,18 @@ fun BottomNavigationBarPreview() {
                 items = listOf(
                     BottomNavigationItem(
                         route = NavigationRoute.Awards,
-                        isSelected = false
+                        isSelected = false,
+                        hasBadge = true
                     ),
                     BottomNavigationItem(
                         route = NavigationRoute.Preparation,
-                        isSelected = true
+                        isSelected = true,
+                        hasBadge = false
                     ),
                     BottomNavigationItem(
                         route = NavigationRoute.More,
-                        isSelected = false
+                        isSelected = false,
+                        hasBadge = false
                     )
                 )
             )

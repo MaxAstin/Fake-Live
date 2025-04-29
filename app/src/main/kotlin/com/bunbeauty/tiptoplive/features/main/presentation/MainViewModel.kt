@@ -5,6 +5,7 @@ import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.features.main.domain.Timer
 import com.bunbeauty.tiptoplive.features.main.domain.UpdateUsedDaysUseCase
+import com.bunbeauty.tiptoplive.features.progress.domain.usecase.GetNewLevelUseCase
 import com.bunbeauty.tiptoplive.shared.domain.SaveImageUriUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,12 +18,21 @@ class MainViewModel @Inject constructor(
     private val analyticsManager: AnalyticsManager,
     private val saveImageUriUseCase: SaveImageUriUseCase,
     private val updateUsedDaysUseCase: UpdateUsedDaysUseCase,
+    private val getNewLevelUseCase: GetNewLevelUseCase,
     private val timer: Timer
 ) : BaseViewModel<Main.State, Main.Action, Main.Event>(
     initState = {
-        Main.State(showNoCameraPermission = false)
+        Main.State(
+            showNoCameraPermission = false,
+            hasNewAwards = false
+        )
     }
 ) {
+
+    init {
+        // TODO: Replace with subscription
+        checkNewAwards()
+    }
 
     override fun onAction(action: Main.Action) {
         when (action) {
@@ -65,6 +75,15 @@ class MainViewModel @Inject constructor(
                         saveImageUriUseCase(uri.toString())
                     }
                 }
+            }
+        }
+    }
+
+    private fun checkNewAwards() {
+        viewModelScope.launch {
+            val hasNewAwards = getNewLevelUseCase()
+            setState {
+                copy(hasNewAwards = hasNewAwards)
             }
         }
     }

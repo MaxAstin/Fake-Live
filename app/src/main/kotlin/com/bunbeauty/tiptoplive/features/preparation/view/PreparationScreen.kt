@@ -25,7 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -239,14 +238,12 @@ private fun PreparationContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
-            brush = Brush.linearGradient(
+            brush = Brush.horizontalGradient(
                 colors = listOf(
                     FakeLiveTheme.colors.instagram.logo1,
                     FakeLiveTheme.colors.instagram.logo2,
                     FakeLiveTheme.colors.instagram.logo3,
-                ),
-                start = Offset(Float.POSITIVE_INFINITY, 0f),
-                end = Offset(0f, Float.POSITIVE_INFINITY),
+                )
             ),
             shape = RoundedCornerShape(6.dp),
             onClick = {

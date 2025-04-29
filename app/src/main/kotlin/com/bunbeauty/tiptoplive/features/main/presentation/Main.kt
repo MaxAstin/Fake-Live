@@ -7,7 +7,8 @@ import com.bunbeauty.tiptoplive.features.notification.NotificationMessage
 interface Main {
 
     data class State(
-        val showNoCameraPermission: Boolean
+        val showNoCameraPermission: Boolean,
+        val hasNewAwards: Boolean
     ): Base.State
 
     sealed interface Action: Base.Action {
