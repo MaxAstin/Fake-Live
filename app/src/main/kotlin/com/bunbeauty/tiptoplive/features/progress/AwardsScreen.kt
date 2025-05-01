@@ -39,10 +39,10 @@ import com.bunbeauty.tiptoplive.features.progress.view.SpeechBubbleShape
 
 @Composable
 fun AwardsScreen() {
-    val viewModel: ProgressViewModel = hiltViewModel()
+    val viewModel: AwardsViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val onAction = remember {
-        { action: Progress.Action ->
+        { action: Awards.Action ->
             viewModel.onAction(action)
         }
     }
@@ -55,8 +55,8 @@ fun AwardsScreen() {
 
 @Composable
 private fun AwardsContent(
-    state: Progress.State,
-    onAction: (Progress.Action) -> Unit
+    state: Awards.State,
+    onAction: (Awards.Action) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -64,7 +64,7 @@ private fun AwardsContent(
             .background(FakeLiveTheme.colors.background)
             .padding(16.dp)
     ) {
-        (state as? Progress.State.Success)?.let { successState ->
+        (state as? Awards.State.Success)?.let { successState ->
             CenterBlock(
                 modifier = Modifier.align(Alignment.Center),
                 state = successState
@@ -80,14 +80,14 @@ private fun AwardsContent(
     val composition by rememberLottieComposition(LottieCompositionSpec.Asset("new_level_animation.json"))
     LottieAnimation(
         modifier = Modifier.fillMaxSize(),
-        isPlaying = (state as? Progress.State.Success)?.showNewLevelAnimation ?: false,
+        isPlaying = (state as? Awards.State.Success)?.showNewAwardsAnimation ?: false,
         composition = composition
     )
 }
 
 @Composable
 private fun CenterBlock(
-    state: Progress.State.Success,
+    state: Awards.State.Success,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -116,8 +116,8 @@ private fun CenterBlock(
 
 @Composable
 private fun ProgressBlock(
-    state: Progress.State.Success,
-    onAction: (Progress.Action) -> Unit,
+    state: Awards.State.Success,
+    onAction: (Awards.Action) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -135,7 +135,7 @@ private fun ProgressBlock(
                     .size(48.dp)
                     .clickableWithoutIndication(
                         onClick = {
-                            onAction(Progress.Action.EmojiClick)
+                            onAction(Awards.Action.EmojiClick)
                         }
                     ),
                 painter = painterResource(id = state.imageId),
@@ -173,7 +173,7 @@ private fun ProgressBlock(
 
 @Composable
 private fun HintBox(
-    onAction: (Progress.Action) -> Unit,
+    onAction: (Awards.Action) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val bubbleShape = SpeechBubbleShape(
@@ -190,7 +190,7 @@ private fun HintBox(
             )
             .clickableWithoutIndication(
                 onClick = {
-                    onAction(Progress.Action.HintClick)
+                    onAction(Awards.Action.HintClick)
                 }
             )
     ) {
@@ -217,8 +217,8 @@ private fun HintBox(
 private fun ProgressScreenPreview() {
     FakeLiveTheme {
         AwardsContent(
-            state = Progress.State.Success(
-                showNewLevelAnimation = true,
+            state = Awards.State.Success(
+                showNewAwardsAnimation = true,
                 showHint = false,
                 level = 10,
                 imageId = R.drawable.img_crown,

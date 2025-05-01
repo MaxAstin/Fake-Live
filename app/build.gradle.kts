@@ -137,6 +137,9 @@ dependencies {
     // Work manager
     implementation(libs.work)
 
+    // Work manager
+    implementation(libs.bundles.datastore)
+
     // Testing
     testImplementation(libs.junit)
     testImplementation(libs.junit.jupiter)

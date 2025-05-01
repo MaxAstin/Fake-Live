@@ -5,9 +5,11 @@ import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.features.main.domain.Timer
 import com.bunbeauty.tiptoplive.features.main.domain.UpdateUsedDaysUseCase
-import com.bunbeauty.tiptoplive.features.progress.domain.usecase.GetNewLevelUseCase
+import com.bunbeauty.tiptoplive.features.progress.domain.usecase.GetNewAwardsFlowUseCase
 import com.bunbeauty.tiptoplive.shared.domain.SaveImageUriUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,7 +20,7 @@ class MainViewModel @Inject constructor(
     private val analyticsManager: AnalyticsManager,
     private val saveImageUriUseCase: SaveImageUriUseCase,
     private val updateUsedDaysUseCase: UpdateUsedDaysUseCase,
-    private val getNewLevelUseCase: GetNewLevelUseCase,
+    private val getNewAwardsFlowUseCase: GetNewAwardsFlowUseCase,
     private val timer: Timer
 ) : BaseViewModel<Main.State, Main.Action, Main.Event>(
     initState = {
@@ -30,8 +32,7 @@ class MainViewModel @Inject constructor(
 ) {
 
     init {
-        // TODO: Replace with subscription
-        checkNewAwards()
+        subscribeOnNewAwards()
     }
 
     override fun onAction(action: Main.Action) {
@@ -79,13 +80,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun checkNewAwards() {
-        viewModelScope.launch {
-            val hasNewAwards = getNewLevelUseCase()
+    private fun subscribeOnNewAwards() {
+        getNewAwardsFlowUseCase().onEach { hasNewAwards ->
             setState {
                 copy(hasNewAwards = hasNewAwards)
             }
-        }
+        }.launchIn(viewModelScope)
     }
 
 }

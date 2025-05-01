@@ -1,7 +1,6 @@
 package com.bunbeauty.tiptoplive.features.main.view
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
@@ -12,7 +11,6 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -28,7 +26,6 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.serialization.generateHashCode
 import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.navigation.BottomNavigationRoute
 import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
@@ -36,7 +33,6 @@ import com.bunbeauty.tiptoplive.common.ui.components.GradientIcon
 import com.bunbeauty.tiptoplive.common.ui.components.PulsingBadge
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.serializer
 
 private val bottomRoutes: List<BottomNavigationRoute> = listOf(
     NavigationRoute.Awards,
@@ -70,17 +66,15 @@ fun BottomNavigationBar(
         return
     }
 
-    val itemList = remember(currentDestination) {
-        BottomNavigationItemList(
-            items = bottomRoutes.map { route ->
-                BottomNavigationItem(
-                    route = route,
-                    isSelected = currentDestination.same(route),
-                    hasBadge = route == NavigationRoute.Awards && hasNewAwards
-                )
-            }
-        )
-    }
+    val itemList = BottomNavigationItemList(
+        items = bottomRoutes.map { route ->
+            BottomNavigationItem(
+                route = route,
+                isSelected = currentDestination.same(route),
+                hasBadge = route == NavigationRoute.Awards && hasNewAwards
+            )
+        }
+    )
     BottomNavigationBarContent(
         navController = navController,
         itemList = itemList
@@ -179,8 +173,6 @@ private fun BottomNavigationRoute.text(): Int {
 @OptIn(InternalSerializationApi::class)
 private fun NavDestination?.same(route: NavigationRoute): Boolean {
     if (this == null) return false
-    Log.d("testTag", "route ${route::class.serializer().generateHashCode()}")
-    Log.d("testTag", "destination $navigatorName")
     return hasRoute(route::class)
 }
 

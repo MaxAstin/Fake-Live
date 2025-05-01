@@ -27,6 +27,7 @@ junitJupiter = "5.8.1"
 ktor = "3.1.1"
 lottie = "6.6.4"
 work = "2.7.1"
+datastore = "1.1.4"
 
 [libraries]
 billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billingKtx" }
@@ -88,6 +89,10 @@ ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", versi
 # Lottie
 lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 
+# Datastore
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastore" }
+
 [plugins]
 application = { id = "com.android.application", version.ref = "application" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -115,4 +120,8 @@ ktor = [
     "ktor-logging",
     "ktor-negotiation",
     "ktor-serialization"
+]
+datastore = [
+    "datastore-preferences",
+    "datastore-core-android"
 ]

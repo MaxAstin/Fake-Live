@@ -3,12 +3,12 @@ package com.bunbeauty.tiptoplive.features.progress
 import androidx.annotation.DrawableRes
 import com.bunbeauty.tiptoplive.common.presentation.Base
 
-interface Progress {
+interface Awards {
 
     sealed interface State: Base.State {
         data object Loading: State
         data class Success(
-            val showNewLevelAnimation: Boolean,
+            val showNewAwardsAnimation: Boolean,
             val showHint: Boolean,
             val level: Int,
             @DrawableRes val imageId: Int,
