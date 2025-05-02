@@ -8,23 +8,63 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.bunbeauty.tiptoplive.R
+import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.rippleClickable
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.instagramBrush
+import com.bunbeauty.tiptoplive.features.more.presentation.More
+import com.bunbeauty.tiptoplive.features.more.presentation.MoreViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @Composable
-fun MoreScreen() {
+fun MoreScreen(navController: NavHostController) {
+    val viewModel: MoreViewModel = hiltViewModel()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val onAction = remember {
+        { action: More.Action ->
+            viewModel.onAction(action)
+        }
+    }
+    LaunchedEffect(Unit) {
+        viewModel.event.onEach { event ->
+            when (event) {
+                More.Event.NavigateToPremiumDetails -> {
+                    navController.navigate(NavigationRoute.PremiumDetails)
+                }
+            }
+        }.launchIn(this)
+    }
+
+    MoreContent(
+        state = state,
+        onAction = onAction
+    )
+}
+
+@Composable
+private fun MoreContent(
+    state: More.State,
+    onAction: (More.Action) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -34,23 +74,10 @@ fun MoreScreen() {
             iconRes = R.drawable.ic_infinity,
             text = "Premium",
             onClick = {
-
+                onAction(More.Action.PremiumClick)
             },
             extraContent = {
-                Text(
-                    modifier = Modifier
-                        .background(
-                            brush = instagramBrush(),
-                            shape = RoundedCornerShape(16.dp)
-                        )
-                        .padding(
-                            horizontal = 12.dp,
-                            vertical = 6.dp
-                        ),
-                    text = "Active",
-                    style = FakeLiveTheme.typography.bodyMedium,
-                    color = FakeLiveTheme.colors.onSurface
-                )
+                PremiumChip(premium = state.premium)
             }
         )
         Option(
@@ -119,10 +146,68 @@ private fun Option(
     }
 }
 
+@Composable
+private fun PremiumChip(
+    premium: More.Premium,
+    modifier: Modifier = Modifier
+) {
+    when (premium) {
+        More.Premium.Loading -> {}
+        More.Premium.Active -> {
+            Text(
+                modifier = modifier
+                    .background(
+                        brush = instagramBrush(),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .padding(
+                        horizontal = 12.dp,
+                        vertical = 6.dp
+                    ),
+                text = "Active",
+                style = FakeLiveTheme.typography.bodyMedium,
+                color = FakeLiveTheme.colors.onSurface
+            )
+        }
+
+        is More.Premium.Discount -> {
+            Row(
+                modifier = modifier
+                    .background(
+                        color = FakeLiveTheme.colors.negative,
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .padding(start = 6.dp, end = 12.dp)
+                    .padding(vertical = 6.dp),
+                horizontalArrangement = spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .background(
+                            color = FakeLiveTheme.colors.background,
+                            shape = CircleShape
+                        )
+                        .size(20.dp)
+                        .padding(4.dp),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_discount),
+                    contentDescription = "premium icon",
+                    tint = FakeLiveTheme.colors.negative,
+                )
+                Text(
+                    text = premium.timer,
+                    style = FakeLiveTheme.typography.bodyMedium,
+                    color = FakeLiveTheme.colors.onSurface
+                )
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
-fun MoreScreenPreview() {
+private fun MoreScreenPreview() {
     FakeLiveTheme {
-        MoreScreen()
+        PremiumChip(More.Premium.Active)
     }
 }

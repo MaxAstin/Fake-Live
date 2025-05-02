@@ -222,7 +222,7 @@ class MainActivity : ComponentActivity() {
                 StreamScreen(navController = navController)
             }
             composable<NavigationRoute.More> {
-                MoreScreen()
+                MoreScreen(navController = navController)
             }
             composable<NavigationRoute.CropImage> { navBackStackEntry ->
                 val cropImageRoute: NavigationRoute.CropImage = navBackStackEntry.toRoute()
