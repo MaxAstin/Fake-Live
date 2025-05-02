@@ -45,6 +45,7 @@ import com.bunbeauty.tiptoplive.features.main.presentation.Main
 import com.bunbeauty.tiptoplive.features.main.presentation.MainViewModel
 import com.bunbeauty.tiptoplive.features.main.view.BottomNavigationBar
 import com.bunbeauty.tiptoplive.features.main.view.CameraIsRequiredDialog
+import com.bunbeauty.tiptoplive.features.more.MoreScreen
 import com.bunbeauty.tiptoplive.features.notification.NotificationMessage
 import com.bunbeauty.tiptoplive.features.premiumdetails.view.PremiumDetailsScreen
 import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseFailedScreen
@@ -221,7 +222,7 @@ class MainActivity : ComponentActivity() {
                 StreamScreen(navController = navController)
             }
             composable<NavigationRoute.More> {
-                // TODO: Add More screen
+                MoreScreen()
             }
             composable<NavigationRoute.CropImage> { navBackStackEntry ->
                 val cropImageRoute: NavigationRoute.CropImage = navBackStackEntry.toRoute()

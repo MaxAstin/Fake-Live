@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -32,6 +31,7 @@ import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.components.GradientIcon
 import com.bunbeauty.tiptoplive.common.ui.components.PulsingBadge
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
+import com.bunbeauty.tiptoplive.common.ui.theme.instagramBrush
 import kotlinx.serialization.InternalSerializationApi
 
 private val bottomRoutes: List<BottomNavigationRoute> = listOf(
@@ -97,13 +97,7 @@ private fun BottomNavigationBarContent(
             itemList.items.forEach { item ->
                 val route = item.route
                 val brush = if (item.isSelected) {
-                    Brush.horizontalGradient(
-                        colors = listOf(
-                            FakeLiveTheme.colors.instagram.logo1,
-                            FakeLiveTheme.colors.instagram.logo2,
-                            FakeLiveTheme.colors.instagram.logo3
-                        )
-                    )
+                    instagramBrush()
                 } else {
                     SolidColor(value = FakeLiveTheme.colors.onBackgroundVariant)
                 }
