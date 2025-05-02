@@ -35,7 +35,6 @@ import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.util.showToast
 import com.bunbeauty.tiptoplive.common.util.launchInAppReview
 import com.bunbeauty.tiptoplive.common.util.openSettings
-import com.bunbeauty.tiptoplive.common.util.openSharing
 import com.bunbeauty.tiptoplive.common.util.serializable
 import com.bunbeauty.tiptoplive.features.billing.BillingService
 import com.bunbeauty.tiptoplive.features.billing.model.PurchaseData
@@ -59,8 +58,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-private const val GOOGLE_PLAY_LINK = "https://play.google.com/store/apps/details?id=com.bunbeauty.tiptoplive"
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -198,20 +195,6 @@ class MainActivity : ComponentActivity() {
                     },
                     onPositiveFeedbackClick = {
                         launchInAppReview()
-                    },
-                    onShareClick = {
-                        runCatching {
-                            openSharing(
-                                text = getString(
-                                    R.string.sharing_text,
-                                    getString(R.string.app_name),
-                                    GOOGLE_PLAY_LINK
-                                ),
-                            )
-                        }.onFailure { exception ->
-                            analyticsManager.get().trackError(exception)
-                            showToast(message = getString(R.string.common_something_went_wrong))
-                        }
                     }
                 )
             }

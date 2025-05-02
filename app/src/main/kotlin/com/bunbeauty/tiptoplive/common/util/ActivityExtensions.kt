@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import com.bunbeauty.tiptoplive.R
+import com.bunbeauty.tiptoplive.common.ui.util.showToast
 import com.google.android.play.core.review.ReviewManagerFactory
 
 fun Activity.launchInAppReview() {
@@ -26,11 +28,15 @@ fun Activity.openSettings() {
 }
 
 fun Activity.openSharing(text: String) {
-    val intent = Intent().apply {
-        action = Intent.ACTION_SEND
-        type = "text/plain"
-        putExtra(Intent.EXTRA_TEXT, text)
+    runCatching {
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, text)
+        }
+        val chooser = Intent.createChooser(intent, null)
+        startActivity(chooser)
+    } .onFailure {
+        showToast(message = getString(R.string.common_something_went_wrong))
     }
-    val chooser = Intent.createChooser(intent, null)
-    startActivity(chooser)
 }

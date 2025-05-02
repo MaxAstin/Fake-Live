@@ -156,11 +156,6 @@ class PreparationViewModel @Inject constructor(
                 }
             }
 
-            Preparation.Action.ShareClick -> {
-                analyticsManager.trackShare()
-                sendEvent(Preparation.Event.HandleShareClick)
-            }
-
             Preparation.Action.PremiumClick -> {
                 setState { copy(showStreamDurationLimitsDialog = false) }
                 viewModelScope.launch {

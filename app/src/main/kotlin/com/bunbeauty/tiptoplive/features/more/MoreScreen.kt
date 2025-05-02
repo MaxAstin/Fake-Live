@@ -1,5 +1,6 @@
 package com.bunbeauty.tiptoplive.features.more
 
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
@@ -30,10 +31,13 @@ import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.rippleClickable
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.instagramBrush
+import com.bunbeauty.tiptoplive.common.util.openSharing
 import com.bunbeauty.tiptoplive.features.more.presentation.More
 import com.bunbeauty.tiptoplive.features.more.presentation.MoreViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+
+private const val GOOGLE_PLAY_LINK = "https://play.google.com/store/apps/details?id=com.bunbeauty.tiptoplive"
 
 @Composable
 fun MoreScreen(navController: NavHostController) {
@@ -44,11 +48,23 @@ fun MoreScreen(navController: NavHostController) {
             viewModel.onAction(action)
         }
     }
+    val activity = LocalActivity.current
     LaunchedEffect(Unit) {
         viewModel.event.onEach { event ->
             when (event) {
                 More.Event.NavigateToPremiumDetails -> {
                     navController.navigate(NavigationRoute.PremiumDetails)
+                }
+                More.Event.OpenSharing -> {
+                    activity?.apply {
+                        openSharing(
+                            text = getString(
+                                R.string.sharing_text,
+                                getString(R.string.app_name),
+                                GOOGLE_PLAY_LINK
+                            )
+                        )
+                    }
                 }
             }
         }.launchIn(this)
@@ -84,7 +100,7 @@ private fun MoreContent(
             iconRes = R.drawable.ic_share,
             text = "Share",
             onClick = {
-
+                onAction(More.Action.ShareClick)
             }
         )
         Option(

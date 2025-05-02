@@ -60,8 +60,7 @@ private const val IMAGE = "image/*"
 fun PreparationScreen(
     navController: NavHostController,
     onStartStreamClick: () -> Unit,
-    onPositiveFeedbackClick: () -> Unit,
-    onShareClick: () -> Unit,
+    onPositiveFeedbackClick: () -> Unit
 ) {
     val viewModel: PreparationViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -103,10 +102,6 @@ fun PreparationScreen(
 
                 Preparation.Event.HandleAvatarClick -> {
                     galleryLauncher.launch(IMAGE)
-                }
-
-                Preparation.Event.HandleShareClick -> {
-                    onShareClick()
                 }
 
                 Preparation.Event.NavigateToPremiumDetails -> {
