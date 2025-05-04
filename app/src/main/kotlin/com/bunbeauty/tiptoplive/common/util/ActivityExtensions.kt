@@ -1,6 +1,7 @@
 package com.bunbeauty.tiptoplive.common.util
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -38,5 +39,27 @@ fun Activity.openSharing(text: String) {
         startActivity(chooser)
     } .onFailure {
         showToast(message = getString(R.string.common_something_went_wrong))
+    }
+}
+
+fun Activity.openMarketListing() {
+    val uri = Uri.parse("market://details?id=$packageName")
+    val intent = Intent(Intent.ACTION_VIEW, uri).apply {
+        setPackage("com.android.vending")
+        addFlags(
+            Intent.FLAG_ACTIVITY_NEW_TASK or
+                Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+        )
+    }
+
+    try {
+        startActivity(intent)
+    } catch (exception: ActivityNotFoundException) {
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(playMarketLink)
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
     }
 }

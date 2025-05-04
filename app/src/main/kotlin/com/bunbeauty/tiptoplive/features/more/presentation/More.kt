@@ -19,11 +19,13 @@ interface More {
     sealed interface Action: Base.Action {
         data object PremiumClick: Action
         data object ShareClick: Action
+        data object RateUsClick: Action
     }
 
     sealed interface Event: Base.Event {
         data object NavigateToPremiumDetails: Event
         data object OpenSharing: Event
+        data object OpenMarketListing: Event
     }
 
 

@@ -32,9 +32,15 @@ class MoreViewModel @Inject constructor(
                 analyticsManager.trackPremiumClick()
                 sendEvent(More.Event.NavigateToPremiumDetails)
             }
+
             More.Action.ShareClick -> {
-                analyticsManager.trackShare()
+                analyticsManager.trackShareClick()
                 sendEvent(More.Event.OpenSharing)
+            }
+
+            More.Action.RateUsClick -> {
+                analyticsManager.trackRateUsClick()
+                sendEvent(More.Event.OpenMarketListing)
             }
         }
     }

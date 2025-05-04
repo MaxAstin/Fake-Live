@@ -31,13 +31,13 @@ import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.rippleClickable
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.instagramBrush
+import com.bunbeauty.tiptoplive.common.util.openMarketListing
 import com.bunbeauty.tiptoplive.common.util.openSharing
+import com.bunbeauty.tiptoplive.common.util.playMarketLink
 import com.bunbeauty.tiptoplive.features.more.presentation.More
 import com.bunbeauty.tiptoplive.features.more.presentation.MoreViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-
-private const val GOOGLE_PLAY_LINK = "https://play.google.com/store/apps/details?id=com.bunbeauty.tiptoplive"
 
 @Composable
 fun MoreScreen(navController: NavHostController) {
@@ -55,16 +55,21 @@ fun MoreScreen(navController: NavHostController) {
                 More.Event.NavigateToPremiumDetails -> {
                     navController.navigate(NavigationRoute.PremiumDetails)
                 }
+
                 More.Event.OpenSharing -> {
                     activity?.apply {
                         openSharing(
                             text = getString(
                                 R.string.sharing_text,
                                 getString(R.string.app_name),
-                                GOOGLE_PLAY_LINK
+                                playMarketLink
                             )
                         )
                     }
+                }
+
+                More.Event.OpenMarketListing -> {
+                    activity?.openMarketListing()
                 }
             }
         }.launchIn(this)
@@ -114,7 +119,7 @@ private fun MoreContent(
             iconRes = R.drawable.ic_star,
             text = "Rate us",
             onClick = {
-
+                onAction(More.Action.RateUsClick)
             }
         )
     }
