@@ -7,6 +7,7 @@
 
     <string name="common_under_development">Esta característica está en desarrollo</string>
     <string name="common_something_went_wrong">Algo salió mal</string>
+    <string name="common_premium">Premium</string>
 
     <string name="intro_next">Siguiente</string>
     <string name="intro_welcome">Bienvenido a %s</string>
@@ -42,7 +43,6 @@
     <string name="preparation_viewer_count">Recuento de espectadores</string>
     <string name="preparation_start_live">Comenzar Directo</string>
     <string name="preparation_seconds">(%d seg)</string>
-    <string name="preparation_premium">Premium</string>
 
     <string name="limits_live_has_ended">La transmisión ha terminado ⏳</string>
     <string name="limits_free_session_limited">Las transmisiones gratuitas están limitadas a %s segundos. ¡Mejora a Premium para transmisiones ilimitadas y funciones exclusivas!</string>
@@ -111,6 +111,12 @@
     <string name="progress_level">Nivel %d</string>
     <string name="progress_points">Puntos</string>
     <string name="progress_minute_equals_point">1 minuto en vivo = 1 punto</string>
+
+    <!-- More -->
+    <string name="more_premium_active">Activo</string>
+    <string name="more_share">Compartir</string>
+    <string name="more_feedback">Comentarios</string>
+    <string name="more_rate_us">Califícanos</string>
 
     <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">
         <item>M</item>

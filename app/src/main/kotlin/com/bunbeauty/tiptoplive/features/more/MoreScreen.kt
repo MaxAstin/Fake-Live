@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -93,7 +94,7 @@ private fun MoreContent(
     ) {
         Option(
             iconRes = R.drawable.ic_infinity,
-            text = "Premium",
+            text = stringResource(R.string.common_premium),
             onClick = {
                 onAction(More.Action.PremiumClick)
             },
@@ -103,21 +104,21 @@ private fun MoreContent(
         )
         Option(
             iconRes = R.drawable.ic_share,
-            text = "Share",
+            text = stringResource(R.string.more_share),
             onClick = {
                 onAction(More.Action.ShareClick)
             }
         )
         Option(
             iconRes = R.drawable.ic_feedback,
-            text = "Feedback",
+            text = stringResource(R.string.more_feedback),
             onClick = {
 
             }
         )
         Option(
             iconRes = R.drawable.ic_star,
-            text = "Rate us",
+            text = stringResource(R.string.more_rate_us),
             onClick = {
                 onAction(More.Action.RateUsClick)
             }
@@ -161,7 +162,7 @@ private fun Option(
         Icon(
             modifier = Modifier.size(16.dp),
             imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_right),
-            contentDescription = "arrow right icon",
+            contentDescription = "arrow icon",
             tint = FakeLiveTheme.colors.onBackgroundVariant,
         )
     }
@@ -185,7 +186,7 @@ private fun PremiumChip(
                         horizontal = 12.dp,
                         vertical = 6.dp
                     ),
-                text = "Active",
+                text = stringResource(R.string.more_premium_active),
                 style = FakeLiveTheme.typography.bodyMedium,
                 color = FakeLiveTheme.colors.onSurface
             )
@@ -212,7 +213,7 @@ private fun PremiumChip(
                         .size(20.dp)
                         .padding(4.dp),
                     imageVector = ImageVector.vectorResource(R.drawable.ic_discount),
-                    contentDescription = "premium icon",
+                    contentDescription = "discount icon",
                     tint = FakeLiveTheme.colors.negative,
                 )
                 Text(

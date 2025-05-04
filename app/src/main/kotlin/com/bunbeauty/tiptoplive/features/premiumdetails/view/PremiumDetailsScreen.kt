@@ -185,7 +185,7 @@ fun PremiumDetailsContent(
                     verticalArrangement = spacedBy(8.dp)
                 ) {
                     val titleTextId = if (state.isPremiumSelected) {
-                        R.string.preparation_premium
+                        R.string.common_premium
                     } else {
                         R.string.subscription_free
                     }
@@ -221,7 +221,7 @@ fun PremiumDetailsContent(
                 ) {
                     persistentListOf(
                         stringResource(R.string.subscription_free),
-                        stringResource(R.string.preparation_premium)
+                        stringResource(R.string.common_premium)
                     ).forEachIndexed { index, text ->
                         SegmentedControlButton(
                             onClick = {

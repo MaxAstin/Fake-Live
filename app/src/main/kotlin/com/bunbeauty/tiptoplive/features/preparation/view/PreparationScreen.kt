@@ -271,7 +271,7 @@ private fun Premium(
         Preparation.Status.FREE -> {
             FakeLivePrimaryButton(
                 modifier = modifier,
-                text = stringResource(R.string.preparation_premium),
+                text = stringResource(R.string.common_premium),
                 onClick = {
                     onAction(Preparation.Action.PremiumClick)
                 },
@@ -309,7 +309,7 @@ private fun Premium(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.preparation_premium),
+                    text = stringResource(R.string.common_premium),
                     color = FakeLiveTheme.colors.onSurface,
                     style = FakeLiveTheme.typography.titleSmall,
                 )
