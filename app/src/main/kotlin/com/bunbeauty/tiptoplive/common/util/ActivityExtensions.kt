@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import com.bunbeauty.tiptoplive.R
-import com.bunbeauty.tiptoplive.common.ui.util.showToast
 import com.google.android.play.core.review.ReviewManagerFactory
 
 fun Activity.launchInAppReview() {

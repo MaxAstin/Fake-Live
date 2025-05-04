@@ -32,13 +32,14 @@ import com.bunbeauty.tiptoplive.common.Constants.NOTIFICATION_MESSAGE_KEY
 import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
-import com.bunbeauty.tiptoplive.common.ui.util.showToast
 import com.bunbeauty.tiptoplive.common.util.launchInAppReview
 import com.bunbeauty.tiptoplive.common.util.openSettings
 import com.bunbeauty.tiptoplive.common.util.serializable
+import com.bunbeauty.tiptoplive.common.util.showToast
 import com.bunbeauty.tiptoplive.features.billing.BillingService
 import com.bunbeauty.tiptoplive.features.billing.model.PurchaseData
 import com.bunbeauty.tiptoplive.features.cropimage.view.CropImageScreen
+import com.bunbeauty.tiptoplive.features.feedback.FeedbackScreen
 import com.bunbeauty.tiptoplive.features.intro.view.IntroScreen
 import com.bunbeauty.tiptoplive.features.main.presentation.Main
 import com.bunbeauty.tiptoplive.features.main.presentation.MainViewModel
@@ -229,6 +230,9 @@ class MainActivity : ComponentActivity() {
             }
             composable<NavigationRoute.PurchaseFailed> {
                 PurchaseFailedScreen(navController = navController)
+            }
+            composable<NavigationRoute.Feedback> {
+                FeedbackScreen(navController = navController)
             }
         }
     }

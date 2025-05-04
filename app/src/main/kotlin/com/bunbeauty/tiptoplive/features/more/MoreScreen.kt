@@ -69,6 +69,10 @@ fun MoreScreen(navController: NavHostController) {
                     }
                 }
 
+                More.Event.NavigateToFeedback -> {
+                    navController.navigate(NavigationRoute.Feedback)
+                }
+
                 More.Event.OpenMarketListing -> {
                     activity?.openMarketListing()
                 }
@@ -113,7 +117,7 @@ private fun MoreContent(
             iconRes = R.drawable.ic_feedback,
             text = stringResource(R.string.more_feedback),
             onClick = {
-
+                onAction(More.Action.FeedbackClick)
             }
         )
         Option(

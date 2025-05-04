@@ -30,6 +30,7 @@ fun FakeLiveTextField(
     readOnly: Boolean,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    singleLine: Boolean = true,
     trailingIcon: @Composable (() -> Unit) = {},
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -53,7 +54,7 @@ fun FakeLiveTextField(
             .onFocusChanged {
                 isFocused = it.isFocused
             },
-        singleLine = true,
+        singleLine = singleLine,
         interactionSource = interactionSource,
         enabled = !readOnly,
         readOnly = readOnly,

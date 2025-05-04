@@ -37,6 +37,9 @@ class MoreViewModel @Inject constructor(
                 analyticsManager.trackShareClick()
                 sendEvent(More.Event.OpenSharing)
             }
+            More.Action.FeedbackClick -> {
+                sendEvent(More.Event.NavigateToFeedback)
+            }
 
             More.Action.RateUsClick -> {
                 analyticsManager.trackRateUsClick()

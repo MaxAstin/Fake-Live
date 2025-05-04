@@ -33,4 +33,7 @@ interface NavigationRoute {
     @Serializable
     data object PurchaseFailed: NavigationRoute
 
+    @Serializable
+    data object Feedback: NavigationRoute
+
 }

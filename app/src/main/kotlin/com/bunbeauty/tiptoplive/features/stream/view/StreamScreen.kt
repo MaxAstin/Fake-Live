@@ -2,7 +2,6 @@ package com.bunbeauty.tiptoplive.features.stream.view
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.camera.core.ImageCapture
@@ -65,6 +64,7 @@ import com.bunbeauty.tiptoplive.common.ui.components.CachedImage
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.bold
+import com.bunbeauty.tiptoplive.common.util.showToast
 import com.bunbeauty.tiptoplive.features.stream.presentation.Stream
 import com.bunbeauty.tiptoplive.features.stream.presentation.StreamViewModel
 import com.bunbeauty.tiptoplive.features.stream.view.ui.AnimatedReaction
@@ -782,11 +782,6 @@ private fun DirectBottomSheet(
             descriptionResId = R.string.stream_direct_description,
         )
     }
-}
-
-private fun Context.showToast(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT)
-        .show()
 }
 
 private fun ImageCapture.takePicture(

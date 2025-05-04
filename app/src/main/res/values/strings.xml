@@ -119,6 +119,13 @@
     <string name="more_feedback">Feedback</string>
     <string name="more_rate_us">Rate us</string>
 
+    <!-- Feedback -->
+    <string name="feedback_title">Feedback</string>
+    <string name="feedback_description">Your feedback means the world to us!\nTell us what we can improve and help make %s even better.</string>
+    <string name="feedback_what_to_improve">What can be improved?</string>
+    <string name="feedback_send">Send</string>
+    <string name="feedback_sent_successfully">Feedback sent successfully</string>
+
     <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">
         <item>S</item>
         <item>O</item>
