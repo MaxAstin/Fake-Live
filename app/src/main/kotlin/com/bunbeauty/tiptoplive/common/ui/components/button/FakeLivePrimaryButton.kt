@@ -30,6 +30,7 @@ fun FakeLivePrimaryButton(
     ),
     contentPadding: PaddingValues = PaddingValues(),
     leadingIcon: @Composable () -> Unit = {},
+    trailingIcon: @Composable () -> Unit = {},
 ) {
     val multipleEventsCutter = rememberMultipleEventsCutter()
 
@@ -49,6 +50,7 @@ fun FakeLivePrimaryButton(
                 text = text,
                 style = FakeLiveTheme.typography.titleSmall,
             )
+            trailingIcon()
         }
     }
 }

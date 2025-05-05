@@ -279,12 +279,12 @@ private fun Premium(
                     horizontal = 12.dp,
                     vertical = 8.dp,
                 ),
-                leadingIcon = {
+                trailingIcon = {
                     Icon(
                         modifier = Modifier
-                            .padding(end = 8.dp)
+                            .padding(start = 6.dp)
                             .size(20.dp),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_star),
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_infinity),
                         contentDescription = "Star",
                         tint = FakeLiveTheme.colors.onSurface,
                     )
