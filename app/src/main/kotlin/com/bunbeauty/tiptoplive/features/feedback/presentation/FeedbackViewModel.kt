@@ -2,13 +2,14 @@ package com.bunbeauty.tiptoplive.features.feedback.presentation
 
 import androidx.lifecycle.viewModelScope
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
+import com.bunbeauty.tiptoplive.features.feedback.domain.SendFeedbackUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FeedbackViewModel @Inject constructor(
+    private val sendFeedbackUseCase: SendFeedbackUseCase
 ) : BaseViewModel<Feedback.State, Feedback.Action, Feedback.Event>(
     initState = {
         Feedback.State(
@@ -32,17 +33,21 @@ class FeedbackViewModel @Inject constructor(
 
             Feedback.Action.ImageClick -> {
                 // TODO attach image
-                setState {
-                    copy(feedback = "")
-                }
             }
 
             Feedback.Action.SendClick -> {
                 viewModelScope.launch {
                     setState { copy(sending = true) }
-                    delay(2_000) // TODO send to Firebase
-                    sendEvent(Feedback.Event.ShowSuccessfullySent)
-                    sendEvent(Feedback.Event.NavigateBack)
+                    sendFeedbackUseCase.invoke(feedback = state.value.feedback)
+                        .onSuccess {
+                            sendEvent(Feedback.Event.ShowSuccessfullySent)
+                            sendEvent(Feedback.Event.NavigateBack)
+                        }.onFailure {
+                            setState {
+                                copy(sending = false)
+                            }
+                            sendEvent(Feedback.Event.ShowSendingFailed)
+                        }
                 }
             }
         }

@@ -112,6 +112,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.database)
 
     // In-App Review
     implementation(libs.review)

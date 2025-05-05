@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -23,17 +22,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.bunbeauty.tiptoplive.R
-import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
 import com.bunbeauty.tiptoplive.common.ui.components.CloseIcon
 import com.bunbeauty.tiptoplive.common.ui.components.FakeLiveTextField
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLivePrimaryButton
@@ -69,7 +65,7 @@ fun FeedbackScreen(navController: NavHostController) {
                     }
                 }
 
-                Feedback.Event.SendingFailed -> {
+                Feedback.Event.ShowSendingFailed -> {
                     context.apply {
                         showToast(message = getString(R.string.common_something_went_wrong))
                     }
@@ -79,8 +75,7 @@ fun FeedbackScreen(navController: NavHostController) {
     }
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         containerColor = FakeLiveTheme.colors.background,
         topBar = {
             TopAppBar(
@@ -163,16 +158,17 @@ fun FeedbackScreen(navController: NavHostController) {
                     onAction(Feedback.Action.UpdateFeedback(text = value))
                 },
                 trailingIcon = {
-                    Icon(
-                        modifier = Modifier
-                            .size(24.dp)
-                            .clickableWithoutIndication {
-                                onAction(Feedback.Action.ImageClick)
-                            },
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_image),
-                        contentDescription = "attach image",
-                        tint = FakeLiveTheme.colors.iconVariant
-                    )
+                    // TODO use to attach image
+//                    Icon(
+//                        modifier = Modifier
+//                            .size(24.dp)
+//                            .clickableWithoutIndication {
+//                                onAction(Feedback.Action.ImageClick)
+//                            },
+//                        imageVector = ImageVector.vectorResource(R.drawable.ic_image),
+//                        contentDescription = "attach image",
+//                        tint = FakeLiveTheme.colors.iconVariant
+//                    )
                 }
             )
         }
