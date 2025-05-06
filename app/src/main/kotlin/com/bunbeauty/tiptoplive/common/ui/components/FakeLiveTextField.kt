@@ -45,7 +45,7 @@ fun FakeLiveTextField(
                 isError = false,
                 interactionSource = interactionSource,
                 colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = FakeLiveTheme.colors.instagram.accent,
+                    focusedIndicatorColor = FakeLiveTheme.colors.interactive,
                     unfocusedIndicatorColor = FakeLiveTheme.colors.borderVariant,
                 ),
                 focusedIndicatorLineThickness = 2.dp,
