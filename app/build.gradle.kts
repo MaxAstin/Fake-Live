@@ -138,7 +138,7 @@ dependencies {
     // Work manager
     implementation(libs.work)
 
-    // Work manager
+    // Datastore
     implementation(libs.bundles.datastore)
 
     // Testing
