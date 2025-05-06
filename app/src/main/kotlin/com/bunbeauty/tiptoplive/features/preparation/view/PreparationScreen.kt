@@ -25,8 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -35,18 +33,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.bunbeauty.tiptoplive.R
-import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
+import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.LocalePreview
 import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
 import com.bunbeauty.tiptoplive.common.ui.components.CachedImage
 import com.bunbeauty.tiptoplive.common.ui.components.FakeLiveTextField
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLiveGradientButton
-import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLiveIconButton
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLivePrimaryButton
 import com.bunbeauty.tiptoplive.common.ui.noEffectClickable
 import com.bunbeauty.tiptoplive.common.ui.rippleClickable
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
+import com.bunbeauty.tiptoplive.common.ui.theme.instagramBrush
 import com.bunbeauty.tiptoplive.features.preparation.RequestNotificationsPermission
 import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation
 import com.bunbeauty.tiptoplive.features.preparation.presentation.PreparationViewModel
@@ -62,8 +60,7 @@ private const val IMAGE = "image/*"
 fun PreparationScreen(
     navController: NavHostController,
     onStartStreamClick: () -> Unit,
-    onPositiveFeedbackClick: () -> Unit,
-    onShareClick: () -> Unit,
+    onPositiveFeedbackClick: () -> Unit
 ) {
     val viewModel: PreparationViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -78,7 +75,7 @@ fun PreparationScreen(
     ) { uri ->
         val uriParam = uri?.toString() ?: return@rememberLauncherForActivityResult
         navController.navigate(
-            NavigationRote.CropImage(uri = uriParam)
+            NavigationRoute.CropImage(uri = uriParam)
         )
     }
 
@@ -92,7 +89,7 @@ fun PreparationScreen(
         viewModel.event.onEach { event ->
             when (event) {
                 Preparation.Event.NavigateToProgress -> {
-                    navController.navigate(NavigationRote.Progress)
+                    navController.navigate(NavigationRoute.Awards)
                 }
 
                 Preparation.Event.OpenStream -> {
@@ -107,12 +104,8 @@ fun PreparationScreen(
                     galleryLauncher.launch(IMAGE)
                 }
 
-                Preparation.Event.HandleShareClick -> {
-                    onShareClick()
-                }
-
                 Preparation.Event.NavigateToPremiumDetails -> {
-                    navController.navigate(NavigationRote.PremiumDetails)
+                    navController.navigate(NavigationRoute.PremiumDetails)
                 }
             }
         }.launchIn(this)
@@ -143,15 +136,6 @@ private fun PreparationContent(
             .background(FakeLiveTheme.colors.background)
             .padding(16.dp)
     ) {
-        FakeLiveIconButton(
-            iconId = R.drawable.ic_cup,
-            contentDescription = "Progress",
-            onClick = {
-                onAction(Preparation.Action.ProgressClick)
-            },
-            hasMarker = state.newLevel
-        )
-
         Premium(
             modifier = Modifier.align(Alignment.TopEnd),
             status = state.status,
@@ -249,15 +233,7 @@ private fun PreparationContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
-            brush = Brush.linearGradient(
-                colors = listOf(
-                    FakeLiveTheme.colors.instagram.logo1,
-                    FakeLiveTheme.colors.instagram.logo2,
-                    FakeLiveTheme.colors.instagram.logo3,
-                ),
-                start = Offset(Float.POSITIVE_INFINITY, 0f),
-                end = Offset(0f, Float.POSITIVE_INFINITY),
-            ),
+            brush = instagramBrush(),
             shape = RoundedCornerShape(6.dp),
             onClick = {
                 onAction(Preparation.Action.StartStreamClick)
@@ -295,7 +271,7 @@ private fun Premium(
         Preparation.Status.FREE -> {
             FakeLivePrimaryButton(
                 modifier = modifier,
-                text = stringResource(R.string.preparation_premium),
+                text = stringResource(R.string.common_premium),
                 onClick = {
                     onAction(Preparation.Action.PremiumClick)
                 },
@@ -303,12 +279,12 @@ private fun Premium(
                     horizontal = 12.dp,
                     vertical = 8.dp,
                 ),
-                leadingIcon = {
+                trailingIcon = {
                     Icon(
                         modifier = Modifier
-                            .padding(end = 8.dp)
+                            .padding(start = 6.dp)
                             .size(20.dp),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_star),
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_infinity),
                         contentDescription = "Star",
                         tint = FakeLiveTheme.colors.onSurface,
                     )
@@ -320,7 +296,7 @@ private fun Premium(
             Row(
                 modifier = modifier
                     .background(
-                        FakeLiveTheme.colors.surface,
+                        color = FakeLiveTheme.colors.surface,
                         shape = RoundedCornerShape(16.dp)
                     )
                     .padding(
@@ -333,7 +309,7 @@ private fun Premium(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.preparation_premium),
+                    text = stringResource(R.string.common_premium),
                     color = FakeLiveTheme.colors.onSurface,
                     style = FakeLiveTheme.typography.titleSmall,
                 )

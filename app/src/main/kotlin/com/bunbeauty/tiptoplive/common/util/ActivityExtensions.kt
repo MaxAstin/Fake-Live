@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import com.bunbeauty.tiptoplive.R
 import com.google.android.play.core.review.ReviewManagerFactory
 
 fun Activity.launchInAppReview() {
@@ -26,11 +27,35 @@ fun Activity.openSettings() {
 }
 
 fun Activity.openSharing(text: String) {
-    val intent = Intent().apply {
-        action = Intent.ACTION_SEND
-        type = "text/plain"
-        putExtra(Intent.EXTRA_TEXT, text)
+    runCatching {
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, text)
+        }
+        val chooser = Intent.createChooser(intent, null)
+        startActivity(chooser)
+    }.onFailure {
+        showToast(message = getString(R.string.common_something_went_wrong))
     }
-    val chooser = Intent.createChooser(intent, null)
-    startActivity(chooser)
+}
+
+fun Activity.openMarketListing() {
+    runCatching {
+        val uri = Uri.parse("market://details?id=$packageName")
+        val intent = Intent(Intent.ACTION_VIEW, uri).apply {
+            setPackage("com.android.vending")
+            addFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+            )
+        }
+        startActivity(intent)
+    }.onFailure {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(playMarketLink)
+        ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+    }
 }

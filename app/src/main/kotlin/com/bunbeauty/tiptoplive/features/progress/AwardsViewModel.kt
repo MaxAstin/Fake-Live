@@ -5,44 +5,44 @@ import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.features.progress.domain.model.Level
 import com.bunbeauty.tiptoplive.features.progress.domain.usecase.GetProgressUseCase
-import com.bunbeauty.tiptoplive.features.progress.domain.usecase.SaveNewLevelUseCase
+import com.bunbeauty.tiptoplive.features.progress.domain.usecase.SaveNewAwardsUseCase
 import com.bunbeauty.tiptoplive.features.progress.domain.usecase.SaveShouldShowProgressHintUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProgressViewModel @Inject constructor(
-    private val saveNewLevelUseCase: SaveNewLevelUseCase,
+class AwardsViewModel @Inject constructor(
+    private val saveNewAwardsUseCase: SaveNewAwardsUseCase,
     private val getProgressUseCase: GetProgressUseCase,
     private val saveShouldShowProgressHintUseCase: SaveShouldShowProgressHintUseCase,
-) : BaseViewModel<Progress.State, Progress.Action, Progress.Event>(
+) : BaseViewModel<Awards.State, Awards.Action, Awards.Event>(
     initState = {
-        Progress.State.Loading
+        Awards.State.Loading
     }
 ) {
 
     init {
-        loadProgress()
+        getProgress()
     }
 
-    override fun onAction(action: Progress.Action) {
+    override fun onAction(action: Awards.Action) {
         when (action) {
-            Progress.Action.HintClick -> {
+            Awards.Action.HintClick -> {
                 updateHintVisibility()
             }
-            Progress.Action.EmojiClick -> {
+            Awards.Action.EmojiClick -> {
                 updateHintVisibility()
             }
         }
     }
 
-    private fun loadProgress() {
+    private fun getProgress() {
         viewModelScope.launch {
             val progress = getProgressUseCase()
             setState {
-                Progress.State.Success(
-                    showNewLevelAnimation = progress.newLevel,
+                Awards.State.Success(
+                    showNewAwardsAnimation = progress.newAwards,
                     showHint = progress.showHint,
                     level = progress.level.number,
                     imageId = progress.level.imageId(),
@@ -52,12 +52,12 @@ class ProgressViewModel @Inject constructor(
                 )
             }
 
-            resetNewLevel()
+            saveNewAwardsUseCase(hasNewAwards = false)
         }
     }
 
     private fun updateHintVisibility() {
-        val state = currentState as? Progress.State.Success ?: return
+        val state = currentState as? Awards.State.Success ?: return
         val showHint = state.showHint
 
         setState {
@@ -67,12 +67,6 @@ class ProgressViewModel @Inject constructor(
             viewModelScope.launch {
                 saveShouldShowProgressHintUseCase(shouldShowProgressHint = false)
             }
-        }
-    }
-
-    private fun resetNewLevel() {
-        viewModelScope.launch {
-            saveNewLevelUseCase(newLevel = false)
         }
     }
 

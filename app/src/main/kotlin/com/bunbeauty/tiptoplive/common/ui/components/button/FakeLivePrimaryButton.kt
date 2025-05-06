@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
@@ -20,11 +21,16 @@ fun FakeLivePrimaryButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    colors: ButtonColors =  ButtonDefaults.buttonColors(
-        containerColor = FakeLiveTheme.colors.interactive
+    enabled: Boolean = true,
+    colors: ButtonColors = ButtonDefaults.buttonColors(
+        containerColor = FakeLiveTheme.colors.interactive,
+        contentColor = FakeLiveTheme.colors.onSurface,
+        disabledContainerColor = Color(0xFFE7F1FE),
+        disabledContentColor = Color(0xFF9CB9DC)
     ),
     contentPadding: PaddingValues = PaddingValues(),
     leadingIcon: @Composable () -> Unit = {},
+    trailingIcon: @Composable () -> Unit = {},
 ) {
     val multipleEventsCutter = rememberMultipleEventsCutter()
 
@@ -32,6 +38,7 @@ fun FakeLivePrimaryButton(
         modifier = modifier,
         shape = RoundedCornerShape(6.dp),
         colors = colors,
+        enabled = enabled,
         onClick = {
             multipleEventsCutter.processEvent(onClick)
         },
@@ -43,6 +50,7 @@ fun FakeLivePrimaryButton(
                 text = text,
                 style = FakeLiveTheme.typography.titleSmall,
             )
+            trailingIcon()
         }
     }
 }

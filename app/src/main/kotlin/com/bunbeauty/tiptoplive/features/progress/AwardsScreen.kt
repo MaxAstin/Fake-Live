@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,40 +28,35 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
-import com.bunbeauty.tiptoplive.common.ui.components.CloseIcon
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.bold
 import com.bunbeauty.tiptoplive.features.progress.view.SpeechBubbleShape
 
 @Composable
-fun ProgressScreen(navController: NavHostController) {
-    val viewModel: ProgressViewModel = hiltViewModel()
+fun AwardsScreen() {
+    val viewModel: AwardsViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val onAction = remember {
-        { action: Progress.Action ->
+        { action: Awards.Action ->
             viewModel.onAction(action)
         }
     }
 
-    ProgressContent(
+    AwardsContent(
         state = state,
-        navController = navController,
         onAction = onAction
     )
 }
 
 @Composable
-private fun ProgressContent(
-    state: Progress.State,
-    navController: NavHostController,
-    onAction: (Progress.Action) -> Unit
+private fun AwardsContent(
+    state: Awards.State,
+    onAction: (Awards.Action) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -69,19 +64,14 @@ private fun ProgressContent(
             .background(FakeLiveTheme.colors.background)
             .padding(16.dp)
     ) {
-        CloseIcon(
-            modifier = Modifier.align(Alignment.TopEnd),
-            onClick = { navController.popBackStack() }
-        )
-
-        (state as? Progress.State.Success)?.let { successState ->
+        (state as? Awards.State.Success)?.let { successState ->
             CenterBlock(
                 modifier = Modifier.align(Alignment.Center),
-                state = state
+                state = successState
             )
             ProgressBlock(
                 modifier = Modifier.align(Alignment.BottomCenter),
-                state = state,
+                state = successState,
                 onAction = onAction
             )
         }
@@ -90,14 +80,14 @@ private fun ProgressContent(
     val composition by rememberLottieComposition(LottieCompositionSpec.Asset("new_level_animation.json"))
     LottieAnimation(
         modifier = Modifier.fillMaxSize(),
-        isPlaying = (state as? Progress.State.Success)?.showNewLevelAnimation ?: false,
+        isPlaying = (state as? Awards.State.Success)?.showNewAwardsAnimation ?: false,
         composition = composition
     )
 }
 
 @Composable
 private fun CenterBlock(
-    state: Progress.State.Success,
+    state: Awards.State.Success,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -126,8 +116,8 @@ private fun CenterBlock(
 
 @Composable
 private fun ProgressBlock(
-    state: Progress.State.Success,
-    onAction: (Progress.Action) -> Unit,
+    state: Awards.State.Success,
+    onAction: (Awards.Action) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -145,7 +135,7 @@ private fun ProgressBlock(
                     .size(48.dp)
                     .clickableWithoutIndication(
                         onClick = {
-                            onAction(Progress.Action.EmojiClick)
+                            onAction(Awards.Action.EmojiClick)
                         }
                     ),
                 painter = painterResource(id = state.imageId),
@@ -183,7 +173,7 @@ private fun ProgressBlock(
 
 @Composable
 private fun HintBox(
-    onAction: (Progress.Action) -> Unit,
+    onAction: (Awards.Action) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val bubbleShape = SpeechBubbleShape(
@@ -200,7 +190,7 @@ private fun HintBox(
             )
             .clickableWithoutIndication(
                 onClick = {
-                    onAction(Progress.Action.HintClick)
+                    onAction(Awards.Action.HintClick)
                 }
             )
     ) {
@@ -226,9 +216,9 @@ private fun HintBox(
 @Composable
 private fun ProgressScreenPreview() {
     FakeLiveTheme {
-        ProgressContent(
-            state = Progress.State.Success(
-                showNewLevelAnimation = true,
+        AwardsContent(
+            state = Awards.State.Success(
+                showNewAwardsAnimation = true,
                 showHint = false,
                 level = 10,
                 imageId = R.drawable.img_crown,
@@ -236,7 +226,6 @@ private fun ProgressScreenPreview() {
                 points = 100,
                 nextLevelPoints = 100,
             ),
-            navController = rememberNavController(),
             onAction = {}
         )
     }

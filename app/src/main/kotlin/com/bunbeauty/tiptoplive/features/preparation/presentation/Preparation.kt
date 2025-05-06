@@ -41,7 +41,6 @@ interface Preparation {
         data class FeedbackClick(val isPositive: Boolean): Action
         data object CloseStreamDurationLimitsDialogClick: Action
         data object PremiumLaterClick: Action
-        data object ShareClick: Action
         data object PremiumClick: Action
     }
 
@@ -50,7 +49,6 @@ interface Preparation {
         data object OpenStream: Event
         data object HandlePositiveFeedbackClick: Event
         data object HandleAvatarClick: Event
-        data object HandleShareClick: Event
         data object NavigateToPremiumDetails: Event
     }
 

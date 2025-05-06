@@ -27,6 +27,8 @@ private const val OPEN_QUESTIONS_EVENT = "open_questions"
 private const val SELECT_QUESTION_EVENT = "select_question"
 
 private const val SHARE_EVENT = "share"
+private const val RATE_US_CLICK_EVENT = "rate_us_click"
+
 private const val PREMIUM_LATER_CLICK_EVENT = "premium_later_click"
 private const val PREMIUM_CLICK_EVENT = "premium_click"
 private const val PREMIUM_QUITE_EVENT = "premium_quite"
@@ -105,8 +107,12 @@ class AnalyticsManager @Inject constructor(
         trackEvent(event = SELECT_QUESTION_EVENT)
     }
 
-    fun trackShare() {
+    fun trackShareClick() {
         trackEvent(event = SHARE_EVENT)
+    }
+
+    fun trackRateUsClick() {
+        trackEvent(event = RATE_US_CLICK_EVENT)
     }
 
     fun trackPremiumLaterClick() {
