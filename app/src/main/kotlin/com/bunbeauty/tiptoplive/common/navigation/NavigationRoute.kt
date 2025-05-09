@@ -28,7 +28,7 @@ interface NavigationRoute {
     data object PremiumDetails: NavigationRoute
 
     @Serializable
-    data object SuccessfullyPurchased: NavigationRoute
+    data object PurchaseSuccess: NavigationRoute
 
     @Serializable
     data object PurchaseFailed: NavigationRoute

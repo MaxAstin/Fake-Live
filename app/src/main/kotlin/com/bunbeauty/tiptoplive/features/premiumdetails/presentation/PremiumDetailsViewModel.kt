@@ -158,7 +158,7 @@ class PremiumDetailsViewModel @Inject constructor(
                 is PurchaseResult.Success -> {
                     billingService.acknowledgePurchase(purchasedProduct = result.product)
                         .onSuccess {
-                            sendEvent(PremiumDetails.Event.NavigateToPurchase)
+                            sendEvent(PremiumDetails.Event.NavigateToPurchaseSuccess)
                         }.onError {
                             handleError()
                         }

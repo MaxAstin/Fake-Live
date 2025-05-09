@@ -43,7 +43,7 @@ interface PremiumDetails {
     sealed interface Event : Base.Event {
         data object NavigateBack : Event
         data class StartCheckout(val purchaseData: PurchaseData) : Event
-        data object NavigateToPurchase : Event
+        data object NavigateToPurchaseSuccess : Event
         data object NavigateToPurchaseFailed : Event
     }
 

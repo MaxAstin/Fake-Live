@@ -123,10 +123,8 @@ fun PremiumDetailsScreen(
                     startCheckout(event.purchaseData)
                 }
 
-                is PremiumDetails.Event.NavigateToPurchase -> {
-                    navController.navigate(NavigationRoute.SuccessfullyPurchased) {
-                        popUpTo<NavigationRoute.Preparation> {}
-                    }
+                is PremiumDetails.Event.NavigateToPurchaseSuccess -> {
+                    navController.navigate(NavigationRoute.PurchaseSuccess)
                 }
 
                 is PremiumDetails.Event.NavigateToPurchaseFailed -> {

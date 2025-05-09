@@ -50,7 +50,7 @@ import com.bunbeauty.tiptoplive.features.more.MoreScreen
 import com.bunbeauty.tiptoplive.features.notification.NotificationMessage
 import com.bunbeauty.tiptoplive.features.premiumdetails.view.PremiumDetailsScreen
 import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseFailedScreen
-import com.bunbeauty.tiptoplive.features.premiumdetails.view.SuccessfullyPurchasedScreen
+import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseSuccessScreen
 import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
 import com.bunbeauty.tiptoplive.features.progress.AwardsScreen
 import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
@@ -226,8 +226,8 @@ class MainActivity : ComponentActivity() {
                     startCheckout = ::startCheckout
                 )
             }
-            composable<NavigationRoute.SuccessfullyPurchased> {
-                SuccessfullyPurchasedScreen(navController = navController)
+            composable<NavigationRoute.PurchaseSuccess> {
+                PurchaseSuccessScreen(navController = navController)
             }
             composable<NavigationRoute.PurchaseFailed> {
                 PurchaseFailedScreen(navController = navController)
