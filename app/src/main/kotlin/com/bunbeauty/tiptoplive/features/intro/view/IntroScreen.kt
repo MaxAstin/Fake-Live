@@ -27,7 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.bunbeauty.tiptoplive.R
-import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
+import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.LocalePreview
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLivePrimaryButton
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
@@ -51,8 +51,8 @@ fun IntroScreen(navController: NavHostController) {
         viewModel.event.onEach { event ->
             when (event) {
                 is Intro.Event.OpenPreparation -> {
-                    navController.navigate(route = NavigationRote.Preparation) {
-                        popUpTo(NavigationRote.Intro) {
+                    navController.navigate(route = NavigationRoute.Preparation) {
+                        popUpTo(NavigationRoute.Intro) {
                             inclusive = true
                         }
                     }

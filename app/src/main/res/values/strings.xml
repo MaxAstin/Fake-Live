@@ -1,8 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">Fake Live</string>
 
+    <string name="navigation_live">Live</string>
+    <string name="navigation_awards">Awards</string>
+    <string name="navigation_more">More</string>
+
     <string name="common_under_development">This feature is under development</string>
     <string name="common_something_went_wrong">Something went wrong</string>
+    <string name="common_premium">Premium</string>
 
     <string name="intro_next">Next</string>
     <string name="intro_welcome">Welcome to %s</string>
@@ -39,7 +44,6 @@
     <string name="preparation_viewer_count">Viewer count</string>
     <string name="preparation_start_live">Start Live</string>
     <string name="preparation_seconds">(%d sec)</string>
-    <string name="preparation_premium">Premium</string>
 
     <string name="limits_live_has_ended">Live has ended ⌛</string>
     <string name="limits_free_session_limited">Free sessions are limited to %s seconds. Upgrade to Premium for unlimited Live streaming and more exclusive features!</string>
@@ -108,6 +112,19 @@
     <string name="progress_level">Level %d</string>
     <string name="progress_points">Points</string>
     <string name="progress_minute_equals_point">1 minute of Live = 1 Point</string>
+
+    <!-- More -->
+    <string name="more_premium_active">Active</string>
+    <string name="more_share">Share</string>
+    <string name="more_feedback">Feedback</string>
+    <string name="more_rate_us">Rate us</string>
+
+    <!-- Feedback -->
+    <string name="feedback_title">Feedback</string>
+    <string name="feedback_description">Your feedback means the world to us!\nTell us what we can improve and help make %s even better.</string>
+    <string name="feedback_what_to_improve">What can be improved?</string>
+    <string name="feedback_send">Send</string>
+    <string name="feedback_sent_successfully">Feedback sent successfully</string>
 
     <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">
         <item>S</item>

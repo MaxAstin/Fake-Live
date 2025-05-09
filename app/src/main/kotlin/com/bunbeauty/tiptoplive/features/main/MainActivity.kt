@@ -30,35 +30,35 @@ import androidx.navigation.toRoute
 import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.Constants.NOTIFICATION_MESSAGE_KEY
 import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
-import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
+import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
-import com.bunbeauty.tiptoplive.common.ui.util.showToast
 import com.bunbeauty.tiptoplive.common.util.launchInAppReview
 import com.bunbeauty.tiptoplive.common.util.openSettings
-import com.bunbeauty.tiptoplive.common.util.openSharing
 import com.bunbeauty.tiptoplive.common.util.serializable
+import com.bunbeauty.tiptoplive.common.util.showToast
 import com.bunbeauty.tiptoplive.features.billing.BillingService
 import com.bunbeauty.tiptoplive.features.billing.model.PurchaseData
 import com.bunbeauty.tiptoplive.features.cropimage.view.CropImageScreen
+import com.bunbeauty.tiptoplive.features.feedback.FeedbackScreen
 import com.bunbeauty.tiptoplive.features.intro.view.IntroScreen
 import com.bunbeauty.tiptoplive.features.main.presentation.Main
 import com.bunbeauty.tiptoplive.features.main.presentation.MainViewModel
+import com.bunbeauty.tiptoplive.features.main.view.BottomNavigationBar
 import com.bunbeauty.tiptoplive.features.main.view.CameraIsRequiredDialog
+import com.bunbeauty.tiptoplive.features.more.MoreScreen
 import com.bunbeauty.tiptoplive.features.notification.NotificationMessage
 import com.bunbeauty.tiptoplive.features.premiumdetails.view.PremiumDetailsScreen
-import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
-import com.bunbeauty.tiptoplive.features.progress.ProgressScreen
-import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
 import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseFailedScreen
 import com.bunbeauty.tiptoplive.features.premiumdetails.view.SuccessfullyPurchasedScreen
+import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
+import com.bunbeauty.tiptoplive.features.progress.AwardsScreen
+import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-private const val GOOGLE_PLAY_LINK = "https://play.google.com/store/apps/details?id=com.bunbeauty.tiptoplive"
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -99,7 +99,7 @@ class MainActivity : ComponentActivity() {
             FakeLiveTheme {
                 val state by mainViewModel.state.collectAsStateWithLifecycle()
 
-                AppContent()
+                AppContent(state = state)
 
                 val onAction = remember {
                     { action: Main.Action ->
@@ -139,18 +139,24 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun AppContent() {
+    private fun AppContent(state: Main.State) {
+        val navController = rememberNavController()
         Scaffold(
             modifier = Modifier
                 .statusBarsPadding()
-                .navigationBarsPadding()
+                .navigationBarsPadding(),
+            bottomBar = {
+                BottomNavigationBar(
+                    navController = navController,
+                    hasNewAwards = state.hasNewAwards
+                )
+            }
         ) { padding ->
-            val navController = rememberNavController()
             LaunchedEffect(Unit) {
                 mainViewModel.event.onEach { event ->
                     when (event) {
                         Main.Event.OpenStream -> {
-                            navController.navigate(NavigationRote.Stream)
+                            navController.navigate(NavigationRoute.Stream)
                         }
                     }
                 }.launchIn(this)
@@ -170,7 +176,7 @@ class MainActivity : ComponentActivity() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = NavigationRote.Intro,
+            startDestination = NavigationRoute.Intro,
             modifier = modifier,
             enterTransition = {
                 EnterTransition.None
@@ -179,10 +185,10 @@ class MainActivity : ComponentActivity() {
                 ExitTransition.None
             },
         ) {
-            composable<NavigationRote.Intro> {
+            composable<NavigationRoute.Intro> {
                 IntroScreen(navController = navController)
             }
-            composable<NavigationRote.Preparation> {
+            composable<NavigationRoute.Preparation> {
                 PreparationScreen(
                     navController = navController,
                     onStartStreamClick = {
@@ -190,31 +196,20 @@ class MainActivity : ComponentActivity() {
                     },
                     onPositiveFeedbackClick = {
                         launchInAppReview()
-                    },
-                    onShareClick = {
-                        runCatching {
-                            openSharing(
-                                text = getString(
-                                    R.string.sharing_text,
-                                    getString(R.string.app_name),
-                                    GOOGLE_PLAY_LINK
-                                ),
-                            )
-                        }.onFailure { exception ->
-                            analyticsManager.get().trackError(exception)
-                            showToast(message = getString(R.string.common_something_went_wrong))
-                        }
                     }
                 )
             }
-            composable<NavigationRote.Progress> {
-                ProgressScreen(navController = navController)
+            composable<NavigationRoute.Awards> {
+                AwardsScreen()
             }
-            composable<NavigationRote.Stream> {
+            composable<NavigationRoute.Stream> {
                 StreamScreen(navController = navController)
             }
-            composable<NavigationRote.CropImage> { navBackStackEntry ->
-                val cropImageRoute: NavigationRote.CropImage = navBackStackEntry.toRoute()
+            composable<NavigationRoute.More> {
+                MoreScreen(navController = navController)
+            }
+            composable<NavigationRoute.CropImage> { navBackStackEntry ->
+                val cropImageRoute: NavigationRoute.CropImage = navBackStackEntry.toRoute()
                 val uri = cropImageRoute.uri.toUri()
                 CropImageScreen(
                     navController = navController,
@@ -224,17 +219,20 @@ class MainActivity : ComponentActivity() {
                     }
                 )
             }
-            composable<NavigationRote.PremiumDetails> {
+            composable<NavigationRoute.PremiumDetails> {
                 PremiumDetailsScreen(
                     navController = navController,
                     startCheckout = ::startCheckout
                 )
             }
-            composable<NavigationRote.SuccessfullyPurchased> {
+            composable<NavigationRoute.SuccessfullyPurchased> {
                 SuccessfullyPurchasedScreen(navController = navController)
             }
-            composable<NavigationRote.PurchaseFailed> {
+            composable<NavigationRoute.PurchaseFailed> {
                 PurchaseFailedScreen(navController = navController)
+            }
+            composable<NavigationRoute.Feedback> {
+                FeedbackScreen(navController = navController)
             }
         }
     }

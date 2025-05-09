@@ -19,8 +19,8 @@ android {
         applicationId = "com.bunbeauty.tiptoplive"
         minSdk = 27
         targetSdk = 35
-        versionCode = 390
-        versionName = "3.9.0"
+        versionCode = 400
+        versionName = "4.0.0"
         multiDexEnabled = true
         setProperty("archivesBaseName", "FakeLive-$versionName")
 
@@ -112,6 +112,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.database)
 
     // In-App Review
     implementation(libs.review)
@@ -136,6 +137,9 @@ dependencies {
 
     // Work manager
     implementation(libs.work)
+
+    // Datastore
+    implementation(libs.bundles.datastore)
 
     // Testing
     testImplementation(libs.junit)

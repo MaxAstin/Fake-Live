@@ -1,7 +1,8 @@
 package com.bunbeauty.tiptoplive.features.stream.domain
 
-import com.bunbeauty.tiptoplive.features.stream.data.EMOJI
-import com.bunbeauty.tiptoplive.features.stream.data.comment.CommentRepository
+import com.bunbeauty.tiptoplive.features.stream.domain.model.EMOJI
+import com.bunbeauty.tiptoplive.features.stream.data.repository.CommentRepository
+import com.bunbeauty.tiptoplive.features.stream.domain.model.CommentType
 import javax.inject.Inject
 import kotlin.random.Random
 
