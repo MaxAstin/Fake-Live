@@ -27,6 +27,7 @@ interface More {
         data object NavigateToPremiumDetails: Event
         data object OpenSharing: Event
         data object NavigateToFeedback: Event
+        data object NavigateToFeedbackSuccess: Event
         data object OpenMarketListing: Event
     }
 

@@ -22,6 +22,7 @@ private const val SHOULD_SHOW_PROGRESS_HINT_KEY = "should show progress hint"
 private const val NEW_LEVEL_KEY = "new level"
 private const val SHOW_STREAM_DURATION_LIMIT_KEY = "show stream duration limit"
 private const val NOTIFIED_OF_STREAM_DURATION_LIMIT = "notified of stream duration limit"
+private const val LAST_FEEDBACK_DATE_KEY = "last feedback date"
 
 class SharedPreferencesStorage @Inject constructor(
     @ApplicationContext private val context: Context
@@ -109,6 +110,12 @@ class SharedPreferencesStorage @Inject constructor(
         }
     }
 
+    override suspend fun saveLastFeedbackDate(date: String) {
+        sharedPreferences.edit {
+            putString(LAST_FEEDBACK_DATE_KEY, date)
+        }
+    }
+
     override fun getImageUriFlow(): Flow<String?> {
         return mutableImageUriFlow.asStateFlow()
     }
@@ -159,6 +166,10 @@ class SharedPreferencesStorage @Inject constructor(
 
     override suspend fun getNotifiedOfStreamDurationLimit(defaultValue: Boolean): Boolean {
         return sharedPreferences.getBoolean(NOTIFIED_OF_STREAM_DURATION_LIMIT, defaultValue)
+    }
+
+    override suspend fun getLastFeedbackDate(): String? {
+        return sharedPreferences.getString(LAST_FEEDBACK_DATE_KEY, null)
     }
 
     private fun getImageUri(): String? {

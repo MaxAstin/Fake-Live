@@ -73,6 +73,10 @@ fun MoreScreen(navController: NavHostController) {
                     navController.navigate(NavigationRoute.Feedback)
                 }
 
+                More.Event.NavigateToFeedbackSuccess -> {
+                    navController.navigate(NavigationRoute.FeedbackSuccess)
+                }
+
                 More.Event.OpenMarketListing -> {
                     activity?.openMarketListing()
                 }

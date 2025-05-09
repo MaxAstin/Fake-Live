@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
+import com.bunbeauty.tiptoplive.features.feedback.domain.IsFeedbackProvidedUseCase
 import com.bunbeauty.tiptoplive.features.premiumdetails.domain.GetOfferTimerFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class MoreViewModel @Inject constructor(
     private val isPremiumAvailableUseCase: IsPremiumAvailableUseCase,
     private val getOfferTimerFlowUseCase: GetOfferTimerFlowUseCase,
+    private val isFeedbackProvidedUseCase: IsFeedbackProvidedUseCase,
     private val analyticsManager: AnalyticsManager
 ) : BaseViewModel<More.State, More.Action, More.Event>(
     initState = {
@@ -38,7 +40,13 @@ class MoreViewModel @Inject constructor(
                 sendEvent(More.Event.OpenSharing)
             }
             More.Action.FeedbackClick -> {
-                sendEvent(More.Event.NavigateToFeedback)
+                viewModelScope.launch {
+                    if (isFeedbackProvidedUseCase()) {
+                        sendEvent(More.Event.NavigateToFeedbackSuccess)
+                    } else {
+                        sendEvent(More.Event.NavigateToFeedback)
+                    }
+                }
             }
 
             More.Action.RateUsClick -> {
