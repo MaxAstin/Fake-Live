@@ -76,12 +76,12 @@
     <string name="subscription_save">Save %s</string>
     <string name="subscription_checkout_failed">Failed to complete the operation</string>
 
-    <!-- Success -->
+    <!-- Premium success -->
     <string name="subscription_success_title">Subscription successfully activated</string>
     <string name="subscription_success_description">Now you can enjoy all premium features and make the most of your experience</string>
     <string name="subscription_success_start_using">Start using</string>
 
-    <!-- Failed -->
+    <!-- Premium failed -->
     <string name="subscription_failed_title">Something went wrong</string>
     <string name="subscription_failed_description">Please check your payment or contact support for assistance</string>
     <string name="subscription_failed_retry">Retry</string>
@@ -125,6 +125,9 @@
     <string name="feedback_what_to_improve">What can be improved?</string>
     <string name="feedback_send">Send</string>
     <string name="feedback_sent_successfully">Feedback sent successfully</string>
+    <string name="feedback_thank_you_title">Thank you for your feedback!</string>
+    <string name="feedback_thank_you_description">Thank you for your feedback! We appreciate your input and will work to enhance your experience.</string>
+    <string name="feedback_done">Done</string>
 
     <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">
         <item>S</item>

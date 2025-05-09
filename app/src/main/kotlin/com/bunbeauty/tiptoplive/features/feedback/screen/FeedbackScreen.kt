@@ -1,4 +1,4 @@
-package com.bunbeauty.tiptoplive.features.feedback
+package com.bunbeauty.tiptoplive.features.feedback.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.bunbeauty.tiptoplive.R
+import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.components.CloseIcon
 import com.bunbeauty.tiptoplive.common.ui.components.FakeLiveTextField
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLivePrimaryButton
@@ -59,9 +60,11 @@ fun FeedbackScreen(navController: NavHostController) {
                     navController.navigateUp()
                 }
 
-                Feedback.Event.ShowSuccessfullySent -> {
-                    context.apply {
-                        showToast(message = getString(R.string.feedback_sent_successfully))
+                Feedback.Event.NavigateToSuccess -> {
+                    navController.navigate(NavigationRoute.FeedbackSuccess) {
+                        popUpTo<NavigationRoute.Feedback> {
+                            inclusive = true
+                        }
                     }
                 }
 

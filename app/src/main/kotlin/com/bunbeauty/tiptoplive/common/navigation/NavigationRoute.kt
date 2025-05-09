@@ -36,4 +36,7 @@ interface NavigationRoute {
     @Serializable
     data object Feedback: NavigationRoute
 
+    @Serializable
+    data object FeedbackSuccess: NavigationRoute
+
 }

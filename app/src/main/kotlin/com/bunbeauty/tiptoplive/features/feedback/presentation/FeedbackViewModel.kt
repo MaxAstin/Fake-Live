@@ -40,8 +40,7 @@ class FeedbackViewModel @Inject constructor(
                     setState { copy(sending = true) }
                     sendFeedbackUseCase.invoke(feedback = state.value.feedback)
                         .onSuccess {
-                            sendEvent(Feedback.Event.ShowSuccessfullySent)
-                            sendEvent(Feedback.Event.NavigateBack)
+                            sendEvent(Feedback.Event.NavigateToSuccess)
                         }.onFailure {
                             setState {
                                 copy(sending = false)

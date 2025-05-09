@@ -39,7 +39,8 @@ import com.bunbeauty.tiptoplive.common.util.showToast
 import com.bunbeauty.tiptoplive.features.billing.BillingService
 import com.bunbeauty.tiptoplive.features.billing.model.PurchaseData
 import com.bunbeauty.tiptoplive.features.cropimage.view.CropImageScreen
-import com.bunbeauty.tiptoplive.features.feedback.FeedbackScreen
+import com.bunbeauty.tiptoplive.features.feedback.screen.FeedbackScreen
+import com.bunbeauty.tiptoplive.features.feedback.screen.FeedbackSuccessScreen
 import com.bunbeauty.tiptoplive.features.intro.view.IntroScreen
 import com.bunbeauty.tiptoplive.features.main.presentation.Main
 import com.bunbeauty.tiptoplive.features.main.presentation.MainViewModel
@@ -233,6 +234,9 @@ class MainActivity : ComponentActivity() {
             }
             composable<NavigationRoute.Feedback> {
                 FeedbackScreen(navController = navController)
+            }
+            composable<NavigationRoute.FeedbackSuccess> {
+                FeedbackSuccessScreen(navController = navController)
             }
         }
     }
