@@ -2,12 +2,12 @@
 activityCompose = "1.10.1"
 application = "8.7.3"
 billingKtx = "7.1.1"
-camera2 = "1.4.1"
+camera2 = "1.4.2"
 coilCompose = "2.6.0"
-composeBom = "2025.03.01"
-coreKtx = "1.15.0"
+composeBom = "2025.05.00"
+coreKtx = "1.16.0"
 coreSplashscreen = "1.0.1"
-firebase = "33.11.0"
+firebase = "33.13.0"
 googleServicesVersion = "4.4.2"
 hiltNavigationCompose = "1.2.0"
 imageCropper = "4.6.0"
@@ -17,17 +17,17 @@ ksp = "2.0.21-1.0.26"
 hilt = "2.56"
 googleServices = "4.4.2"
 firebaseCrashlytics = "3.0.3"
-lifecycleRuntimeKtx = "2.8.7"
-media3 = "1.5.1"
-navigationCompose = "2.8.9"
+lifecycleRuntimeKtx = "2.9.0"
+media3 = "1.6.1"
+navigationCompose = "2.9.0"
 review = "2.0.2"
 kotlinxSerializationJson = "1.8.0"
 junit = "4.13.2"
 junitJupiter = "5.8.1"
 ktor = "3.1.1"
 lottie = "6.6.4"
-work = "2.7.1"
-datastore = "1.1.4"
+work = "2.10.1"
+datastore = "1.1.6"
 
 [libraries]
 billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billingKtx" }
@@ -50,7 +50,7 @@ compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeB
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-compose-animation = { module = "androidx.compose.animation:animation", version="1.8.0-rc02" }
+compose-animation = { module = "androidx.compose.animation:animation" }
 
 # Camera
 camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camera2" }
