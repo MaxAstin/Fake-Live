@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
+import com.bunbeauty.tiptoplive.common.ui.LocalePreview
 import com.bunbeauty.tiptoplive.common.ui.components.CloseIcon
 import com.bunbeauty.tiptoplive.common.ui.components.FakeLiveTextField
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLivePrimaryButton
@@ -41,7 +42,6 @@ import com.bunbeauty.tiptoplive.features.feedback.presentation.FeedbackViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedbackScreen(navController: NavHostController) {
     val viewModel: FeedbackViewModel = hiltViewModel()
@@ -77,6 +77,18 @@ fun FeedbackScreen(navController: NavHostController) {
         }.launchIn(this)
     }
 
+    FeedbackScreenContent(
+        state = state,
+        onAction = onAction
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun FeedbackScreenContent(
+    state: Feedback.State,
+    onAction: (Feedback.Action) -> Unit
+) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = FakeLiveTheme.colors.background,
@@ -159,21 +171,22 @@ fun FeedbackScreen(navController: NavHostController) {
                 singleLine = false,
                 onValueChange = { value ->
                     onAction(Feedback.Action.UpdateFeedback(text = value))
-                },
-                trailingIcon = {
-                    // TODO use to attach image
-//                    Icon(
-//                        modifier = Modifier
-//                            .size(24.dp)
-//                            .clickableWithoutIndication {
-//                                onAction(Feedback.Action.ImageClick)
-//                            },
-//                        imageVector = ImageVector.vectorResource(R.drawable.ic_image),
-//                        contentDescription = "attach image",
-//                        tint = FakeLiveTheme.colors.iconVariant
-//                    )
                 }
             )
         }
+    }
+}
+
+@Composable
+@LocalePreview
+private fun FeedbackScreenPreview() {
+    FakeLiveTheme {
+        FeedbackScreenContent(
+            state = Feedback.State(
+                feedback = "feedback",
+                sending = false
+            ),
+            onAction = {}
+        )
     }
 }

@@ -124,9 +124,8 @@
     <string name="feedback_description">Your feedback means the world to us!\nTell us what we can improve and help make %s even better.</string>
     <string name="feedback_what_to_improve">What can be improved?</string>
     <string name="feedback_send">Send</string>
-    <string name="feedback_sent_successfully">Feedback sent successfully</string>
     <string name="feedback_thank_you_title">Thank you for your feedback!</string>
-    <string name="feedback_thank_you_description">Thank you for your feedback! We appreciate your input and will work to enhance your experience.</string>
+    <string name="feedback_thank_you_description">We appreciate your input and will work to enhance your experience.</string>
     <string name="feedback_done">Done</string>
 
     <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">

@@ -60,6 +60,7 @@ fun SuccessScreen(
     ) { paddingValues ->
         Column(
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(paddingValues)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -98,11 +99,23 @@ fun SuccessScreen(
 
 @Preview
 @Composable
-fun SuccessScreenPreview() {
+fun SuccessScreenLongPreview() {
     FakeLiveTheme {
         SuccessScreen(
             title = "Title",
             description = "Description. It's description. Simple description. Long description. My description. Cool description.",
+            mainButtonText = "Action",
+        )
+    }
+}
+
+@Preview
+@Composable
+fun SuccessScreenShortPreview() {
+    FakeLiveTheme {
+        SuccessScreen(
+            title = "Title",
+            description = "Description. Short description.",
             mainButtonText = "Action",
         )
     }

@@ -3,7 +3,9 @@ package com.bunbeauty.tiptoplive.features.feedback.screen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.tiptoplive.R
+import com.bunbeauty.tiptoplive.common.ui.LocalePreview
 import com.bunbeauty.tiptoplive.common.ui.screen.SuccessScreen
 
 @Composable
@@ -19,4 +21,10 @@ fun FeedbackSuccessScreen(navController: NavHostController) {
             navController.popBackStack()
         }
     )
+}
+
+@LocalePreview
+@Composable
+private fun FeedbackSuccessScreenPreview() {
+    FeedbackSuccessScreen(navController = rememberNavController())
 }
