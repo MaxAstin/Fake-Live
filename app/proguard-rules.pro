@@ -19,3 +19,16 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# DataStore
+-keepclassmembers class * extends androidx.datastore.preferences.protobuf.GeneratedMessageLite {
+    <fields>;
+}
+
+# Compose
+-optimizations !class/enum/unboxing
+-keep,includecode,allowobfuscation,allowshrinking class androidx.compose.runtime.SnapshotStateKt** { *; }
+-dontwarn androidx.compose.runtime.**
+
+# Serialization
+-keep @kotlinx.serialization.Serializable class * { *; }
