@@ -2,6 +2,7 @@ package com.bunbeauty.tiptoplive.features.feedback.presentation
 
 import androidx.lifecycle.viewModelScope
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
+import com.bunbeauty.tiptoplive.features.feedback.domain.SaveFeedbackDataUseCase
 import com.bunbeauty.tiptoplive.features.feedback.domain.SendFeedbackUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -9,7 +10,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeedbackViewModel @Inject constructor(
-    private val sendFeedbackUseCase: SendFeedbackUseCase
+    private val sendFeedbackUseCase: SendFeedbackUseCase,
+    private val saveFeedbackDataUseCase: SaveFeedbackDataUseCase
 ) : BaseViewModel<Feedback.State, Feedback.Action, Feedback.Event>(
     initState = {
         Feedback.State(
@@ -40,8 +42,10 @@ class FeedbackViewModel @Inject constructor(
                     setState { copy(sending = true) }
                     sendFeedbackUseCase.invoke(feedback = state.value.feedback)
                         .onSuccess {
-                            sendEvent(Feedback.Event.ShowSuccessfullySent)
-                            sendEvent(Feedback.Event.NavigateBack)
+                            viewModelScope.launch {
+                                saveFeedbackDataUseCase()
+                                sendEvent(Feedback.Event.NavigateToSuccess)
+                            }
                         }.onFailure {
                             setState {
                                 copy(sending = false)

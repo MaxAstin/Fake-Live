@@ -18,7 +18,7 @@ interface Feedback {
 
     sealed interface Event: Base.Event {
         data object NavigateBack : Event
-        data object ShowSuccessfullySent : Event
+        data object NavigateToSuccess : Event
         data object ShowSendingFailed : Event
     }
 

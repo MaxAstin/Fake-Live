@@ -17,6 +17,7 @@ interface KeyValueStorage {
     suspend fun saveNewLevel(newLevel: Boolean)
     suspend fun saveShowStreamDurationLimit(show: Boolean)
     suspend fun saveNotifiedOfStreamDurationLimit(notified: Boolean)
+    suspend fun saveLastFeedbackDate(date: String)
 
     fun getImageUriFlow(): Flow<String?>
     suspend fun getUsername(): String?
@@ -31,5 +32,6 @@ interface KeyValueStorage {
     suspend fun getNewLevel(defaultValue: Boolean): Boolean
     suspend fun getShowStreamDurationLimit(defaultValue: Boolean): Boolean
     suspend fun getNotifiedOfStreamDurationLimit(defaultValue: Boolean): Boolean
+    suspend fun getLastFeedbackDate(): String?
 
 }

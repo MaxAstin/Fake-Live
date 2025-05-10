@@ -119,6 +119,15 @@
     <string name="more_feedback">Обратная связь</string>
     <string name="more_rate_us">Оцените нас</string>
 
+    <!-- Feedback -->
+    <string name="feedback_title">Обратная связь</string>
+    <string name="feedback_description">Ваш отзыв очень важен для нас!\nРасскажите, что мы можем улучшить, и помогите сделать %s ещё лучше.</string>
+    <string name="feedback_what_to_improve">Что можно улучшить?</string>
+    <string name="feedback_send">Отправить</string>
+    <string name="feedback_thank_you_title">Спасибо за ваш отзыв!</string>
+    <string name="feedback_thank_you_description">Мы ценим ваше мнение и будем работать над улучшениями.</string>
+    <string name="feedback_done">Готово</string>
+
     <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">
         <item>А</item>
         <item>У</item>

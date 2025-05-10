@@ -39,7 +39,8 @@ import com.bunbeauty.tiptoplive.common.util.showToast
 import com.bunbeauty.tiptoplive.features.billing.BillingService
 import com.bunbeauty.tiptoplive.features.billing.model.PurchaseData
 import com.bunbeauty.tiptoplive.features.cropimage.view.CropImageScreen
-import com.bunbeauty.tiptoplive.features.feedback.FeedbackScreen
+import com.bunbeauty.tiptoplive.features.feedback.screen.FeedbackScreen
+import com.bunbeauty.tiptoplive.features.feedback.screen.FeedbackSuccessScreen
 import com.bunbeauty.tiptoplive.features.intro.view.IntroScreen
 import com.bunbeauty.tiptoplive.features.main.presentation.Main
 import com.bunbeauty.tiptoplive.features.main.presentation.MainViewModel
@@ -49,7 +50,7 @@ import com.bunbeauty.tiptoplive.features.more.MoreScreen
 import com.bunbeauty.tiptoplive.features.notification.NotificationMessage
 import com.bunbeauty.tiptoplive.features.premiumdetails.view.PremiumDetailsScreen
 import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseFailedScreen
-import com.bunbeauty.tiptoplive.features.premiumdetails.view.SuccessfullyPurchasedScreen
+import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseSuccessScreen
 import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
 import com.bunbeauty.tiptoplive.features.progress.AwardsScreen
 import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
@@ -225,14 +226,17 @@ class MainActivity : ComponentActivity() {
                     startCheckout = ::startCheckout
                 )
             }
-            composable<NavigationRoute.SuccessfullyPurchased> {
-                SuccessfullyPurchasedScreen(navController = navController)
+            composable<NavigationRoute.PurchaseSuccess> {
+                PurchaseSuccessScreen(navController = navController)
             }
             composable<NavigationRoute.PurchaseFailed> {
                 PurchaseFailedScreen(navController = navController)
             }
             composable<NavigationRoute.Feedback> {
                 FeedbackScreen(navController = navController)
+            }
+            composable<NavigationRoute.FeedbackSuccess> {
+                FeedbackSuccessScreen(navController = navController)
             }
         }
     }
