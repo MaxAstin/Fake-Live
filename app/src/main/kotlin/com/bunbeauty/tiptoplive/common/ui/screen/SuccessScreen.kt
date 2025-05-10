@@ -1,7 +1,6 @@
 package com.bunbeauty.tiptoplive.common.ui.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bunbeauty.tiptoplive.R
-import com.bunbeauty.tiptoplive.common.ui.components.CloseIcon
+import com.bunbeauty.tiptoplive.common.ui.components.TopBarWithCloseIcon
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLivePrimaryButton
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 
@@ -32,20 +31,13 @@ fun SuccessScreen(
     mainButtonText: String,
     modifier: Modifier = Modifier,
     onMainButtonClick: () -> Unit = {},
-    onCloseIconOnClick: () -> Unit = {}
+    onCloseIconClick: () -> Unit = {}
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = FakeLiveTheme.colors.background,
         topBar = {
-            Box(modifier = Modifier.fillMaxWidth()) {
-                CloseIcon(
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .padding(16.dp),
-                    onClick = onCloseIconOnClick
-                )
-            }
+            TopBarWithCloseIcon(onCloseIconClick = onCloseIconClick)
         },
         floatingActionButton = {
             FakeLivePrimaryButton(

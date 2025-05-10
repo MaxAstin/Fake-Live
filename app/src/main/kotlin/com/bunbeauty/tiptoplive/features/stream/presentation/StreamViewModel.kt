@@ -244,7 +244,7 @@ class StreamViewModel @Inject constructor(
                 val duration = getStreamDuration()
                 viewModelScope.launch {
                     finishStreamManuallyUseCase(duration = duration)
-                    sendEvent(Stream.Event.NavigateBack)
+                    sendEvent(Stream.Event.FinishStream)
                 }
             }
 
@@ -302,7 +302,7 @@ class StreamViewModel @Inject constructor(
     private suspend fun startDemoTimer() {
         delay(TIME_LIMIT_FOR_FREE_VERSION * 1_000L)
         finishDemoStreamAutomaticallyUseCase()
-        sendEvent(Stream.Event.NavigateBack)
+        sendEvent(Stream.Event.FinishStream)
     }
 
     private fun startGenerateReactions() {

@@ -71,7 +71,7 @@ interface Stream {
     }
 
     sealed interface Event : Base.Event {
-        data object NavigateBack : Event
+        data object FinishStream : Event
         data object ShowFilterNotAvailable : Event
         data object TakePicture : Event
     }

@@ -23,7 +23,7 @@ fun PurchaseSuccessScreen(navController: NavHostController) {
                 }
             }
         },
-        onCloseIconOnClick = {
+        onCloseIconClick = {
             navController.popBackStack()
         }
     )

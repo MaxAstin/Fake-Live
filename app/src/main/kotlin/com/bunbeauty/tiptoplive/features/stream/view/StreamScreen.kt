@@ -139,9 +139,9 @@ private fun handleEvent(
     onAction: (Stream.Action) -> Unit,
 ) {
     when (event) {
-        is Stream.Event.NavigateBack -> {
-            navController.navigate(route = NavigationRoute.Preparation) {
-                popUpTo<NavigationRoute.Preparation> {
+        is Stream.Event.FinishStream -> {
+            navController.navigate(route = NavigationRoute.StreamReview) {
+                popUpTo<NavigationRoute.Stream> {
                     inclusive = true
                 }
             }
