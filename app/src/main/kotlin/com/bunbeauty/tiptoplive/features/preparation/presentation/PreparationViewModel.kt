@@ -134,7 +134,7 @@ class PreparationViewModel @Inject constructor(
                 viewModelScope.launch {
                     saveFeedbackProvidedUseCase(feedbackProvided = true)
                 }
-                analyticsManager.trackFeedback(action.isPositive)
+                //analyticsManager.trackFeedback(action.isPositive)
                 if (action.isPositive) {
                     sendEvent(Preparation.Event.HandlePositiveFeedbackClick)
                 }

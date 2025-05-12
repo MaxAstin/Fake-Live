@@ -22,6 +22,7 @@ private const val STREAM_DURATION_PARAM = "stream_duration"
 
 private const val FEEDBACK_POSITIVE_EVENT = "feedback_positive"
 private const val FEEDBACK_NEGATIVE_EVENT = "feedback_negative"
+private const val FEEDBACK_DO_NOT_ASK_EVENT = "feedback_do_not_ask"
 
 private const val OPEN_QUESTIONS_EVENT = "open_questions"
 private const val SELECT_QUESTION_EVENT = "select_question"
@@ -90,13 +91,16 @@ class AnalyticsManager @Inject constructor(
         trackEvent(event = STREAM_AUTO_FINISHED_EVENT)
     }
 
-    fun trackFeedback(isPositive: Boolean) {
-        val event = if (isPositive) {
-            FEEDBACK_POSITIVE_EVENT
-        } else {
-            FEEDBACK_NEGATIVE_EVENT
-        }
-        trackEvent(event = event)
+    fun trackPositiveFeedback() {
+        trackEvent(event = FEEDBACK_POSITIVE_EVENT)
+    }
+
+    fun trackNegativeFeedback() {
+        trackEvent(event = FEEDBACK_NEGATIVE_EVENT)
+    }
+
+    fun trackDoNotAsk() {
+        trackEvent(event = FEEDBACK_DO_NOT_ASK_EVENT)
     }
 
     fun trackOpenQuestions() {
