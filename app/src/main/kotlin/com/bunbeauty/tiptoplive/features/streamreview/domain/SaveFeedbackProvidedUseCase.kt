@@ -1,4 +1,4 @@
-package com.bunbeauty.tiptoplive.features.preparation.domain
+package com.bunbeauty.tiptoplive.features.streamreview.domain
 
 import com.bunbeauty.tiptoplive.common.domain.KeyValueStorage
 import javax.inject.Inject

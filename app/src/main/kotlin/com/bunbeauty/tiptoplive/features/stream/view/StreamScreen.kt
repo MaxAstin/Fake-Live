@@ -140,10 +140,14 @@ private fun handleEvent(
 ) {
     when (event) {
         is Stream.Event.FinishStream -> {
-            navController.navigate(route = NavigationRoute.StreamReview) {
-                popUpTo<NavigationRoute.Stream> {
-                    inclusive = true
+            if (event.showReview) {
+                navController.navigate(route = NavigationRoute.StreamReview) {
+                    popUpTo<NavigationRoute.Stream> {
+                        inclusive = true
+                    }
                 }
+            } else {
+                navController.navigateUp()
             }
         }
 

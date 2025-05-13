@@ -116,10 +116,6 @@ fun PreparationScreen(
         onAction = onAction,
     )
 
-    if (state.showFeedbackDialog) {
-        FeedbackDialog(onAction = onAction)
-    }
-
     if (state.showStreamDurationLimitsDialog == true) {
         StreamDurationLimitsDialog(onAction = onAction)
     }
@@ -336,7 +332,6 @@ private fun PreparationFreePreview() {
                 viewerCount = ViewerCount.V_100_200,
                 viewerCountList = persistentListOf(),
                 status = Preparation.Status.FREE,
-                showFeedbackDialog = false,
                 showStreamDurationLimitsDialog = false
             ),
             onAction = {}
@@ -356,7 +351,6 @@ private fun PreparationPremiumPreview() {
                 viewerCount = ViewerCount.V_100_200,
                 viewerCountList = persistentListOf(),
                 status = Preparation.Status.PREMIUM,
-                showFeedbackDialog = false,
                 showStreamDurationLimitsDialog = false
             ),
             onAction = {}

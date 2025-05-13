@@ -35,7 +35,7 @@ fun StreamDurationLimitsDialog(
 ) {
     BasicAlertDialog(
         onDismissRequest = {
-            onAction(Preparation.Action.CloseFeedbackDialogClick)
+            onAction(Preparation.Action.CloseStreamDurationLimitsDialogClick)
         }
     ) {
         Column(

@@ -3,7 +3,7 @@ package com.bunbeauty.tiptoplive.features.streamreview.presentation
 import androidx.lifecycle.viewModelScope
 import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
-import com.bunbeauty.tiptoplive.features.preparation.domain.SaveFeedbackProvidedUseCase
+import com.bunbeauty.tiptoplive.features.streamreview.domain.SaveFeedbackProvidedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.launch

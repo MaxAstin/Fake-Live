@@ -7,7 +7,6 @@ interface KeyValueStorage {
     suspend fun saveImageUri(uri: String)
     suspend fun saveUsername(username: String)
     suspend fun saveViewerCountIndex(index: Int)
-    suspend fun saveShouldAskFeedback(shouldAsk: Boolean)
     suspend fun saveFeedbackProvided(feedbackProvided: Boolean)
     suspend fun saveIsIntroViewed(isIntroViewed: Boolean)
     suspend fun saveLastUsedDate(date: String)
@@ -22,7 +21,6 @@ interface KeyValueStorage {
     fun getImageUriFlow(): Flow<String?>
     suspend fun getUsername(): String?
     suspend fun getViewerCountIndex(defaultValue: Int): Int
-    suspend fun getShouldAskFeedback(defaultValue: Boolean): Boolean
     suspend fun getFeedbackProvided(defaultValue: Boolean): Boolean
     suspend fun getIsIntroViewed(defaultValue: Boolean): Boolean
     suspend fun getLastUsedDate(): String?
