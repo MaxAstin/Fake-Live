@@ -54,6 +54,7 @@ import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseSuccessScre
 import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
 import com.bunbeauty.tiptoplive.features.progress.AwardsScreen
 import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
+import com.bunbeauty.tiptoplive.features.streamreview.screen.StreamReviewScreen
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -205,6 +206,9 @@ class MainActivity : ComponentActivity() {
             }
             composable<NavigationRoute.Stream> {
                 StreamScreen(navController = navController)
+            }
+            composable<NavigationRoute.StreamReview> {
+                StreamReviewScreen(navController = navController)
             }
             composable<NavigationRoute.More> {
                 MoreScreen(navController = navController)

@@ -14,13 +14,10 @@ class FinishDemoStreamAutomaticallyUseCase @Inject constructor(
     suspend operator fun invoke() {
         increaseProgressPointsUseCase(points = 1)
 
-        val isNotifiedOfStreamDurationLimit = keyValueStorage.getNotifiedOfStreamDurationLimit(defaultValue = false)
-        if (isNotifiedOfStreamDurationLimit) {
-            val isFeedbackProvided = keyValueStorage.getFeedbackProvided(defaultValue = false)
-            if (!isFeedbackProvided) {
-                keyValueStorage.saveShouldAskFeedback(shouldAsk = true)
-            }
-        } else {
+        val isNotifiedOfStreamDurationLimit = keyValueStorage.getNotifiedOfStreamDurationLimit(
+            defaultValue = false
+        )
+        if (!isNotifiedOfStreamDurationLimit) {
             keyValueStorage.saveShowStreamDurationLimit(show = true)
         }
 

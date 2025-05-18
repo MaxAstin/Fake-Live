@@ -21,11 +21,20 @@
     <string name="notification_body_will_you_go">Vai entrar ao vivo?</string>
     <string name="notification_body_when_next">Quando é a próxima Live?</string>
 
+    <!-- Stream -->
     <string name="stream_live">AO VIVO</string>
     <string name="stream_thousands_viewers_count">%s.%sK</string>
     <string name="stream_add_comment">Adicione um comentário…</string>
     <string name="stream_question_title">Pergunta</string>
     <string name="stream_filter_not_available">Este filtro não está disponível</string>
+
+    <!-- Stream review -->
+    <string name="stream_review_how_was_it">Você gostou da transmissão ao vivo?</string>
+    <string name="stream_review_good">Bom, gostei!</string>
+    <string name="stream_review_not_good">Ruim, não gostei</string>
+    <string name="stream_review_rate">Avalie o aplicativo</string>
+    <string name="stream_review_give_feedback">Enviar feedback</string>
+    <string name="stream_do_not_ask_again">Não perguntar novamente</string>
 
     <string name="required_camera_permission_title">Permitir que %s acesse sua câmera</string>
     <string name="required_camera_permission_body">Isso permite iniciar o Ao Vivo.

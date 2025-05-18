@@ -21,11 +21,20 @@
     <string name="notification_body_will_you_go">Will you go Live?</string>
     <string name="notification_body_when_next">When is the next Live stream?</string>
 
+    <!-- Stream -->
     <string name="stream_live">LIVE</string>
     <string name="stream_thousands_viewers_count">%s.%sK</string>
     <string name="stream_add_comment">Add comment…</string>
     <string name="stream_question_title">Question</string>
     <string name="stream_filter_not_available">This filter is not available</string>
+
+    <!-- Stream review -->
+    <string name="stream_review_how_was_it">Did you like the Live stream?</string>
+    <string name="stream_review_good">Good, like it!</string>
+    <string name="stream_review_not_good">Not good, don\'t like it</string>
+    <string name="stream_review_rate">Rate the app</string>
+    <string name="stream_review_give_feedback">Give feedback</string>
+    <string name="stream_do_not_ask_again">Don\'t ask again</string>
 
     <string name="required_camera_permission_title">Allow %s to access your camera</string>
     <string name="required_camera_permission_body">This lets you start the Live.
@@ -146,7 +155,7 @@
     <string-array name="two_letter_comments" tools:ignore="InconsistentArrays">
         <item>Hi</item>
         <item>No</item>
-        <item>Ok</item>
+        <item>OK</item>
         <item>By</item>
         <item>Up</item>
         <item>Go</item>

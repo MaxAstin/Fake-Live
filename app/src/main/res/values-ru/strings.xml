@@ -20,11 +20,20 @@
     <string name="notification_body_will_you_go">Ты выйдешь в эфир?</string>
     <string name="notification_body_when_next">Когда следующая Live трансляция?</string>
 
+    <!-- Stream -->
     <string name="stream_live">ПРЯМОЙ ЭФИР</string>
     <string name="stream_thousands_viewers_count">%s,%s тыс.</string>
     <string name="stream_add_comment">Добавьте комментарий…</string>
     <string name="stream_question_title">Вопрос</string>
     <string name="stream_filter_not_available">Этот фильтр недоступен</string>
+
+    <!-- Stream review -->
+    <string name="stream_review_how_was_it">Понравилась Live трансляция?</string>
+    <string name="stream_review_good">Хорошо, понравилось!</string>
+    <string name="stream_review_not_good">Плохо, не понравилось</string>
+    <string name="stream_review_rate">Оцените приложение</string>
+    <string name="stream_review_give_feedback">Оставить отзыв</string>
+    <string name="stream_do_not_ask_again">Больше не спрашивать</string>
 
     <string name="required_camera_permission_title">Разрешите %s to доступ к камере</string>
     <string name="required_camera_permission_body">Это позволит начть стрим.

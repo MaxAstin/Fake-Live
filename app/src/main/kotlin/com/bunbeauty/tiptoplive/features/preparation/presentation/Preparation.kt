@@ -14,7 +14,6 @@ interface Preparation {
         val viewerCountList: ImmutableList<ViewerCountItem>,
         val viewerCount: ViewerCount,
         val status: Status,
-        val showFeedbackDialog: Boolean,
         val showStreamDurationLimitsDialog: Boolean?,
     ): Base.State
 
@@ -37,8 +36,6 @@ interface Preparation {
         data class UsernameUpdate(val username: String): Action
         data object AvatarClick: Action
         data object StartStreamClick: Action
-        data object CloseFeedbackDialogClick: Action
-        data class FeedbackClick(val isPositive: Boolean): Action
         data object CloseStreamDurationLimitsDialogClick: Action
         data object PremiumLaterClick: Action
         data object PremiumClick: Action

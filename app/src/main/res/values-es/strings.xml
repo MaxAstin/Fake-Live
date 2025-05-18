@@ -21,11 +21,20 @@
     <string name="notification_body_will_you_go">¿Vas a salir en vivo?</string>
     <string name="notification_body_when_next">¿Cuándo es tu próxima transmisión en vivo?</string>
 
+    <!-- Stream -->
     <string name="stream_live">DIRECTO</string>
     <string name="stream_thousands_viewers_count">%s.%sK</string>
     <string name="stream_add_comment">Añadir comentario…</string>
     <string name="stream_question_title">Pregunta</string>
     <string name="stream_filter_not_available">Este filtro no está disponible</string>
+
+    <!-- Stream review -->
+    <string name="stream_review_how_was_it">¿Te gusto la transmisión en vivo?</string>
+    <string name="stream_review_good">Bien, ¡me gustó!</string>
+    <string name="stream_review_not_good">Mal, no me gustó</string>
+    <string name="stream_review_rate">Califica la aplicación</string>
+    <string name="stream_review_give_feedback">Enviar comentarios</string>
+    <string name="stream_do_not_ask_again">No volver a preguntar</string>
 
     <string name="required_camera_permission_title">Permitir que %s acceda a tu cámara</string>
     <string name="required_camera_permission_body">Esto te permite iniciar el Directo. Puedes cambiar esto en cualquier momento en la configuración de tu dispositivo.</string>

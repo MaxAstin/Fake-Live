@@ -17,7 +17,7 @@ fun FeedbackSuccessScreen(navController: NavHostController) {
         onMainButtonClick = {
             navController.popBackStack()
         },
-        onCloseIconOnClick = {
+        onCloseIconClick = {
             navController.popBackStack()
         }
     )

@@ -8,12 +8,9 @@ import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.GetShowStreamDurationLimitUseCase
-import com.bunbeauty.tiptoplive.features.preparation.domain.SaveFeedbackProvidedUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SaveNotifiedOfStreamDurationLimitUseCase
-import com.bunbeauty.tiptoplive.features.preparation.domain.SaveShouldAskFeedbackUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SaveShowStreamDurationLimitUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SetupNotificationUseCase
-import com.bunbeauty.tiptoplive.features.preparation.domain.ShouldAskFeedbackUseCase
 import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation.ViewerCountItem
 import com.bunbeauty.tiptoplive.shared.domain.GetImageUriFlowUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetUsernameUseCase
@@ -38,9 +35,6 @@ import javax.inject.Inject
 @HiltViewModel
 class PreparationViewModel @Inject constructor(
     private val getImageUriFlowUseCase: GetImageUriFlowUseCase,
-    private val shouldAskFeedbackUseCase: ShouldAskFeedbackUseCase,
-    private val saveShouldAskFeedbackUseCase: SaveShouldAskFeedbackUseCase,
-    private val saveFeedbackProvidedUseCase: SaveFeedbackProvidedUseCase,
     private val getShowStreamDurationLimitUseCase: GetShowStreamDurationLimitUseCase,
     private val saveShowStreamDurationLimitUseCase: SaveShowStreamDurationLimitUseCase,
     private val saveNotifiedOfStreamDurationLimitUseCase: SaveNotifiedOfStreamDurationLimitUseCase,
@@ -60,7 +54,6 @@ class PreparationViewModel @Inject constructor(
             viewerCountList = persistentListOf(),
             viewerCount = ViewerCount.V_100_200,
             status = Preparation.Status.LOADING,
-            showFeedbackDialog = false,
             showStreamDurationLimitsDialog = null
         )
     }
@@ -75,7 +68,6 @@ class PreparationViewModel @Inject constructor(
         when (action) {
             Preparation.Action.StartScreen -> {
                 checkPremiumStatus()
-                checkShouldAskFeedback()
                 checkShowStreamDurationLimit()
             }
 
@@ -118,25 +110,6 @@ class PreparationViewModel @Inject constructor(
                     )
                     saveUsernameUseCase(mutableState.value.username)
                     sendEvent(Preparation.Event.OpenStream)
-                }
-            }
-
-            Preparation.Action.CloseFeedbackDialogClick -> {
-                setState {
-                    copy(showFeedbackDialog = false)
-                }
-            }
-
-            is Preparation.Action.FeedbackClick -> {
-                setState {
-                    copy(showFeedbackDialog = false)
-                }
-                viewModelScope.launch {
-                    saveFeedbackProvidedUseCase(feedbackProvided = true)
-                }
-                analyticsManager.trackFeedback(action.isPositive)
-                if (action.isPositive) {
-                    sendEvent(Preparation.Event.HandlePositiveFeedbackClick)
                 }
             }
 
@@ -192,17 +165,6 @@ class PreparationViewModel @Inject constructor(
                 )
             }
         }.launchIn(viewModelScope)
-    }
-
-    private fun checkShouldAskFeedback() {
-        viewModelScope.launch {
-            if (shouldAskFeedbackUseCase()) {
-                setState {
-                    copy(showFeedbackDialog = true)
-                }
-                saveShouldAskFeedbackUseCase(shouldAsk = false)
-            }
-        }
     }
 
     private fun checkShowStreamDurationLimit() {
