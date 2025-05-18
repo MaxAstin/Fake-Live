@@ -29,7 +29,7 @@
     <string name="stream_filter_not_available">This filter is not available</string>
 
     <!-- Stream review -->
-    <string name="stream_review_how_was_it">How was it?</string>
+    <string name="stream_review_how_was_it">Did you like the Live stream?</string>
     <string name="stream_review_good">Good, like it!</string>
     <string name="stream_review_not_good">Not good, don\'t like it</string>
     <string name="stream_review_rate">Rate the app</string>
@@ -155,7 +155,7 @@
     <string-array name="two_letter_comments" tools:ignore="InconsistentArrays">
         <item>Hi</item>
         <item>No</item>
-        <item>Ok</item>
+        <item>OK</item>
         <item>By</item>
         <item>Up</item>
         <item>Go</item>
