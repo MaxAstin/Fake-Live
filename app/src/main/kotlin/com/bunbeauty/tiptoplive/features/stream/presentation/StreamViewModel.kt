@@ -7,7 +7,7 @@ import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.common.util.Seconds
 import com.bunbeauty.tiptoplive.common.util.getCurrentTimeSeconds
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
-import com.bunbeauty.tiptoplive.features.stream.domain.ShouldAskFeedbackUseCase
+import com.bunbeauty.tiptoplive.features.stream.domain.ShouldAskReviewUseCase
 import com.bunbeauty.tiptoplive.features.progress.domain.usecase.IncreaseProgressPointsUseCase
 import com.bunbeauty.tiptoplive.features.stream.CameraUtil
 import com.bunbeauty.tiptoplive.features.stream.domain.FinishDemoStreamAutomaticallyUseCase
@@ -42,7 +42,7 @@ class StreamViewModel @Inject constructor(
     private val getCommentsUseCase: GetCommentsUseCase,
     private val getQuestionUseCase: GetQuestionUseCase,
     private val finishDemoStreamAutomaticallyUseCase: FinishDemoStreamAutomaticallyUseCase,
-    private val shouldAskFeedbackUseCase: ShouldAskFeedbackUseCase,
+    private val shouldAskReviewUseCase: ShouldAskReviewUseCase,
     private val analyticsManager: AnalyticsManager,
     private val cameraUtil: CameraUtil
 ) : BaseViewModel<Stream.State, Stream.Action, Stream.Event>(
@@ -244,7 +244,7 @@ class StreamViewModel @Inject constructor(
                 val duration = getStreamDuration()
                 viewModelScope.launch {
                     analyticsManager.trackStreamFinish(duration = duration)
-                    val showReview = shouldAskFeedbackUseCase(duration = duration)
+                    val showReview = shouldAskReviewUseCase(duration = duration)
                     sendEvent(
                         Stream.Event.FinishStream(showReview = showReview)
                     )
@@ -309,7 +309,7 @@ class StreamViewModel @Inject constructor(
 
     private suspend fun finishDemoStream() {
         finishDemoStreamAutomaticallyUseCase()
-        val showReview = shouldAskFeedbackUseCase(
+        val showReview = shouldAskReviewUseCase(
             duration = Seconds(
                 value = TIME_LIMIT_FOR_FREE_VERSION
             )

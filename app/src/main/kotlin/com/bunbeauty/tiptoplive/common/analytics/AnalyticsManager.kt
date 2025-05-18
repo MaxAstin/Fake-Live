@@ -91,15 +91,15 @@ class AnalyticsManager @Inject constructor(
         trackEvent(event = STREAM_AUTO_FINISHED_EVENT)
     }
 
-    fun trackPositiveFeedback() {
+    fun trackPositiveReview() {
         trackEvent(event = FEEDBACK_POSITIVE_EVENT)
     }
 
-    fun trackNegativeFeedback() {
+    fun trackNegativeReview() {
         trackEvent(event = FEEDBACK_NEGATIVE_EVENT)
     }
 
-    fun trackDoNotAsk() {
+    fun trackDoNotAskReview() {
         trackEvent(event = FEEDBACK_DO_NOT_ASK_EVENT)
     }
 

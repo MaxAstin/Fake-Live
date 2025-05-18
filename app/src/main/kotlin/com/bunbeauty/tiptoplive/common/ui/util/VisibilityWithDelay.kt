@@ -10,7 +10,7 @@ import androidx.compose.runtime.setValue
 import kotlinx.coroutines.delay
 
 @Composable
-fun AppearWithDelay(
+fun VisibilityWithDelay(
     delayTimeMillis: Long = 2_000,
     content: @Composable () -> Unit
 ) {

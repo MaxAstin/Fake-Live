@@ -22,18 +22,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
+import com.bunbeauty.tiptoplive.common.ui.LocalePreview
 import com.bunbeauty.tiptoplive.common.ui.components.FakeLiveScaffold
 import com.bunbeauty.tiptoplive.common.ui.components.TopBarWithCloseIcon
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLiveSecondaryButton
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.bold
-import com.bunbeauty.tiptoplive.common.ui.util.AppearWithDelay
+import com.bunbeauty.tiptoplive.common.ui.util.VisibilityWithDelay
 import com.bunbeauty.tiptoplive.common.util.openMarketListing
 import com.bunbeauty.tiptoplive.features.streamreview.presentation.StreamReview
 import com.bunbeauty.tiptoplive.features.streamreview.presentation.StreamReviewViewModel
@@ -86,7 +86,7 @@ private fun StreamReviewContent(onAction: (StreamReview.Action) -> Unit) {
             )
         },
         bottomButton = {
-            AppearWithDelay {
+            VisibilityWithDelay {
                 FakeLiveSecondaryButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.stream_do_not_ask_again),
@@ -179,7 +179,7 @@ private fun EmojiCard(
     }
 }
 
-@Preview
+@LocalePreview
 @Composable
 private fun StreamReviewScreenPreview() {
     FakeLiveTheme {

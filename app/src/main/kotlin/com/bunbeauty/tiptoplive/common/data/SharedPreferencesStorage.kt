@@ -12,7 +12,7 @@ import javax.inject.Inject
 private const val IMAGE_URI_KEY = "image uri"
 private const val USERNAME_KEY = "username"
 private const val VIEWER_COUNT_INDEX_KEY = "viewer count index"
-private const val FEEDBACK_PROVIDED_KEY = "feedback provided"
+private const val REVIEW_PROVIDED_KEY = "review provided"
 private const val IS_INTRO_VIEWED_KEY = "is intro viewed"
 private const val LAST_USED_DATE_KEY = "last used date"
 private const val USED_DAY_COUNT_KEY = "used day count"
@@ -49,9 +49,9 @@ class SharedPreferencesStorage @Inject constructor(
         }
     }
 
-    override suspend fun saveFeedbackProvided(feedbackProvided: Boolean) {
+    override suspend fun saveReviewProvided(provided: Boolean) {
         sharedPreferences.edit {
-            putBoolean(FEEDBACK_PROVIDED_KEY, feedbackProvided)
+            putBoolean(REVIEW_PROVIDED_KEY, provided)
         }
     }
 
@@ -121,8 +121,8 @@ class SharedPreferencesStorage @Inject constructor(
         return sharedPreferences.getInt(VIEWER_COUNT_INDEX_KEY, defaultValue)
     }
 
-    override suspend fun getFeedbackProvided(defaultValue: Boolean): Boolean {
-        return sharedPreferences.getBoolean(FEEDBACK_PROVIDED_KEY, defaultValue)
+    override suspend fun getReviewProvided(defaultValue: Boolean): Boolean {
+        return sharedPreferences.getBoolean(REVIEW_PROVIDED_KEY, defaultValue)
     }
 
     override suspend fun getIsIntroViewed(defaultValue: Boolean): Boolean {

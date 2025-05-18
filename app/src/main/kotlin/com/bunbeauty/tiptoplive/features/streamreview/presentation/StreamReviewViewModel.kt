@@ -3,14 +3,14 @@ package com.bunbeauty.tiptoplive.features.streamreview.presentation
 import androidx.lifecycle.viewModelScope
 import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
-import com.bunbeauty.tiptoplive.features.streamreview.domain.SaveFeedbackProvidedUseCase
+import com.bunbeauty.tiptoplive.features.streamreview.domain.SaveReviewProvidedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class StreamReviewViewModel @Inject constructor(
-    private val saveFeedbackProvidedUseCase: SaveFeedbackProvidedUseCase,
+    private val saveReviewProvidedUseCase: SaveReviewProvidedUseCase,
     private val analyticsManager: AnalyticsManager
 ) : BaseViewModel<StreamReview.State, StreamReview.Action, StreamReview.Event>(
     initState = {
@@ -25,24 +25,21 @@ class StreamReviewViewModel @Inject constructor(
             }
             StreamReview.Action.LikeClick -> {
                 viewModelScope.launch {
-                    saveFeedbackProvidedUseCase(feedbackProvided = true)
+                    saveReviewProvidedUseCase(provided = true)
                 }
-                analyticsManager.trackPositiveFeedback()
+                analyticsManager.trackPositiveReview()
                 sendEvent(StreamReview.Event.OpenMarketListing)
                 sendEvent(StreamReview.Event.NavigateBack)
             }
             StreamReview.Action.DislikeClick -> {
-                viewModelScope.launch {
-                    saveFeedbackProvidedUseCase(feedbackProvided = true)
-                }
-                analyticsManager.trackNegativeFeedback()
+                analyticsManager.trackNegativeReview()
                 sendEvent(StreamReview.Event.NavigateToFeedback)
             }
             StreamReview.Action.DoNotAskClick -> {
                 viewModelScope.launch {
-                    saveFeedbackProvidedUseCase(feedbackProvided = true)
+                    saveReviewProvidedUseCase(provided = true)
                 }
-                analyticsManager.trackDoNotAsk()
+                analyticsManager.trackDoNotAskReview()
                 sendEvent(StreamReview.Event.NavigateBack)
             }
         }

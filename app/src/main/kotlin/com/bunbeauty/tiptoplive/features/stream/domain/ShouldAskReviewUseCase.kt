@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 private const val STREAM_DURATION_TO_ASK_FEEDBACK = 30 // sec
 
-class ShouldAskFeedbackUseCase @Inject constructor(
+class ShouldAskReviewUseCase @Inject constructor(
     private val keyValueStorage: KeyValueStorage
 ) {
 
@@ -15,7 +15,7 @@ class ShouldAskFeedbackUseCase @Inject constructor(
             return false
         }
 
-        val provided = keyValueStorage.getFeedbackProvided(defaultValue = false)
+        val provided = keyValueStorage.getReviewProvided(defaultValue = false)
         return !provided
     }
 

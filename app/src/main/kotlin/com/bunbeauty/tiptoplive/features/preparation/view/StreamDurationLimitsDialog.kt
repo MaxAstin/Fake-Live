@@ -102,7 +102,7 @@ fun StreamDurationLimitsDialog(
 
 @LocalePreview
 @Composable
-private fun FeedbackDialogPreview() {
+private fun StreamDurationLimitsDialogPreview() {
     StreamDurationLimitsDialog(
         onAction = {}
     )
