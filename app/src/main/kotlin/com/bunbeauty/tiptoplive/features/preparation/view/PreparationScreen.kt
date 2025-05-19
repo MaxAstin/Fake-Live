@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,7 +39,6 @@ import com.bunbeauty.tiptoplive.common.ui.components.CachedImage
 import com.bunbeauty.tiptoplive.common.ui.components.FakeLiveTextField
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLiveGradientButton
-import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLivePrimaryButton
 import com.bunbeauty.tiptoplive.common.ui.noEffectClickable
 import com.bunbeauty.tiptoplive.common.ui.rippleClickable
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
@@ -265,25 +263,10 @@ private fun Premium(
     when (status) {
         Preparation.Status.LOADING -> Unit
         Preparation.Status.FREE -> {
-            FakeLivePrimaryButton(
+            PremiumBanner(
                 modifier = modifier,
-                text = stringResource(R.string.common_premium),
                 onClick = {
                     onAction(Preparation.Action.PremiumClick)
-                },
-                contentPadding = PaddingValues(
-                    horizontal = 12.dp,
-                    vertical = 8.dp,
-                ),
-                trailingIcon = {
-                    Icon(
-                        modifier = Modifier
-                            .padding(start = 6.dp)
-                            .size(20.dp),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_infinity),
-                        contentDescription = "Star",
-                        tint = FakeLiveTheme.colors.onSurface,
-                    )
                 }
             )
         }
