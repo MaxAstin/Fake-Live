@@ -169,7 +169,7 @@ private fun Option(
         extraContent()
         Icon(
             modifier = Modifier.size(16.dp),
-            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_right),
+            imageVector = ImageVector.vectorResource(R.drawable.ic_chevron_right),
             contentDescription = "arrow icon",
             tint = FakeLiveTheme.colors.onBackgroundVariant,
         )

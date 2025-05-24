@@ -132,7 +132,7 @@ private fun PreparationContent(
     ) {
         Premium(
             modifier = Modifier.align(Alignment.TopEnd),
-            status = state.status,
+            premiumStatus = state.premiumStatus,
             onAction = onAction
         )
 
@@ -201,7 +201,7 @@ private fun PreparationContent(
                     trailingIcon = {
                         Icon(
                             modifier = Modifier.size(16.dp),
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_right),
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_chevron_right),
                             contentDescription = "Arrow",
                             tint = FakeLiveTheme.colors.iconVariant,
                         )
@@ -235,8 +235,8 @@ private fun PreparationContent(
         ) {
             val startLiveText = stringResource(R.string.preparation_start_live)
             val secondsText = stringResource(R.string.preparation_seconds, TIME_LIMIT_FOR_FREE_VERSION)
-            val text = remember(state.status) {
-                if (state.status == Preparation.Status.FREE) {
+            val text = remember(state.premiumStatus) {
+                if (state.premiumStatus is Preparation.PremiumStatus.Free) {
                     "$startLiveText $secondsText"
                 } else {
                     startLiveText
@@ -256,22 +256,23 @@ private fun PreparationContent(
 
 @Composable
 private fun Premium(
-    status: Preparation.Status,
+    premiumStatus: Preparation.PremiumStatus,
     onAction: (Preparation.Action) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    when (status) {
-        Preparation.Status.LOADING -> Unit
-        Preparation.Status.FREE -> {
+    when (premiumStatus) {
+        Preparation.PremiumStatus.Loading -> Unit
+        is Preparation.PremiumStatus.Free -> {
             PremiumBanner(
                 modifier = modifier,
+                timer = premiumStatus.offerTimer,
                 onClick = {
                     onAction(Preparation.Action.PremiumClick)
                 }
             )
         }
 
-        Preparation.Status.PREMIUM -> {
+        Preparation.PremiumStatus.Active -> {
             Row(
                 modifier = modifier
                     .background(
@@ -281,7 +282,8 @@ private fun Premium(
                     .padding(
                         horizontal = 12.dp,
                         vertical = 6.dp
-                    ).clickableWithoutIndication {
+                    )
+                    .clickableWithoutIndication {
                         onAction(Preparation.Action.PremiumClick)
                     },
                 horizontalArrangement = spacedBy(6.dp),
@@ -314,7 +316,9 @@ private fun PreparationFreePreview() {
                 username = "",
                 viewerCount = ViewerCount.V_100_200,
                 viewerCountList = persistentListOf(),
-                status = Preparation.Status.FREE,
+                premiumStatus = Preparation.PremiumStatus.Free(
+                    offerTimer = "12:00:00"
+                ),
                 showStreamDurationLimitsDialog = false
             ),
             onAction = {}
@@ -333,7 +337,7 @@ private fun PreparationPremiumPreview() {
                 username = "",
                 viewerCount = ViewerCount.V_100_200,
                 viewerCountList = persistentListOf(),
-                status = Preparation.Status.PREMIUM,
+                premiumStatus = Preparation.PremiumStatus.Active,
                 showStreamDurationLimitsDialog = false
             ),
             onAction = {}
