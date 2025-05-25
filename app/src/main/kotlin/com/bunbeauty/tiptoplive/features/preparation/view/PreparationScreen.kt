@@ -276,7 +276,7 @@ private fun Premium(
             Row(
                 modifier = modifier
                     .background(
-                        color = FakeLiveTheme.colors.surface,
+                        color = FakeLiveTheme.colors.premium,
                         shape = RoundedCornerShape(16.dp)
                     )
                     .padding(
