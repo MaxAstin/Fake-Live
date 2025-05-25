@@ -16,6 +16,7 @@ val Gray150 = Color(0xFFADADAD)
 val Gray100 = Color(0xFFDBDBDB)
 val Gray50 = Color(0xFFE9E9E9)
 val Blue = Color(0xFF0195F7)
+val CornflowerBlue = Color(0xFF737EFA)
 val Green = Color(0xFF00BE64)
 val Red = Color(0xFFF95667)
 val Yellow = Color(0xFFF7CA01)
@@ -43,6 +44,7 @@ class ColorScheme(
     negative: Color,
     progress: Color,
     inactive: Color,
+    premium: Color,
     instagram: InstagramColors,
 ) {
 
@@ -97,6 +99,9 @@ class ColorScheme(
     var inactive by mutableStateOf(inactive)
         internal set
 
+    var premium by mutableStateOf(premium)
+        internal set
+
     var instagram by mutableStateOf(instagram)
         internal set
 
@@ -119,6 +124,7 @@ class ColorScheme(
         negative: Color = this.negative,
         progress: Color = this.progress,
         inactive: Color = this.inactive,
+        premium: Color = this.premium,
         instagram: InstagramColors = this.instagram,
     ): ColorScheme = ColorScheme(
         interactive = interactive,
@@ -138,6 +144,7 @@ class ColorScheme(
         negative = negative,
         progress = progress,
         inactive = inactive,
+        premium = premium,
         instagram = instagram.copy(
             logo1 = instagram.logo1,
             logo2 = instagram.logo2,

@@ -21,11 +21,30 @@
     <string name="notification_body_will_you_go">¿Vas a salir en vivo?</string>
     <string name="notification_body_when_next">¿Cuándo es tu próxima transmisión en vivo?</string>
 
+    <!-- Preparation -->
+    <string name="preparation_special_offer">La oferta especial termina en</string>
+    <string name="preparation_upgrade_now">Actualizar ahora</string>
+    <string name="preparation_edit_photo">Editar foto</string>
+    <string name="preparation_username">Nombre de usuario</string>
+    <string name="preparation_username_hint">nombre_de_usuario</string>
+    <string name="preparation_viewer_count">Recuento de espectadores</string>
+    <string name="preparation_start_live">Comenzar Directo</string>
+    <string name="preparation_seconds">(%d seg)</string>
+
+    <!-- Stream -->
     <string name="stream_live">DIRECTO</string>
     <string name="stream_thousands_viewers_count">%s.%sK</string>
     <string name="stream_add_comment">Añadir comentario…</string>
     <string name="stream_question_title">Pregunta</string>
     <string name="stream_filter_not_available">Este filtro no está disponible</string>
+
+    <!-- Stream review -->
+    <string name="stream_review_how_was_it">¿Te gusto la transmisión en vivo?</string>
+    <string name="stream_review_good">Bien, ¡me gustó!</string>
+    <string name="stream_review_not_good">Mal, no me gustó</string>
+    <string name="stream_review_rate">Califica la aplicación</string>
+    <string name="stream_review_give_feedback">Enviar comentarios</string>
+    <string name="stream_do_not_ask_again">No volver a preguntar</string>
 
     <string name="required_camera_permission_title">Permitir que %s acceda a tu cámara</string>
     <string name="required_camera_permission_body">Esto te permite iniciar el Directo. Puedes cambiar esto en cualquier momento en la configuración de tu dispositivo.</string>
@@ -36,13 +55,6 @@
     <string name="do_not_ask">Por favor, no preguntes más</string>
     <string name="feedback_yes">Sí</string>
     <string name="feedback_no">No</string>
-
-    <string name="preparation_edit_photo">Editar foto</string>
-    <string name="preparation_username">Nombre de usuario</string>
-    <string name="preparation_username_hint">nombre_de_usuario</string>
-    <string name="preparation_viewer_count">Recuento de espectadores</string>
-    <string name="preparation_start_live">Comenzar Directo</string>
-    <string name="preparation_seconds">(%d seg)</string>
 
     <string name="limits_live_has_ended">La transmisión ha terminado ⏳</string>
     <string name="limits_free_session_limited">Las transmisiones gratuitas están limitadas a %s segundos. ¡Mejora a Premium para transmisiones ilimitadas y funciones exclusivas!</string>

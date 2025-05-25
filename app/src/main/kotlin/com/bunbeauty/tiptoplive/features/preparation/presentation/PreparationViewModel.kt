@@ -7,13 +7,11 @@ import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
+import com.bunbeauty.tiptoplive.features.premiumdetails.domain.GetOfferTimerFlowUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.GetShowStreamDurationLimitUseCase
-import com.bunbeauty.tiptoplive.features.preparation.domain.SaveFeedbackProvidedUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SaveNotifiedOfStreamDurationLimitUseCase
-import com.bunbeauty.tiptoplive.features.preparation.domain.SaveShouldAskFeedbackUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SaveShowStreamDurationLimitUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SetupNotificationUseCase
-import com.bunbeauty.tiptoplive.features.preparation.domain.ShouldAskFeedbackUseCase
 import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation.ViewerCountItem
 import com.bunbeauty.tiptoplive.shared.domain.GetImageUriFlowUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetUsernameUseCase
@@ -25,6 +23,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -38,9 +37,6 @@ import javax.inject.Inject
 @HiltViewModel
 class PreparationViewModel @Inject constructor(
     private val getImageUriFlowUseCase: GetImageUriFlowUseCase,
-    private val shouldAskFeedbackUseCase: ShouldAskFeedbackUseCase,
-    private val saveShouldAskFeedbackUseCase: SaveShouldAskFeedbackUseCase,
-    private val saveFeedbackProvidedUseCase: SaveFeedbackProvidedUseCase,
     private val getShowStreamDurationLimitUseCase: GetShowStreamDurationLimitUseCase,
     private val saveShowStreamDurationLimitUseCase: SaveShowStreamDurationLimitUseCase,
     private val saveNotifiedOfStreamDurationLimitUseCase: SaveNotifiedOfStreamDurationLimitUseCase,
@@ -50,6 +46,7 @@ class PreparationViewModel @Inject constructor(
     private val saveViewerCountUseCase: SaveViewerCountUseCase,
     private val isPremiumAvailableUseCase: IsPremiumAvailableUseCase,
     private val setupNotificationUseCase: SetupNotificationUseCase,
+    private val getOfferTimerFlowUseCase: GetOfferTimerFlowUseCase,
     private val analyticsManager: AnalyticsManager
 ) : BaseViewModel<Preparation.State, Preparation.Action, Preparation.Event>(
     initState = {
@@ -59,12 +56,13 @@ class PreparationViewModel @Inject constructor(
             username = "",
             viewerCountList = persistentListOf(),
             viewerCount = ViewerCount.V_100_200,
-            status = Preparation.Status.LOADING,
-            showFeedbackDialog = false,
+            premiumStatus = Preparation.PremiumStatus.Loading,
             showStreamDurationLimitsDialog = null
         )
     }
 ) {
+
+    private var offerTimerJob: Job? = null
 
     init {
         initState()
@@ -75,7 +73,6 @@ class PreparationViewModel @Inject constructor(
         when (action) {
             Preparation.Action.StartScreen -> {
                 checkPremiumStatus()
-                checkShouldAskFeedback()
                 checkShowStreamDurationLimit()
             }
 
@@ -118,25 +115,6 @@ class PreparationViewModel @Inject constructor(
                     )
                     saveUsernameUseCase(mutableState.value.username)
                     sendEvent(Preparation.Event.OpenStream)
-                }
-            }
-
-            Preparation.Action.CloseFeedbackDialogClick -> {
-                setState {
-                    copy(showFeedbackDialog = false)
-                }
-            }
-
-            is Preparation.Action.FeedbackClick -> {
-                setState {
-                    copy(showFeedbackDialog = false)
-                }
-                viewModelScope.launch {
-                    saveFeedbackProvidedUseCase(feedbackProvided = true)
-                }
-                analyticsManager.trackFeedback(action.isPositive)
-                if (action.isPositive) {
-                    sendEvent(Preparation.Event.HandlePositiveFeedbackClick)
                 }
             }
 
@@ -194,17 +172,6 @@ class PreparationViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun checkShouldAskFeedback() {
-        viewModelScope.launch {
-            if (shouldAskFeedbackUseCase()) {
-                setState {
-                    copy(showFeedbackDialog = true)
-                }
-                saveShouldAskFeedbackUseCase(shouldAsk = false)
-            }
-        }
-    }
-
     private fun checkShowStreamDurationLimit() {
         viewModelScope.launch {
             if (getShowStreamDurationLimitUseCase()) {
@@ -218,19 +185,30 @@ class PreparationViewModel @Inject constructor(
 
     private fun checkPremiumStatus() {
         viewModelScope.launch {
-            val status = if (isPremiumAvailableUseCase()) {
-                Preparation.Status.PREMIUM
+            if (isPremiumAvailableUseCase()) {
+                setState {
+                    copy(premiumStatus = Preparation.PremiumStatus.Active)
+                }
             } else {
-                Preparation.Status.FREE
+                if (offerTimerJob == null) {
+                    offerTimerJob = getOfferTimerFlowUseCase().onEach { offerTimer ->
+                        setState {
+                            copy(
+                                premiumStatus = Preparation.PremiumStatus.Free(
+                                    offerTimer = offerTimer
+                                )
+                            )
+                        }
+                    }.launchIn(this)
+                }
             }
             setState {
                 copy(
-                    status = status,
                     viewerCountList = ViewerCount.entries.map { viewerCount ->
                         ViewerCountItem(
                             viewerCount = viewerCount,
                             isAvailable = viewerCount == ViewerCount.V_100_200
-                                || status == Preparation.Status.PREMIUM,
+                                || premiumStatus is Preparation.PremiumStatus.Active,
                         )
                     }.toImmutableList()
                 )

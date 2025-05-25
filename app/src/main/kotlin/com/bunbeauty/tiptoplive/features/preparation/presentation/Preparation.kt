@@ -13,8 +13,7 @@ interface Preparation {
         val username: String,
         val viewerCountList: ImmutableList<ViewerCountItem>,
         val viewerCount: ViewerCount,
-        val status: Status,
-        val showFeedbackDialog: Boolean,
+        val premiumStatus: PremiumStatus,
         val showStreamDurationLimitsDialog: Boolean?,
     ): Base.State
 
@@ -23,10 +22,10 @@ interface Preparation {
         val isAvailable: Boolean
     )
 
-    enum class Status {
-        LOADING,
-        FREE,
-        PREMIUM
+    sealed interface PremiumStatus {
+        data object Loading: PremiumStatus
+        data class Free(val offerTimer: String): PremiumStatus
+        data object Active: PremiumStatus
     }
 
     sealed interface Action: Base.Action {
@@ -37,8 +36,6 @@ interface Preparation {
         data class UsernameUpdate(val username: String): Action
         data object AvatarClick: Action
         data object StartStreamClick: Action
-        data object CloseFeedbackDialogClick: Action
-        data class FeedbackClick(val isPositive: Boolean): Action
         data object CloseStreamDurationLimitsDialogClick: Action
         data object PremiumLaterClick: Action
         data object PremiumClick: Action

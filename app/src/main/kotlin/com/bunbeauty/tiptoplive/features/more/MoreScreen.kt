@@ -31,7 +31,6 @@ import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.rippleClickable
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
-import com.bunbeauty.tiptoplive.common.ui.theme.instagramBrush
 import com.bunbeauty.tiptoplive.common.util.openMarketListing
 import com.bunbeauty.tiptoplive.common.util.openSharing
 import com.bunbeauty.tiptoplive.common.util.playMarketLink
@@ -169,7 +168,7 @@ private fun Option(
         extraContent()
         Icon(
             modifier = Modifier.size(16.dp),
-            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_right),
+            imageVector = ImageVector.vectorResource(R.drawable.ic_chevron_right),
             contentDescription = "arrow icon",
             tint = FakeLiveTheme.colors.onBackgroundVariant,
         )
@@ -187,7 +186,7 @@ private fun PremiumChip(
             Text(
                 modifier = modifier
                     .background(
-                        brush = instagramBrush(),
+                        color = FakeLiveTheme.colors.premium,
                         shape = RoundedCornerShape(16.dp)
                     )
                     .padding(
@@ -195,7 +194,7 @@ private fun PremiumChip(
                         vertical = 6.dp
                     ),
                 text = stringResource(R.string.more_premium_active),
-                style = FakeLiveTheme.typography.bodyMedium,
+                style = FakeLiveTheme.typography.titleSmall,
                 color = FakeLiveTheme.colors.onSurface
             )
         }
@@ -204,7 +203,7 @@ private fun PremiumChip(
             Row(
                 modifier = modifier
                     .background(
-                        color = FakeLiveTheme.colors.negative,
+                        color = FakeLiveTheme.colors.premium,
                         shape = RoundedCornerShape(16.dp)
                     )
                     .padding(start = 6.dp, end = 12.dp)
@@ -222,7 +221,7 @@ private fun PremiumChip(
                         .padding(4.dp),
                     imageVector = ImageVector.vectorResource(R.drawable.ic_discount),
                     contentDescription = "discount icon",
-                    tint = FakeLiveTheme.colors.negative,
+                    tint = FakeLiveTheme.colors.premium,
                 )
                 Text(
                     text = premium.timer,
