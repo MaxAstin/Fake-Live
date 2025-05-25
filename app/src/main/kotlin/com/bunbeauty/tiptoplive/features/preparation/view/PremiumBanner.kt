@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,9 +24,9 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bunbeauty.tiptoplive.R
+import com.bunbeauty.tiptoplive.common.ui.LocalePreview
 import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.bold
@@ -47,6 +46,7 @@ fun PremiumBanner(
     ) {
         Column(
             modifier = Modifier
+                .weight(1f)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
                 .align(Alignment.CenterVertically)
         ) {
@@ -74,7 +74,7 @@ fun PremiumBanner(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Upgrade now",
+                    text = stringResource(R.string.preparation_upgrade_now),
                     color = FakeLiveTheme.colors.onSurface,
                     style = FakeLiveTheme.typography.titleSmall,
                 )
@@ -88,7 +88,6 @@ fun PremiumBanner(
                 )
             }
         }
-        Spacer(modifier = Modifier.weight(1f))
         Image(
             modifier = Modifier
                 .width(128.dp)
@@ -100,7 +99,7 @@ fun PremiumBanner(
     }
 }
 
-@Preview
+@LocalePreview
 @Composable
 private fun PremiumBannerPreview() {
     FakeLiveTheme {

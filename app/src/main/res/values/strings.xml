@@ -22,7 +22,8 @@
     <string name="notification_body_when_next">When is the next Live stream?</string>
 
     <!-- Preparation -->
-    <string name="preparation_special_offer">Special offer ends in </string>
+    <string name="preparation_special_offer">Special offer ends in</string>
+    <string name="preparation_upgrade_now">Upgrade now</string>
     <string name="preparation_edit_photo">Edit photo</string>
     <string name="preparation_username">Username</string>
     <string name="preparation_username_hint">user_name</string>

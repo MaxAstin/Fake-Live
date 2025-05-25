@@ -21,6 +21,16 @@
     <string name="notification_body_will_you_go">Vai entrar ao vivo?</string>
     <string name="notification_body_when_next">Quando é a próxima Live?</string>
 
+    <!-- Preparation -->
+    <string name="preparation_special_offer">A oferta especial termina em</string>
+    <string name="preparation_upgrade_now">Atualizar agora</string>
+    <string name="preparation_edit_photo">Editar foto</string>
+    <string name="preparation_username">Nome de usuário</string>
+    <string name="preparation_username_hint">user_name</string>
+    <string name="preparation_viewer_count">Contagem de espectadores</string>
+    <string name="preparation_start_live">Iniciar Ao Vivo</string>
+    <string name="preparation_seconds">(%d seg)</string>
+
     <!-- Stream -->
     <string name="stream_live">AO VIVO</string>
     <string name="stream_thousands_viewers_count">%s.%sK</string>
@@ -46,13 +56,6 @@
     <string name="do_not_ask">Por favor, não pergunte mais</string>
     <string name="feedback_no">Não</string>
     <string name="feedback_yes">Sim</string>
-
-    <string name="preparation_edit_photo">Editar foto</string>
-    <string name="preparation_username">Nome de usuário</string>
-    <string name="preparation_username_hint">user_name</string>
-    <string name="preparation_viewer_count">Contagem de espectadores</string>
-    <string name="preparation_start_live">Iniciar Ao Vivo</string>
-    <string name="preparation_seconds">(%d seg)</string>
 
     <string name="limits_live_has_ended">A transmissão terminou ⏳</string>
     <string name="limits_free_session_limited">As transmissões gratuitas são limitadas a %s segundos. Faça upgrade para o Premium e tenha transmissões ilimitadas e recursos exclusivos!</string>
