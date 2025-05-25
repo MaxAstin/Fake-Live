@@ -365,7 +365,7 @@ private fun UsernameRow(
             modifier = Modifier
                 .padding(start = 4.dp)
                 .size(16.dp),
-            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_drop_down),
+            imageVector = ImageVector.vectorResource(R.drawable.ic_chevron_down),
             contentDescription = "Dropdown",
             tint = FakeLiveTheme.colors.icon,
         )

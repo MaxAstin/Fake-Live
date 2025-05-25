@@ -21,6 +21,16 @@
     <string name="notification_body_will_you_go">¿Vas a salir en vivo?</string>
     <string name="notification_body_when_next">¿Cuándo es tu próxima transmisión en vivo?</string>
 
+    <!-- Preparation -->
+    <string name="preparation_special_offer">La oferta especial termina en</string>
+    <string name="preparation_upgrade_now">Actualizar ahora</string>
+    <string name="preparation_edit_photo">Editar foto</string>
+    <string name="preparation_username">Nombre de usuario</string>
+    <string name="preparation_username_hint">nombre_de_usuario</string>
+    <string name="preparation_viewer_count">Recuento de espectadores</string>
+    <string name="preparation_start_live">Comenzar Directo</string>
+    <string name="preparation_seconds">(%d seg)</string>
+
     <!-- Stream -->
     <string name="stream_live">DIRECTO</string>
     <string name="stream_thousands_viewers_count">%s.%sK</string>
@@ -45,13 +55,6 @@
     <string name="do_not_ask">Por favor, no preguntes más</string>
     <string name="feedback_yes">Sí</string>
     <string name="feedback_no">No</string>
-
-    <string name="preparation_edit_photo">Editar foto</string>
-    <string name="preparation_username">Nombre de usuario</string>
-    <string name="preparation_username_hint">nombre_de_usuario</string>
-    <string name="preparation_viewer_count">Recuento de espectadores</string>
-    <string name="preparation_start_live">Comenzar Directo</string>
-    <string name="preparation_seconds">(%d seg)</string>
 
     <string name="limits_live_has_ended">La transmisión ha terminado ⏳</string>
     <string name="limits_free_session_limited">Las transmisiones gratuitas están limitadas a %s segundos. ¡Mejora a Premium para transmisiones ilimitadas y funciones exclusivas!</string>

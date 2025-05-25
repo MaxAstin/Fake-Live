@@ -7,6 +7,7 @@ import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
+import com.bunbeauty.tiptoplive.features.premiumdetails.domain.GetOfferTimerFlowUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.GetShowStreamDurationLimitUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SaveNotifiedOfStreamDurationLimitUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SaveShowStreamDurationLimitUseCase
@@ -22,6 +23,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -44,6 +46,7 @@ class PreparationViewModel @Inject constructor(
     private val saveViewerCountUseCase: SaveViewerCountUseCase,
     private val isPremiumAvailableUseCase: IsPremiumAvailableUseCase,
     private val setupNotificationUseCase: SetupNotificationUseCase,
+    private val getOfferTimerFlowUseCase: GetOfferTimerFlowUseCase,
     private val analyticsManager: AnalyticsManager
 ) : BaseViewModel<Preparation.State, Preparation.Action, Preparation.Event>(
     initState = {
@@ -53,11 +56,13 @@ class PreparationViewModel @Inject constructor(
             username = "",
             viewerCountList = persistentListOf(),
             viewerCount = ViewerCount.V_100_200,
-            status = Preparation.Status.LOADING,
+            premiumStatus = Preparation.PremiumStatus.Loading,
             showStreamDurationLimitsDialog = null
         )
     }
 ) {
+
+    private var offerTimerJob: Job? = null
 
     init {
         initState()
@@ -180,19 +185,30 @@ class PreparationViewModel @Inject constructor(
 
     private fun checkPremiumStatus() {
         viewModelScope.launch {
-            val status = if (isPremiumAvailableUseCase()) {
-                Preparation.Status.PREMIUM
+            if (isPremiumAvailableUseCase()) {
+                setState {
+                    copy(premiumStatus = Preparation.PremiumStatus.Active)
+                }
             } else {
-                Preparation.Status.FREE
+                if (offerTimerJob == null) {
+                    offerTimerJob = getOfferTimerFlowUseCase().onEach { offerTimer ->
+                        setState {
+                            copy(
+                                premiumStatus = Preparation.PremiumStatus.Free(
+                                    offerTimer = offerTimer
+                                )
+                            )
+                        }
+                    }.launchIn(this)
+                }
             }
             setState {
                 copy(
-                    status = status,
                     viewerCountList = ViewerCount.entries.map { viewerCount ->
                         ViewerCountItem(
                             viewerCount = viewerCount,
                             isAvailable = viewerCount == ViewerCount.V_100_200
-                                || status == Preparation.Status.PREMIUM,
+                                || premiumStatus is Preparation.PremiumStatus.Active,
                         )
                     }.toImmutableList()
                 )

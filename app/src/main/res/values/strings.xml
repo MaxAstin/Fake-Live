@@ -21,6 +21,16 @@
     <string name="notification_body_will_you_go">Will you go Live?</string>
     <string name="notification_body_when_next">When is the next Live stream?</string>
 
+    <!-- Preparation -->
+    <string name="preparation_special_offer">Special offer ends in</string>
+    <string name="preparation_upgrade_now">Upgrade now</string>
+    <string name="preparation_edit_photo">Edit photo</string>
+    <string name="preparation_username">Username</string>
+    <string name="preparation_username_hint">user_name</string>
+    <string name="preparation_viewer_count">Viewer count</string>
+    <string name="preparation_start_live">Start Live</string>
+    <string name="preparation_seconds">(%d sec)</string>
+
     <!-- Stream -->
     <string name="stream_live">LIVE</string>
     <string name="stream_thousands_viewers_count">%s.%sK</string>
@@ -46,13 +56,6 @@
     <string name="do_not_ask">Please don\'t ask anymore</string>
     <string name="feedback_yes">Yes</string>
     <string name="feedback_no">No</string>
-
-    <string name="preparation_edit_photo">Edit photo</string>
-    <string name="preparation_username">Username</string>
-    <string name="preparation_username_hint">user_name</string>
-    <string name="preparation_viewer_count">Viewer count</string>
-    <string name="preparation_start_live">Start Live</string>
-    <string name="preparation_seconds">(%d sec)</string>
 
     <string name="limits_live_has_ended">Live has ended ⌛</string>
     <string name="limits_free_session_limited">Free sessions are limited to %s seconds. Upgrade to Premium for unlimited Live streaming and more exclusive features!</string>

@@ -20,6 +20,16 @@
     <string name="notification_body_will_you_go">Ты выйдешь в эфир?</string>
     <string name="notification_body_when_next">Когда следующая Live трансляция?</string>
 
+    <!-- Preparation -->
+    <string name="preparation_special_offer">Специальное предложение заканчивается через</string>
+    <string name="preparation_upgrade_now">Обновить сейчас</string>
+    <string name="preparation_edit_photo">Изменить фото</string>
+    <string name="preparation_username">Имя пользователя</string>
+    <string name="preparation_username_hint">user_name</string>
+    <string name="preparation_viewer_count">Количество зрителей</string>
+    <string name="preparation_start_live">Начать стрим</string>
+    <string name="preparation_seconds">(%d сек)</string>
+
     <!-- Stream -->
     <string name="stream_live">ПРЯМОЙ ЭФИР</string>
     <string name="stream_thousands_viewers_count">%s,%s тыс.</string>
@@ -45,13 +55,6 @@
     <string name="do_not_ask">Больше не спрашивать</string>
     <string name="feedback_no">Нет</string>
     <string name="feedback_yes">Да</string>
-
-    <string name="preparation_edit_photo">Изменить фото</string>
-    <string name="preparation_username">Имя пользователя</string>
-    <string name="preparation_username_hint">user_name</string>
-    <string name="preparation_viewer_count">Количество зрителей</string>
-    <string name="preparation_start_live">Начать стрим</string>
-    <string name="preparation_seconds">(%d сек)</string>
 
     <string name="limits_live_has_ended">Трансляция завершена ⏳</string>
     <string name="limits_free_session_limited">Бесплатные трансляции ограничены %s секундами. Обновитесь до Премиум для безлимитных трансляций и эксклюзивных функций!</string>

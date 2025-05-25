@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,7 +39,6 @@ import com.bunbeauty.tiptoplive.common.ui.components.CachedImage
 import com.bunbeauty.tiptoplive.common.ui.components.FakeLiveTextField
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLiveGradientButton
-import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLivePrimaryButton
 import com.bunbeauty.tiptoplive.common.ui.noEffectClickable
 import com.bunbeauty.tiptoplive.common.ui.rippleClickable
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
@@ -134,7 +132,7 @@ private fun PreparationContent(
     ) {
         Premium(
             modifier = Modifier.align(Alignment.TopEnd),
-            status = state.status,
+            premiumStatus = state.premiumStatus,
             onAction = onAction
         )
 
@@ -203,7 +201,7 @@ private fun PreparationContent(
                     trailingIcon = {
                         Icon(
                             modifier = Modifier.size(16.dp),
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_right),
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_chevron_right),
                             contentDescription = "Arrow",
                             tint = FakeLiveTheme.colors.iconVariant,
                         )
@@ -237,8 +235,8 @@ private fun PreparationContent(
         ) {
             val startLiveText = stringResource(R.string.preparation_start_live)
             val secondsText = stringResource(R.string.preparation_seconds, TIME_LIMIT_FOR_FREE_VERSION)
-            val text = remember(state.status) {
-                if (state.status == Preparation.Status.FREE) {
+            val text = remember(state.premiumStatus) {
+                if (state.premiumStatus is Preparation.PremiumStatus.Free) {
                     "$startLiveText $secondsText"
                 } else {
                     startLiveText
@@ -258,47 +256,34 @@ private fun PreparationContent(
 
 @Composable
 private fun Premium(
-    status: Preparation.Status,
+    premiumStatus: Preparation.PremiumStatus,
     onAction: (Preparation.Action) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    when (status) {
-        Preparation.Status.LOADING -> Unit
-        Preparation.Status.FREE -> {
-            FakeLivePrimaryButton(
+    when (premiumStatus) {
+        Preparation.PremiumStatus.Loading -> Unit
+        is Preparation.PremiumStatus.Free -> {
+            PremiumBanner(
                 modifier = modifier,
-                text = stringResource(R.string.common_premium),
+                timer = premiumStatus.offerTimer,
                 onClick = {
                     onAction(Preparation.Action.PremiumClick)
-                },
-                contentPadding = PaddingValues(
-                    horizontal = 12.dp,
-                    vertical = 8.dp,
-                ),
-                trailingIcon = {
-                    Icon(
-                        modifier = Modifier
-                            .padding(start = 6.dp)
-                            .size(20.dp),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_infinity),
-                        contentDescription = "Star",
-                        tint = FakeLiveTheme.colors.onSurface,
-                    )
                 }
             )
         }
 
-        Preparation.Status.PREMIUM -> {
+        Preparation.PremiumStatus.Active -> {
             Row(
                 modifier = modifier
                     .background(
-                        color = FakeLiveTheme.colors.surface,
+                        color = FakeLiveTheme.colors.premium,
                         shape = RoundedCornerShape(16.dp)
                     )
                     .padding(
                         horizontal = 12.dp,
                         vertical = 6.dp
-                    ).clickableWithoutIndication {
+                    )
+                    .clickableWithoutIndication {
                         onAction(Preparation.Action.PremiumClick)
                     },
                 horizontalArrangement = spacedBy(6.dp),
@@ -331,7 +316,9 @@ private fun PreparationFreePreview() {
                 username = "",
                 viewerCount = ViewerCount.V_100_200,
                 viewerCountList = persistentListOf(),
-                status = Preparation.Status.FREE,
+                premiumStatus = Preparation.PremiumStatus.Free(
+                    offerTimer = "12:00:00"
+                ),
                 showStreamDurationLimitsDialog = false
             ),
             onAction = {}
@@ -350,7 +337,7 @@ private fun PreparationPremiumPreview() {
                 username = "",
                 viewerCount = ViewerCount.V_100_200,
                 viewerCountList = persistentListOf(),
-                status = Preparation.Status.PREMIUM,
+                premiumStatus = Preparation.PremiumStatus.Active,
                 showStreamDurationLimitsDialog = false
             ),
             onAction = {}
