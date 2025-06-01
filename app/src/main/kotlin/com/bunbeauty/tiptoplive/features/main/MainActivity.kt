@@ -1,6 +1,8 @@
 package com.bunbeauty.tiptoplive.features.main
 
 import android.Manifest.permission.CAMERA
+import android.content.Intent
+import android.media.projection.MediaProjectionManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -53,6 +55,8 @@ import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseFailedScree
 import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseSuccessScreen
 import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
 import com.bunbeauty.tiptoplive.features.progress.AwardsScreen
+import com.bunbeauty.tiptoplive.features.recording.RecordingService
+import com.bunbeauty.tiptoplive.features.recording.RecordingStore
 import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
 import com.bunbeauty.tiptoplive.features.streamreview.screen.StreamReviewScreen
 import dagger.Lazy
@@ -73,6 +77,13 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var analyticsManager: Lazy<AnalyticsManager>
 
+    @Inject
+    lateinit var recordingStore: Lazy<RecordingStore>
+
+    private val mediaProjectionManager by lazy {
+        getSystemService(MediaProjectionManager::class.java)
+    }
+
     private val requestCameraPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -80,6 +91,19 @@ class MainActivity : ComponentActivity() {
             mainViewModel.onAction(Main.Action.CameraPermissionAccept)
         } else {
             mainViewModel.onAction(Main.Action.CameraPermissionDeny)
+        }
+    }
+
+    private val captureLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK && result.data != null) {
+            val intent = Intent(this, RecordingService::class.java)
+                .apply {
+                    putExtra(RecordingService.RESULT_CODE_KEY, result.resultCode)
+                    putExtra(RecordingService.RESULT_DATA_KEY, result.data)
+                }
+            startForegroundService(intent)
         }
     }
 
@@ -205,10 +229,20 @@ class MainActivity : ComponentActivity() {
                 AwardsScreen()
             }
             composable<NavigationRoute.Stream> {
-                StreamScreen(navController = navController)
+                StreamScreen(
+                    navController = navController,
+                    requestRecording = {
+                        captureLauncher.launch(
+                            mediaProjectionManager.createScreenCaptureIntent()
+                        )
+                    }
+                )
             }
             composable<NavigationRoute.StreamReview> {
-                StreamReviewScreen(navController = navController)
+                StreamReviewScreen(
+                    navController = navController,
+                    recordingUri = recordingStore.get().lastRecordingUri
+                )
             }
             composable<NavigationRoute.More> {
                 MoreScreen(navController = navController)

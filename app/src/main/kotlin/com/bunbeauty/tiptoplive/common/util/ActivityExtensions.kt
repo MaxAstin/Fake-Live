@@ -6,6 +6,7 @@ import android.net.Uri
 import android.provider.Settings
 import com.bunbeauty.tiptoplive.R
 import com.google.android.play.core.review.ReviewManagerFactory
+import androidx.core.net.toUri
 
 fun Activity.launchInAppReview() {
     val reviewManager = ReviewManagerFactory.create(this)
@@ -40,9 +41,23 @@ fun Activity.openSharing(text: String) {
     }
 }
 
+fun Activity.openSharing(uri: Uri) {
+    runCatching {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "video/mp4"
+            putExtra(Intent.EXTRA_STREAM, uri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        startActivity(Intent.createChooser(shareIntent, "Share your screen recording"))
+    }.onFailure {
+        showToast(message = getString(R.string.common_something_went_wrong))
+    }
+}
+
 fun Activity.openMarketListing() {
     runCatching {
-        val uri = Uri.parse("market://details?id=$packageName")
+        val uri = "market://details?id=$packageName".toUri()
         val intent = Intent(Intent.ACTION_VIEW, uri).apply {
             setPackage("com.android.vending")
             addFlags(
@@ -54,7 +69,7 @@ fun Activity.openMarketListing() {
     }.onFailure {
         val intent = Intent(
             Intent.ACTION_VIEW,
-            Uri.parse(playMarketLink)
+            playMarketLink.toUri()
         ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }

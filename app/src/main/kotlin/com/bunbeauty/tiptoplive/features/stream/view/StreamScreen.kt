@@ -83,7 +83,10 @@ import kotlinx.coroutines.flow.onEach
 
 @SuppressLint("DiscouragedApi")
 @Composable
-fun StreamScreen(navController: NavHostController) {
+fun StreamScreen(
+    navController: NavHostController,
+    requestRecording: () -> Unit
+) {
     val viewModel: StreamViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val onAction = remember {
@@ -96,6 +99,9 @@ fun StreamScreen(navController: NavHostController) {
         ImageCapture.Builder().build()
     }
 
+    LaunchedEffect(Unit) {
+        requestRecording()
+    }
     LaunchedEffect(Unit) {
         viewModel.event.onEach { event ->
             handleEvent(
