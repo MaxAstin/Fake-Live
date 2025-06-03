@@ -2,6 +2,7 @@ package com.bunbeauty.tiptoplive.features.stream.view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.camera.core.ImageCapture
@@ -65,6 +66,7 @@ import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.bold
 import com.bunbeauty.tiptoplive.common.util.showToast
+import com.bunbeauty.tiptoplive.features.recording.RecordingService
 import com.bunbeauty.tiptoplive.features.stream.presentation.Stream
 import com.bunbeauty.tiptoplive.features.stream.presentation.StreamViewModel
 import com.bunbeauty.tiptoplive.features.stream.view.ui.AnimatedReaction
@@ -146,6 +148,8 @@ private fun handleEvent(
 ) {
     when (event) {
         is Stream.Event.FinishStream -> {
+            val stopIntent = Intent(context, RecordingService::class.java)
+            context.stopService(stopIntent)
             if (event.showReview) {
                 navController.navigate(route = NavigationRoute.StreamReview) {
                     popUpTo<NavigationRoute.Stream> {

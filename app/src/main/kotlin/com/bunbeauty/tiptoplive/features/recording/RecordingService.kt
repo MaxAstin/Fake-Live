@@ -1,32 +1,18 @@
 package com.bunbeauty.tiptoplive.features.recording
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
-import android.hardware.display.DisplayManager
-import android.hardware.display.VirtualDisplay
-import android.media.CamcorderProfile
-import android.media.MediaRecorder
-import android.media.projection.MediaProjection
-import android.media.projection.MediaProjectionManager
-import android.net.Uri
-import android.os.Environment
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import androidx.core.content.FileProvider
+import com.bunbeauty.tiptoplive.R
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.io.File
 
 private const val RECORDING_CHANNEL_ID = "FakeStreamRecorder"
-private const val VIRTUAL_DISPLAY_NAME = "main"
+private const val NOTIFICATION_ID = 1002
 
 @AndroidEntryPoint
 class RecordingService : Service() {
@@ -37,115 +23,63 @@ class RecordingService : Service() {
     }
 
     @Inject
-    lateinit var recordingStore: RecordingStore
-
-    private var mediaProjection: MediaProjection? = null
-    private var virtualDisplay: VirtualDisplay? = null
-    private var mediaRecorder: MediaRecorder? = null
-
-    private val serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    lateinit var recordingManager: RecordingManager
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        createNotificationChannel()
-
-        val notification = NotificationCompat.Builder(this, RECORDING_CHANNEL_ID)
-            .setContentTitle("Fake Live")
-            .setContentText("Fake Live stream is recording")
-            .build()
-        startForeground(1, notification)
-
         val resultCode = intent?.extras?.getInt(RESULT_CODE_KEY)
         val resultData = intent?.getParcelableExtra<Intent>(RESULT_DATA_KEY)
-        if (resultCode != null && resultData != null) {
-            setupVirtualDisplay(
+
+        createNotificationChannel()
+        val notification = createNotification()
+        startForeground(NOTIFICATION_ID, notification)
+
+        return if (resultCode != null && resultData != null) {
+            val isSuccess = recordingManager.start(
                 resultCode = resultCode,
                 resultData = resultData
             )
+
+            if (isSuccess) {
+                super.onStartCommand(intent, flags, startId)
+            } else {
+                startNotSticky()
+            }
+        } else {
+            startNotSticky()
         }
-
-
-        return super.onStartCommand(intent, flags, startId)
-    }
-
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
     }
 
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
             RECORDING_CHANNEL_ID,
-            "Fake Stream Recorder",
+            getString(R.string.recording_notification_channel_name),
             NotificationManager.IMPORTANCE_DEFAULT
         )
         val manager = getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(channel)
     }
 
-    private fun setupVirtualDisplay(resultCode: Int, resultData: Intent) {
-        val mediaProjectionManager = getSystemService(MediaProjectionManager::class.java)
-        mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, resultData)
-            ?: throw IllegalStateException("MediaProjection unavailable")
-
-        val metrics = resources.displayMetrics
-        val screenWidth = metrics.widthPixels
-        val screenHeight = metrics.heightPixels
-        val profile = CamcorderProfile.get(CamcorderProfile.QUALITY_720P)
-
-        val outputFile = getOutputFile()
-        recordingStore.lastRecordingUri = getContentUriForFile(outputFile)
-
-        mediaRecorder = MediaRecorder().apply {
-            setVideoSource(MediaRecorder.VideoSource.SURFACE)
-            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            setOutputFile(outputFile.absolutePath)
-            setVideoSize(screenWidth, screenHeight)
-            setVideoEncoder(MediaRecorder.VideoEncoder.H264)
-            setVideoEncodingBitRate(profile.videoBitRate)
-            setVideoFrameRate(profile.videoFrameRate)
-            prepare()
-        }
-        virtualDisplay = mediaProjection?.createVirtualDisplay(
-            VIRTUAL_DISPLAY_NAME,
-            screenWidth,
-            screenHeight,
-            metrics.densityDpi,
-            DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-            mediaRecorder?.surface,
-            null,
-            null
-        )
-
-        mediaRecorder?.start()
-        serviceScope.launch {
-            delay(5_000)
-            mediaRecorder?.stop()
-            stopForeground(STOP_FOREGROUND_REMOVE)
-            stopSelf()
-        }
+    private fun createNotification(): Notification {
+        return NotificationCompat.Builder(this, RECORDING_CHANNEL_ID)
+            .setContentTitle(getString(R.string.app_name))
+            .setContentText(getString(R.string.stream_is_recording))
+            .build()
     }
 
-    private fun getOutputFile(): File {
-        val mediaDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES)
-            ?: filesDir
-        val timestamp = System.currentTimeMillis()
-        val fileName = "VID_$timestamp.mp4"
-
-        val videoFile = File(mediaDir, fileName)
-        if (!videoFile.parentFile!!.exists()) {
-            videoFile.parentFile!!.mkdirs()
-        }
-
-        return videoFile
+    private fun startNotSticky(): Int {
+        stopSelf()
+        return START_NOT_STICKY
     }
 
-    private fun getContentUriForFile(file: File): Uri {
-        val authority = "$packageName.fileprovider"
-        return FileProvider.getUriForFile(this, authority, file)
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
     }
 
     override fun onDestroy() {
+        recordingManager.stop()
+        stopForeground(STOP_FOREGROUND_REMOVE)
+
         super.onDestroy()
-        serviceScope.cancel()
     }
 
 }

@@ -38,6 +38,10 @@
     <string name="stream_question_title">Question</string>
     <string name="stream_filter_not_available">This filter is not available</string>
 
+    <!-- Recording -->
+    <string name="stream_is_recording">Fake Live stream is recording</string>
+    <string name="recording_notification_channel_name">Fake Live recorder</string>
+
     <!-- Stream review -->
     <string name="stream_review_how_was_it">Did you like the Live stream?</string>
     <string name="stream_review_good">Good, like it!</string>
