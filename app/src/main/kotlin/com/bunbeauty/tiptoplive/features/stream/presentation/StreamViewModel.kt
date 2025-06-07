@@ -7,6 +7,7 @@ import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.common.util.Seconds
 import com.bunbeauty.tiptoplive.common.util.getCurrentTimeSeconds
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
+import com.bunbeauty.tiptoplive.features.preparation.domain.IsRecordingUseCase
 import com.bunbeauty.tiptoplive.features.stream.domain.ShouldAskReviewUseCase
 import com.bunbeauty.tiptoplive.features.progress.domain.usecase.IncreaseProgressPointsUseCase
 import com.bunbeauty.tiptoplive.features.stream.CameraUtil
@@ -33,6 +34,7 @@ const val TIME_LIMIT_FOR_FREE_VERSION = 60 // sec
 
 @HiltViewModel
 class StreamViewModel @Inject constructor(
+    private val isRecordingUseCase: IsRecordingUseCase,
     private val getImageUriFlowUseCase: GetImageUriFlowUseCase,
     private val getUsernameUseCase: GetUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
@@ -70,6 +72,7 @@ class StreamViewModel @Inject constructor(
 ) {
 
     init {
+        requestRecording()
         setupAvatar()
         setupUsername()
         setupViewerCount()
@@ -261,6 +264,14 @@ class StreamViewModel @Inject constructor(
 
             is Stream.Action.HandlePicture -> {
                 updateCurrentLiveScreenUseCase(bytes = action.bytes)
+            }
+        }
+    }
+
+    private fun requestRecording() {
+        viewModelScope.launch {
+            if (isRecordingUseCase()) {
+                sendEvent(Stream.Event.RequestRecording)
             }
         }
     }

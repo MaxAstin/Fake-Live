@@ -13,6 +13,7 @@ interface Preparation {
         val username: String,
         val viewerCountList: ImmutableList<ViewerCountItem>,
         val viewerCount: ViewerCount,
+        val isRecording: Boolean?,
         val premiumStatus: PremiumStatus,
         val showStreamDurationLimitsDialog: Boolean?,
     ): Base.State
@@ -31,10 +32,10 @@ interface Preparation {
     sealed interface Action: Base.Action {
         data object StartScreen: Action
         data object SetupNotification: Action
-        data object ProgressClick: Action
-        data class ViewerCountSelect(val item: ViewerCountItem): Action
-        data class UsernameUpdate(val username: String): Action
         data object AvatarClick: Action
+        data class UsernameUpdate(val username: String): Action
+        data class ViewerCountSelect(val item: ViewerCountItem): Action
+        data class RecordingUpdate(val isRecording: Boolean): Action
         data object StartStreamClick: Action
         data object CloseStreamDurationLimitsDialogClick: Action
         data object PremiumLaterClick: Action
@@ -42,7 +43,6 @@ interface Preparation {
     }
 
     sealed interface Event: Base.Event {
-        data object NavigateToProgress: Event
         data object OpenStream: Event
         data object HandlePositiveFeedbackClick: Event
         data object HandleAvatarClick: Event

@@ -14,7 +14,7 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 
 @Immutable
-sealed interface ImageSource<T> {
+sealed interface ImageSource<out T : Any> {
 
     val data: T
 
@@ -56,6 +56,7 @@ fun CachedImage(
                 )
             }
         }
+
         else -> {
             imageSource.data
         }

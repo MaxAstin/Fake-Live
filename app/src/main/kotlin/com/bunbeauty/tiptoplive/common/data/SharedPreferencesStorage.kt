@@ -12,6 +12,7 @@ import javax.inject.Inject
 private const val IMAGE_URI_KEY = "image uri"
 private const val USERNAME_KEY = "username"
 private const val VIEWER_COUNT_INDEX_KEY = "viewer count index"
+private const val RECORDING_KEY = "recording"
 private const val REVIEW_PROVIDED_KEY = "review provided"
 private const val IS_INTRO_VIEWED_KEY = "is intro viewed"
 private const val LAST_USED_DATE_KEY = "last used date"
@@ -46,6 +47,12 @@ class SharedPreferencesStorage @Inject constructor(
     override suspend fun saveViewerCountIndex(index: Int) {
         sharedPreferences.edit {
             putInt(VIEWER_COUNT_INDEX_KEY, index)
+        }
+    }
+
+    override suspend fun saveRecording(isRecording: Boolean) {
+        sharedPreferences.edit {
+            putBoolean(RECORDING_KEY, isRecording)
         }
     }
 
@@ -119,6 +126,10 @@ class SharedPreferencesStorage @Inject constructor(
 
     override suspend fun getViewerCountIndex(defaultValue: Int): Int {
         return sharedPreferences.getInt(VIEWER_COUNT_INDEX_KEY, defaultValue)
+    }
+
+    override suspend fun getRecording(defaultValue: Boolean): Boolean {
+        return sharedPreferences.getBoolean(RECORDING_KEY, defaultValue)
     }
 
     override suspend fun getReviewProvided(defaultValue: Boolean): Boolean {

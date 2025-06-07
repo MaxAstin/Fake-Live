@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -36,6 +37,7 @@ import com.bunbeauty.tiptoplive.common.navigation.NavigationRoute
 import com.bunbeauty.tiptoplive.common.ui.LocalePreview
 import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
 import com.bunbeauty.tiptoplive.common.ui.components.CachedImage
+import com.bunbeauty.tiptoplive.common.ui.components.FakeLiveSwitch
 import com.bunbeauty.tiptoplive.common.ui.components.FakeLiveTextField
 import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLiveGradientButton
@@ -45,9 +47,11 @@ import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.instagramBrush
 import com.bunbeauty.tiptoplive.features.preparation.RequestNotificationsPermission
 import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation
+import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation.ViewerCountItem
 import com.bunbeauty.tiptoplive.features.preparation.presentation.PreparationViewModel
 import com.bunbeauty.tiptoplive.features.stream.presentation.TIME_LIMIT_FOR_FREE_VERSION
 import com.bunbeauty.tiptoplive.shared.domain.model.ViewerCount
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -86,10 +90,6 @@ fun PreparationScreen(
     LaunchedEffect(Unit) {
         viewModel.event.onEach { event ->
             when (event) {
-                Preparation.Event.NavigateToProgress -> {
-                    navController.navigate(NavigationRoute.Awards)
-                }
-
                 Preparation.Event.OpenStream -> {
                     onStartStreamClick()
                 }
@@ -136,91 +136,31 @@ private fun PreparationContent(
             onAction = onAction
         )
 
-        Column(modifier = Modifier.align(Alignment.Center)) {
-            CachedImage(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .size(80.dp)
-                    .clip(CircleShape)
-                    .noEffectClickable {
-                        onAction(Preparation.Action.AvatarClick)
-                    },
-                imageSource = state.image,
-                cacheKey = state.image.data.toString(),
-                contentDescription = "Avatar",
+        Column(
+            modifier = Modifier.align(Alignment.Center),
+            verticalArrangement = spacedBy(16.dp)
+        ) {
+            AvatarBlock(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                image = state.image,
+                onAction = onAction
             )
-            Box(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .noEffectClickable {
-                        onAction(Preparation.Action.AvatarClick)
-                    }
-            ) {
-                Text(
-                    modifier = Modifier.padding(16.dp),
-                    text = stringResource(R.string.preparation_edit_photo),
-                    color = FakeLiveTheme.colors.interactive,
-                    style = FakeLiveTheme.typography.titleSmall,
-                )
-            }
-
-            Text(
-                modifier = Modifier.padding(top = 16.dp),
-                text = stringResource(R.string.preparation_username),
-                color = FakeLiveTheme.colors.onSurfaceVariant,
-                style = FakeLiveTheme.typography.bodyMedium,
-            )
-            FakeLiveTextField(
+            UsernameBlock(
                 modifier = Modifier.fillMaxWidth(),
-                value = state.username,
-                hint = stringResource(R.string.preparation_username_hint),
-                readOnly = false,
-                onValueChange = { username ->
-                    onAction(Preparation.Action.UsernameUpdate(username = username))
-                },
+                username = state.username,
+                onAction = onAction
             )
-
-            var menuExpanded by remember {
-                mutableStateOf(false)
-            }
-            Text(
-                modifier = Modifier.padding(top = 16.dp),
-                text = stringResource(R.string.preparation_viewer_count),
-                color = FakeLiveTheme.colors.onSurfaceVariant,
-                style = FakeLiveTheme.typography.bodyMedium,
+            ViewerCountBlock(
+                modifier = Modifier.fillMaxWidth(),
+                viewerCount = state.viewerCount,
+                viewerCountList = state.viewerCountList,
+                onAction = onAction
             )
-            Box {
-                FakeLiveTextField(
-                    modifier = Modifier.rippleClickable {
-                        menuExpanded = true
-                    },
-                    value = state.viewerCount.text,
-                    hint = "",
-                    readOnly = true,
-                    onValueChange = {},
-                    trailingIcon = {
-                        Icon(
-                            modifier = Modifier.size(16.dp),
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_chevron_right),
-                            contentDescription = "Arrow",
-                            tint = FakeLiveTheme.colors.iconVariant,
-                        )
-                    }
-                )
-                ViewersDropdownMenu(
-                    expanded = menuExpanded,
-                    viewerCountList = state.viewerCountList,
-                    onDismissRequest = {
-                        menuExpanded = false
-                    },
-                    onItemClick = { item ->
-                        onAction(
-                            Preparation.Action.ViewerCountSelect(item = item)
-                        )
-                        menuExpanded = false
-                    }
-                )
-            }
+            RecordingSwitcher(
+                modifier = Modifier.fillMaxWidth(),
+                isRecording = state.isRecording,
+                onAction = onAction
+            )
         }
 
         FakeLiveGradientButton(
@@ -305,6 +245,141 @@ private fun Premium(
     }
 }
 
+@Composable
+private fun AvatarBlock(
+    image: ImageSource<Any>,
+    onAction: (Preparation.Action) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.noEffectClickable {
+            onAction(Preparation.Action.AvatarClick)
+        },
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CachedImage(
+            modifier = Modifier
+                .size(80.dp)
+                .clip(CircleShape),
+            imageSource = image,
+            cacheKey = image.data.toString(),
+            contentDescription = "Avatar",
+        )
+        Text(
+            modifier = Modifier.padding(16.dp),
+            text = stringResource(R.string.preparation_edit_photo),
+            color = FakeLiveTheme.colors.interactive,
+            style = FakeLiveTheme.typography.titleSmall,
+        )
+    }
+}
+
+@Composable
+private fun UsernameBlock(
+    username: String,
+    onAction: (Preparation.Action) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = stringResource(R.string.preparation_username),
+            color = FakeLiveTheme.colors.onSurfaceVariant,
+            style = FakeLiveTheme.typography.bodyMedium,
+        )
+        FakeLiveTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = username,
+            hint = stringResource(R.string.preparation_username_hint),
+            readOnly = false,
+            onValueChange = { username ->
+                onAction(Preparation.Action.UsernameUpdate(username = username))
+            },
+        )
+    }
+}
+
+@Composable
+private fun ViewerCountBlock(
+    viewerCount: ViewerCount,
+    viewerCountList: ImmutableList<ViewerCountItem>,
+    onAction: (Preparation.Action) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = stringResource(R.string.preparation_viewer_count),
+            color = FakeLiveTheme.colors.onSurfaceVariant,
+            style = FakeLiveTheme.typography.bodyMedium,
+        )
+        Box {
+            var menuExpanded by remember {
+                mutableStateOf(false)
+            }
+            FakeLiveTextField(
+                modifier = Modifier.rippleClickable {
+                    menuExpanded = true
+                },
+                value = viewerCount.text,
+                hint = "",
+                readOnly = true,
+                onValueChange = {},
+                trailingIcon = {
+                    Icon(
+                        modifier = Modifier.size(16.dp),
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_chevron_right),
+                        contentDescription = "Arrow",
+                        tint = FakeLiveTheme.colors.iconVariant,
+                    )
+                }
+            )
+            ViewersDropdownMenu(
+                expanded = menuExpanded,
+                viewerCountList = viewerCountList,
+                onDismissRequest = {
+                    menuExpanded = false
+                },
+                onItemClick = { item ->
+                    onAction(
+                        Preparation.Action.ViewerCountSelect(item = item)
+                    )
+                    menuExpanded = false
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun RecordingSwitcher(
+    isRecording: Boolean?,
+    onAction: (Preparation.Action) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.height(48.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = stringResource(R.string.preparation_record_live),
+            color = FakeLiveTheme.colors.onBackground,
+            style = FakeLiveTheme.typography.bodyLarge
+        )
+        isRecording?.let {
+            FakeLiveSwitch(
+                checked = isRecording,
+                onCheckedChange = { checked ->
+                    onAction(
+                        Preparation.Action.RecordingUpdate(isRecording = checked)
+                    )
+                }
+            )
+        }
+    }
+}
+
 @LocalePreview
 @Composable
 private fun PreparationFreePreview() {
@@ -316,6 +391,7 @@ private fun PreparationFreePreview() {
                 username = "",
                 viewerCount = ViewerCount.V_100_200,
                 viewerCountList = persistentListOf(),
+                isRecording = true,
                 premiumStatus = Preparation.PremiumStatus.Free(
                     offerTimer = "12:00:00"
                 ),
@@ -337,6 +413,7 @@ private fun PreparationPremiumPreview() {
                 username = "",
                 viewerCount = ViewerCount.V_100_200,
                 viewerCountList = persistentListOf(),
+                isRecording = false,
                 premiumStatus = Preparation.PremiumStatus.Active,
                 showStreamDurationLimitsDialog = false
             ),

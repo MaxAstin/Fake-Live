@@ -102,15 +102,13 @@ fun StreamScreen(
     }
 
     LaunchedEffect(Unit) {
-        requestRecording()
-    }
-    LaunchedEffect(Unit) {
         viewModel.event.onEach { event ->
             handleEvent(
                 event = event,
                 navController = navController,
                 context = context,
                 imageCapture = imageCapture,
+                requestRecording = requestRecording,
                 onAction = onAction
             )
         }.launchIn(this)
@@ -144,9 +142,14 @@ private fun handleEvent(
     navController: NavHostController,
     context: Context,
     imageCapture: ImageCapture,
+    requestRecording: () -> Unit,
     onAction: (Stream.Action) -> Unit,
 ) {
     when (event) {
+        is Stream.Event.RequestRecording -> {
+            requestRecording()
+        }
+
         is Stream.Event.FinishStream -> {
             val stopIntent = Intent(context, RecordingService::class.java)
             context.stopService(stopIntent)

@@ -9,7 +9,9 @@ import com.bunbeauty.tiptoplive.common.ui.components.ImageSource
 import com.bunbeauty.tiptoplive.features.billing.domain.IsPremiumAvailableUseCase
 import com.bunbeauty.tiptoplive.features.premiumdetails.domain.GetOfferTimerFlowUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.GetShowStreamDurationLimitUseCase
+import com.bunbeauty.tiptoplive.features.preparation.domain.IsRecordingUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SaveNotifiedOfStreamDurationLimitUseCase
+import com.bunbeauty.tiptoplive.features.preparation.domain.SaveRecordingUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SaveShowStreamDurationLimitUseCase
 import com.bunbeauty.tiptoplive.features.preparation.domain.SetupNotificationUseCase
 import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation.ViewerCountItem
@@ -43,7 +45,9 @@ class PreparationViewModel @Inject constructor(
     private val getUsernameUseCase: GetUsernameUseCase,
     private val saveUsernameUseCase: SaveUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
+    private val isRecordingUseCase: IsRecordingUseCase,
     private val saveViewerCountUseCase: SaveViewerCountUseCase,
+    private val saveRecordingUseCase: SaveRecordingUseCase,
     private val isPremiumAvailableUseCase: IsPremiumAvailableUseCase,
     private val setupNotificationUseCase: SetupNotificationUseCase,
     private val getOfferTimerFlowUseCase: GetOfferTimerFlowUseCase,
@@ -56,6 +60,7 @@ class PreparationViewModel @Inject constructor(
             username = "",
             viewerCountList = persistentListOf(),
             viewerCount = ViewerCount.V_100_200,
+            isRecording = null,
             premiumStatus = Preparation.PremiumStatus.Loading,
             showStreamDurationLimitsDialog = null
         )
@@ -80,8 +85,14 @@ class PreparationViewModel @Inject constructor(
                 setupNotificationUseCase()
             }
 
-            Preparation.Action.ProgressClick -> {
-                sendEvent(Preparation.Event.NavigateToProgress)
+            Preparation.Action.AvatarClick -> {
+                sendEvent(Preparation.Event.HandleAvatarClick)
+            }
+
+            is Preparation.Action.UsernameUpdate -> {
+                mutableState.update { state ->
+                    state.copy(username = action.username)
+                }
             }
 
             is Preparation.Action.ViewerCountSelect -> {
@@ -97,14 +108,13 @@ class PreparationViewModel @Inject constructor(
                 }
             }
 
-            is Preparation.Action.UsernameUpdate -> {
-                mutableState.update { state ->
-                    state.copy(username = action.username)
+            is Preparation.Action.RecordingUpdate -> {
+                viewModelScope.launch {
+                    saveRecordingUseCase(isRecording = action.isRecording)
                 }
-            }
-
-            Preparation.Action.AvatarClick -> {
-                sendEvent(Preparation.Event.HandleAvatarClick)
+                mutableState.update { state ->
+                    state.copy(isRecording = action.isRecording)
+                }
             }
 
             Preparation.Action.StartStreamClick -> {
@@ -149,13 +159,16 @@ class PreparationViewModel @Inject constructor(
         viewModelScope.launch {
             val usernameDeferred = async { getUsernameUseCase() }
             val viewerCountDeferred = async { getViewerCountUseCase() }
+            val isRecordingDeferred = async { isRecordingUseCase() }
             val username = usernameDeferred.await()
             val viewerCount = viewerCountDeferred.await()
+            val isRecording = isRecordingDeferred.await()
 
             setState {
                 copy(
                     username = username,
-                    viewerCount = viewerCount
+                    viewerCount = viewerCount,
+                    isRecording = isRecording
                 )
             }
         }
