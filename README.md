@@ -41,5 +41,5 @@ this app provides a platform to create realistic fake Lives.
 ## Contacts
 For any questions or feedback, feel free to contact:
 
-- Telegram: [@maxastin](https://t.me/maxastin)
-- LinkedIn: [@maxastin](https://www.linkedin.com/in/maxastin/)
+- Telegram: [@freshmorsikov](https://t.me/freshmorsikov)
+- LinkedIn: [@freshmorsikov](https://www.linkedin.com/in/freshmorsikov/)
