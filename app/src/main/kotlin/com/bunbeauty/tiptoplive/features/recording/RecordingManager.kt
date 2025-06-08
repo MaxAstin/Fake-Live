@@ -17,6 +17,7 @@ import jakarta.inject.Inject
 import java.io.File
 
 private const val VIRTUAL_DISPLAY_NAME = "main"
+private const val OUTPUT_FILE_NAME_NAME = "recording.mp4"
 
 class RecordingManager @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -91,17 +92,13 @@ class RecordingManager @Inject constructor(
     }
 
     private fun getOutputFile(): File {
-        val mediaDir = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES) ?: context.filesDir
-        val timestamp = System.currentTimeMillis()
-        val fileName = "$timestamp.mp4"
-
-        val videoFile = File(mediaDir, fileName)
-        val parentFile = videoFile.parentFile
-        if (parentFile?.exists() == false) {
-            parentFile.mkdirs()
+        val moviesDirectory = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES) ?: context.filesDir
+        val outputFile = File(moviesDirectory, OUTPUT_FILE_NAME_NAME)
+        if (outputFile.parentFile?.exists() == false) {
+            outputFile.parentFile?.mkdirs()
         }
 
-        return videoFile
+        return outputFile
     }
 
     private fun getContentUriForFile(file: File): Uri {
