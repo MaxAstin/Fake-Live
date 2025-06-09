@@ -8,10 +8,10 @@ import android.media.CamcorderProfile
 import android.media.MediaRecorder
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
-import android.net.Uri
 import android.os.Environment
 import androidx.core.content.FileProvider
 import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
+import com.bunbeauty.tiptoplive.shared.data.recording.RecordingRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import jakarta.inject.Inject
 import java.io.File
@@ -21,7 +21,7 @@ private const val OUTPUT_FILE_NAME_NAME = "recording.mp4"
 
 class RecordingManager @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val recordingStore: RecordingStore,
+    private val recordingRepository: RecordingRepository,
     private val analyticsManager: AnalyticsManager
 ) {
 
@@ -67,7 +67,11 @@ class RecordingManager @Inject constructor(
         val profile = CamcorderProfile.get(CamcorderProfile.QUALITY_720P)
 
         val outputFile = getOutputFile()
-        recordingStore.lastRecordingUri = getContentUriForFile(outputFile)
+        recordingRepository.saveRecordingUri(
+            uri = getContentUriForFile(
+                file = outputFile
+            )
+        )
 
         mediaRecorder = MediaRecorder().apply {
             setVideoSource(MediaRecorder.VideoSource.SURFACE)
@@ -101,9 +105,10 @@ class RecordingManager @Inject constructor(
         return outputFile
     }
 
-    private fun getContentUriForFile(file: File): Uri {
+    private fun getContentUriForFile(file: File): String {
         val authority = "${context.packageName}.fileprovider"
         return FileProvider.getUriForFile(context, authority, file)
+            .toString()
     }
 
 }

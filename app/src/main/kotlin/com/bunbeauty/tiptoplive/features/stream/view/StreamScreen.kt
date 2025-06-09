@@ -146,8 +146,16 @@ private fun handleEvent(
     onAction: (Stream.Action) -> Unit,
 ) {
     when (event) {
-        is Stream.Event.RequestRecording -> {
+        Stream.Event.RequestRecording -> {
             requestRecording()
+        }
+
+        Stream.Event.NavigateToRecordingPreview -> {
+            navController.navigate(route = NavigationRoute.RecordingPreview){
+                popUpTo<NavigationRoute.Stream> {
+                    inclusive = true
+                }
+            }
         }
 
         is Stream.Event.FinishStream -> {

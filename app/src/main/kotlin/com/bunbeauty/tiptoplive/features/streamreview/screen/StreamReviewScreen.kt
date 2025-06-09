@@ -1,6 +1,5 @@
 package com.bunbeauty.tiptoplive.features.streamreview.screen
 
-import android.net.Uri
 import androidx.activity.compose.LocalActivity
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
@@ -36,17 +35,13 @@ import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.bold
 import com.bunbeauty.tiptoplive.common.ui.util.VisibilityWithDelay
 import com.bunbeauty.tiptoplive.common.util.openMarketListing
-import com.bunbeauty.tiptoplive.common.util.openSharing
 import com.bunbeauty.tiptoplive.features.streamreview.presentation.StreamReview
 import com.bunbeauty.tiptoplive.features.streamreview.presentation.StreamReviewViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @Composable
-fun StreamReviewScreen(
-    navController: NavHostController,
-    recordingUri: Uri?
-) {
+fun StreamReviewScreen(navController: NavHostController) {
     val viewModel: StreamReviewViewModel = hiltViewModel()
     val onAction = remember {
         { action: StreamReview.Action ->
@@ -75,12 +70,6 @@ fun StreamReviewScreen(
                 }
             }
         }.launchIn(this)
-    }
-
-    LaunchedEffect(Unit) {
-        recordingUri?.let {
-            activity?.openSharing(uri = recordingUri)
-        }
     }
 
     StreamReviewContent(onAction = onAction)

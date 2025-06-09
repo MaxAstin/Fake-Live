@@ -19,6 +19,7 @@ import com.bunbeauty.tiptoplive.features.stream.domain.model.Question
 import com.bunbeauty.tiptoplive.shared.domain.GetImageUriFlowUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetUsernameUseCase
 import com.bunbeauty.tiptoplive.shared.domain.GetViewerCountUseCase
+import com.bunbeauty.tiptoplive.shared.domain.recording.GetRecordingUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
@@ -45,6 +46,7 @@ class StreamViewModel @Inject constructor(
     private val getQuestionUseCase: GetQuestionUseCase,
     private val finishDemoStreamAutomaticallyUseCase: FinishDemoStreamAutomaticallyUseCase,
     private val shouldAskReviewUseCase: ShouldAskReviewUseCase,
+    private val getRecordingUriUseCase: GetRecordingUrlUseCase,
     private val analyticsManager: AnalyticsManager,
     private val cameraUtil: CameraUtil
 ) : BaseViewModel<Stream.State, Stream.Action, Stream.Event>(
@@ -64,6 +66,7 @@ class StreamViewModel @Inject constructor(
             startStreamTimeSeconds = getCurrentTimeSeconds(),
             isCameraEnabled = cameraUtil.hasCamera(),
             isCameraFront = cameraUtil.hasFrontCamera(),
+            isRecording = false,
             showJoinRequests = false,
             showInvite = false,
             showDirect = false,
@@ -247,10 +250,18 @@ class StreamViewModel @Inject constructor(
                 val duration = getStreamDuration()
                 viewModelScope.launch {
                     analyticsManager.trackStreamFinish(duration = duration)
-                    val showReview = shouldAskReviewUseCase(duration = duration)
-                    sendEvent(
-                        Stream.Event.FinishStream(showReview = showReview)
-                    )
+
+                    val recordingUri = getRecordingUriUseCase()
+                    if (currentState.isRecording && recordingUri != null) {
+                        sendEvent(
+                            Stream.Event.NavigateToRecordingPreview
+                        )
+                    } else {
+                        val showReview = shouldAskReviewUseCase(duration = duration)
+                        sendEvent(
+                            Stream.Event.FinishStream(showReview = showReview)
+                        )
+                    }
                 }
             }
 
@@ -270,8 +281,12 @@ class StreamViewModel @Inject constructor(
 
     private fun requestRecording() {
         viewModelScope.launch {
-            if (isRecordingUseCase()) {
+            val isRecording = isRecordingUseCase()
+            if (isRecording) {
                 sendEvent(Stream.Event.RequestRecording)
+            }
+            setState {
+                copy(isRecording = isRecording)
             }
         }
     }

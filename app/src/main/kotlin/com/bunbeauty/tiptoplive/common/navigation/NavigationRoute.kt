@@ -28,6 +28,9 @@ interface NavigationRoute {
     data object StreamReview: NavigationRoute
 
     @Serializable
+    data object RecordingPreview: NavigationRoute
+
+    @Serializable
     data object PremiumDetails: NavigationRoute
 
     @Serializable

@@ -18,6 +18,7 @@ interface Stream {
         val startStreamTimeSeconds: Seconds,
         val isCameraEnabled: Boolean,
         val isCameraFront: Boolean,
+        val isRecording: Boolean,
         val showJoinRequests: Boolean,
         val showInvite: Boolean,
         val showDirect: Boolean,
@@ -73,6 +74,7 @@ interface Stream {
     sealed interface Event : Base.Event {
         data object RequestRecording : Event
         data class FinishStream(val showReview: Boolean) : Event
+        data object NavigateToRecordingPreview : Event
         data object ShowFilterNotAvailable : Event
         data object TakePicture : Event
     }
