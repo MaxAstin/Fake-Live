@@ -150,6 +150,11 @@ private fun handleEvent(
             requestRecording()
         }
 
+        Stream.Event.FinishRecording -> {
+            val finisIntent = Intent(context, RecordingService::class.java)
+            context.stopService(finisIntent)
+        }
+
         Stream.Event.NavigateToRecordingPreview -> {
             navController.navigate(route = NavigationRoute.RecordingPreview){
                 popUpTo<NavigationRoute.Stream> {
@@ -159,8 +164,6 @@ private fun handleEvent(
         }
 
         is Stream.Event.FinishStream -> {
-            val stopIntent = Intent(context, RecordingService::class.java)
-            context.stopService(stopIntent)
             if (event.showReview) {
                 navController.navigate(route = NavigationRoute.StreamReview) {
                     popUpTo<NavigationRoute.Stream> {

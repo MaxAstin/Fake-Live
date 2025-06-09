@@ -4,10 +4,10 @@ application = "8.7.3"
 billingKtx = "7.1.1"
 camera2 = "1.4.2"
 coilCompose = "2.6.0"
-composeBom = "2025.05.00"
+composeBom = "2025.06.00"
 coreKtx = "1.16.0"
 coreSplashscreen = "1.0.1"
-firebase = "33.13.0"
+firebase = "33.15.0"
 googleServicesVersion = "4.4.2"
 hiltNavigationCompose = "1.2.0"
 imageCropper = "4.6.0"
@@ -16,9 +16,9 @@ kotlinxCollectionsImmutable = "0.3.7"
 ksp = "2.0.21-1.0.26"
 hilt = "2.56"
 googleServices = "4.4.2"
-firebaseCrashlytics = "3.0.3"
-lifecycleRuntimeKtx = "2.9.0"
-media3 = "1.6.1"
+firebaseCrashlytics = "3.0.4"
+lifecycleRuntimeKtx = "2.9.1"
+media3 = "1.7.1"
 navigationCompose = "2.9.0"
 review = "2.0.2"
 kotlinxSerializationJson = "1.8.0"
@@ -27,7 +27,7 @@ junitJupiter = "5.8.1"
 ktor = "3.1.1"
 lottie = "6.6.4"
 work = "2.10.1"
-datastore = "1.1.6"
+datastore = "1.1.7"
 
 [libraries]
 billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billingKtx" }
@@ -71,6 +71,7 @@ firebase-database = { module = "com.google.firebase:firebase-database-ktx" }
 # Media
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
+media3-ui-compose = { module = "androidx.media3:media3-ui-compose", version.ref = "media3" }
 
 # Review
 review = { module = "com.google.android.play:review", version.ref = "review" }
@@ -114,6 +115,11 @@ camera2 = [
     "camera-camera2",
     "camera-lifecycle",
     "camera-view"
+]
+media3 = [
+    "media3-exoplayer",
+    "media3-ui",
+    "media3-ui-compose"
 ]
 ktor = [
     "ktor-core",

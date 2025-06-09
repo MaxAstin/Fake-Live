@@ -250,12 +250,11 @@ class StreamViewModel @Inject constructor(
                 val duration = getStreamDuration()
                 viewModelScope.launch {
                     analyticsManager.trackStreamFinish(duration = duration)
+                    sendEvent(Stream.Event.FinishRecording)
 
                     val recordingUri = getRecordingUriUseCase()
                     if (currentState.isRecording && recordingUri != null) {
-                        sendEvent(
-                            Stream.Event.NavigateToRecordingPreview
-                        )
+                        sendEvent(Stream.Event.NavigateToRecordingPreview)
                     } else {
                         val showReview = shouldAskReviewUseCase(duration = duration)
                         sendEvent(

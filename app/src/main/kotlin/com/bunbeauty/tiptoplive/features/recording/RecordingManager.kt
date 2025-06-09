@@ -8,6 +8,7 @@ import android.media.CamcorderProfile
 import android.media.MediaRecorder
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
+import android.net.Uri
 import android.os.Environment
 import androidx.core.content.FileProvider
 import com.bunbeauty.tiptoplive.common.analytics.AnalyticsManager
@@ -105,10 +106,9 @@ class RecordingManager @Inject constructor(
         return outputFile
     }
 
-    private fun getContentUriForFile(file: File): String {
+    private fun getContentUriForFile(file: File): Uri {
         val authority = "${context.packageName}.fileprovider"
         return FileProvider.getUriForFile(context, authority, file)
-            .toString()
     }
 
 }

@@ -73,6 +73,7 @@ interface Stream {
 
     sealed interface Event : Base.Event {
         data object RequestRecording : Event
+        data object FinishRecording : Event
         data class FinishStream(val showReview: Boolean) : Event
         data object NavigateToRecordingPreview : Event
         data object ShowFilterNotAvailable : Event

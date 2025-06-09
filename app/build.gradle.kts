@@ -105,8 +105,7 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
 
     // Media3
-    implementation(libs.media3.ui)
-    implementation(libs.media3.exoplayer)
+    implementation(libs.bundles.media3)
 
     // Firebase
     implementation(platform(libs.firebase.bom))

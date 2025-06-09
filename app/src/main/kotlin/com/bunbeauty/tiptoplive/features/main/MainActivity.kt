@@ -10,7 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -57,6 +56,7 @@ import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseSuccessScre
 import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
 import com.bunbeauty.tiptoplive.features.progress.AwardsScreen
 import com.bunbeauty.tiptoplive.features.recording.RecordingService
+import com.bunbeauty.tiptoplive.features.recording.view.RecordingPreviewScreen
 import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
 import com.bunbeauty.tiptoplive.features.streamreview.screen.StreamReviewScreen
 import dagger.Lazy
@@ -239,7 +239,7 @@ class MainActivity : ComponentActivity() {
                 StreamReviewScreen(navController = navController)
             }
             composable<NavigationRoute.RecordingPreview> {
-                Box {  }
+                RecordingPreviewScreen(navController = navController)
             }
             composable<NavigationRoute.More> {
                 MoreScreen(navController = navController)
