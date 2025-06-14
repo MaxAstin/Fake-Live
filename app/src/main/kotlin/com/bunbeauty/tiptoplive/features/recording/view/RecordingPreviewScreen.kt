@@ -2,6 +2,7 @@ package com.bunbeauty.tiptoplive.features.recording.view
 
 import android.content.Context
 import android.net.Uri
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.OptIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,24 +42,52 @@ import com.bunbeauty.tiptoplive.common.ui.components.FakeLiveScaffold
 import com.bunbeauty.tiptoplive.common.ui.components.TopBarWithCloseIcon
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLivePrimaryButton
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
+import com.bunbeauty.tiptoplive.common.util.openSharing
 import com.bunbeauty.tiptoplive.features.recording.presentation.RecordingPreview
 import com.bunbeauty.tiptoplive.features.recording.presentation.RecordingPreviewViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun RecordingPreviewScreen(navController: NavHostController) {
     val viewModel: RecordingPreviewViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val onAction = remember {
+        { action: RecordingPreview.Action ->
+            viewModel.onAction(action)
+        }
+    }
+    val activity = LocalActivity.current
+    LaunchedEffect(Unit) {
+        viewModel.event.onEach { event ->
+            when (event) {
+                RecordingPreview.Event.NavigateBack -> {
+                    navController.navigateUp()
+                }
 
-    RecordingPreviewContent(state = state)
+                is RecordingPreview.Event.OpenSharing -> {
+                    activity?.openSharing(uri = event.videoUri)
+                }
+            }
+        }.launchIn(this)
+    }
+
+    RecordingPreviewContent(
+        state = state,
+        onAction = onAction
+    )
 }
 
 @Composable
-fun RecordingPreviewContent(state: RecordingPreview.State) {
+fun RecordingPreviewContent(
+    state: RecordingPreview.State,
+    onAction: (RecordingPreview.Action) -> Unit
+) {
     FakeLiveScaffold(
         topBar = {
             TopBarWithCloseIcon(
                 onCloseIconClick = {
-                    //TODO onAction(StreamReview.Action.CloseClick)
+                    onAction(RecordingPreview.Action.CloseClick)
                 }
             )
         },
@@ -66,8 +96,9 @@ fun RecordingPreviewContent(state: RecordingPreview.State) {
                 modifier = Modifier.fillMaxWidth(),
                 text = "Share recording",
                 onClick = {
-                    //TODO onAction(StreamReview.Action.DoNotAskClick)
-                }
+                    onAction(RecordingPreview.Action.ShareClick)
+                },
+                enabled = state.videoContent is RecordingPreview.VideoContent.Success
             )
         }
     ) {
@@ -87,13 +118,10 @@ fun RecordingPreviewContent(state: RecordingPreview.State) {
             ) {
                 when (state.videoContent) {
                     RecordingPreview.VideoContent.Loading -> {
-                        val windowInfo = LocalWindowInfo.current
-                        val screenRatio = windowInfo.containerSize.width.toFloat() / windowInfo.containerSize.height
-
                         Box(
                             modifier = Modifier
                                 .fillMaxHeight()
-                                .aspectRatio(screenRatio)
+                                .aspectRatio(screenRatio())
                                 .background(
                                     color = FakeLiveTheme.colors.inactive,
                                     shape = RoundedCornerShape(12.dp)
@@ -113,6 +141,7 @@ fun RecordingPreviewContent(state: RecordingPreview.State) {
                             modifier = Modifier
                                 .align(Alignment.Center)
                                 .fillMaxHeight()
+                                .aspectRatio(screenRatio())
                                 .clip(RoundedCornerShape(12.dp)),
                             videoUri = state.videoContent.videoUri,
                             onClick = {}
@@ -122,6 +151,12 @@ fun RecordingPreviewContent(state: RecordingPreview.State) {
             }
         }
     }
+}
+
+@Composable
+private fun screenRatio(): Float {
+    val windowInfo = LocalWindowInfo.current
+    return windowInfo.containerSize.width.toFloat() / windowInfo.containerSize.height
 }
 
 @Composable
@@ -177,7 +212,8 @@ private fun RecordingPreviewScreenPreview() {
         RecordingPreviewContent(
             state = RecordingPreview.State(
                 videoContent = RecordingPreview.VideoContent.Loading
-            )
+            ),
+            onAction = {}
         )
     }
 }

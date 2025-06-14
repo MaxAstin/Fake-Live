@@ -28,7 +28,19 @@ class RecordingPreviewViewModel @Inject constructor(
     }
 
     override fun onAction(action: RecordingPreview.Action) {
+        when (action) {
+            RecordingPreview.Action.CloseClick -> {
+                sendEvent(RecordingPreview.Event.NavigateBack)
+            }
 
+            RecordingPreview.Action.ShareClick -> {
+                // TODO track sharing click
+                val videoUri = (state.value.videoContent as? RecordingPreview.VideoContent.Success)?.videoUri ?: return
+                sendEvent(
+                    RecordingPreview.Event.OpenSharing(videoUri = videoUri)
+                )
+            }
+        }
     }
 
 }

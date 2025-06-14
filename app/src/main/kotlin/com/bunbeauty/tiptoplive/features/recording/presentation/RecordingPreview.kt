@@ -15,9 +15,13 @@ interface RecordingPreview {
     }
 
     sealed interface Action : Base.Action {
+        data object CloseClick : Action
         data object ShareClick : Action
     }
 
-    data object Event : Base.Event
+    sealed interface Event : Base.Event {
+        data object NavigateBack : Event
+        data class OpenSharing(val videoUri: Uri): Event
+    }
 
 }

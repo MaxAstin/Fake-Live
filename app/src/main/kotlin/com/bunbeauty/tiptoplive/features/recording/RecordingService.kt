@@ -20,6 +20,8 @@ class RecordingService : Service() {
     companion object {
         const val RESULT_CODE_KEY = "result code"
         const val RESULT_DATA_KEY = "result data"
+        const val WEIGHT_KEY = "weight"
+        const val HEIGHT_KEY = "height"
     }
 
     @Inject
@@ -28,6 +30,8 @@ class RecordingService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val resultCode = intent?.extras?.getInt(RESULT_CODE_KEY)
         val resultData = intent?.getParcelableExtra<Intent>(RESULT_DATA_KEY)
+        val weight = intent?.extras?.getInt(WEIGHT_KEY)
+        val height = intent?.extras?.getInt(HEIGHT_KEY)
 
         createNotificationChannel()
         val notification = createNotification()
@@ -36,7 +40,9 @@ class RecordingService : Service() {
         return if (resultCode != null && resultData != null) {
             val isSuccess = recordingManager.start(
                 resultCode = resultCode,
-                resultData = resultData
+                resultData = resultData,
+                weight = weight,
+                height = height
             )
 
             if (isSuccess) {

@@ -19,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -91,6 +92,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private var weightPx: Int? = null
+    private var heightPx: Int? = null
     private val captureLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -99,6 +102,8 @@ class MainActivity : ComponentActivity() {
                 .apply {
                     putExtra(RecordingService.RESULT_CODE_KEY, result.resultCode)
                     putExtra(RecordingService.RESULT_DATA_KEY, result.data)
+                    putExtra(RecordingService.WEIGHT_KEY, weightPx)
+                    putExtra(RecordingService.HEIGHT_KEY, heightPx)
                 }
             startForegroundService(intent)
         }
@@ -226,6 +231,11 @@ class MainActivity : ComponentActivity() {
                 AwardsScreen()
             }
             composable<NavigationRoute.Stream> {
+                val windowInfo = LocalWindowInfo.current
+                LaunchedEffect(Unit) {
+                    this@MainActivity.weightPx = windowInfo.containerSize.width
+                    this@MainActivity.heightPx = windowInfo.containerSize.height
+                }
                 StreamScreen(
                     navController = navController,
                     requestRecording = {

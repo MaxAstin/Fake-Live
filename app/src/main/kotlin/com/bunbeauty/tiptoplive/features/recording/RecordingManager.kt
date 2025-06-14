@@ -32,13 +32,21 @@ class RecordingManager @Inject constructor(
 
     private var started: Boolean = false
 
-    fun start(resultCode: Int, resultData: Intent): Boolean {
+    fun start(
+        resultCode: Int,
+        resultData: Intent,
+        weight: Int?,
+        height: Int?
+    ): Boolean {
         return try {
             val mediaProjectionManager = context.getSystemService(MediaProjectionManager::class.java)
             mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, resultData)
                 ?: error("MediaProjection unavailable")
 
-            setupRecorder()
+            setupRecorder(
+                weight = weight,
+                height = height
+            )
             mediaRecorder?.start()
             started = true
 
@@ -61,10 +69,13 @@ class RecordingManager @Inject constructor(
         }
     }
 
-    private fun setupRecorder() {
+    private fun setupRecorder(
+        weight: Int?,
+        height: Int?
+    ) {
         val metrics = context.resources.displayMetrics
-        val screenWidth = metrics.widthPixels
-        val screenHeight = metrics.heightPixels
+        val screenWidth = weight ?: metrics.widthPixels
+        val screenHeight = height ?: metrics.heightPixels
         val profile = CamcorderProfile.get(CamcorderProfile.QUALITY_720P)
 
         val outputFile = getOutputFile()
@@ -88,7 +99,7 @@ class RecordingManager @Inject constructor(
             VIRTUAL_DISPLAY_NAME,
             screenWidth,
             screenHeight,
-            metrics.densityDpi,
+            context.resources.displayMetrics.densityDpi,
             DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
             mediaRecorder?.surface,
             null,

@@ -156,7 +156,7 @@ private fun handleEvent(
         }
 
         Stream.Event.NavigateToRecordingPreview -> {
-            navController.navigate(route = NavigationRoute.RecordingPreview){
+            navController.navigate(route = NavigationRoute.RecordingPreview) {
                 popUpTo<NavigationRoute.Stream> {
                     inclusive = true
                 }
