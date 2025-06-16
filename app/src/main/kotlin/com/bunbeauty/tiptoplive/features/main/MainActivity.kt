@@ -6,19 +6,21 @@ import android.media.projection.MediaProjectionManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
@@ -57,6 +59,7 @@ import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseSuccessScre
 import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
 import com.bunbeauty.tiptoplive.features.progress.AwardsScreen
 import com.bunbeauty.tiptoplive.features.recording.RecordingService
+import com.bunbeauty.tiptoplive.features.recording.ScreenInfo
 import com.bunbeauty.tiptoplive.features.recording.view.RecordingPreviewScreen
 import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
 import com.bunbeauty.tiptoplive.features.streamreview.screen.StreamReviewScreen
@@ -92,8 +95,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private var weightPx: Int? = null
-    private var heightPx: Int? = null
+    private var screenInfo: ScreenInfo? = null
     private val captureLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -102,14 +104,14 @@ class MainActivity : ComponentActivity() {
                 .apply {
                     putExtra(RecordingService.RESULT_CODE_KEY, result.resultCode)
                     putExtra(RecordingService.RESULT_DATA_KEY, result.data)
-                    putExtra(RecordingService.WEIGHT_KEY, weightPx)
-                    putExtra(RecordingService.HEIGHT_KEY, heightPx)
+                    putExtra(RecordingService.SCREEN_INFO_KEY, screenInfo)
                 }
             startForegroundService(intent)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
@@ -170,9 +172,6 @@ class MainActivity : ComponentActivity() {
     private fun AppContent(state: Main.State) {
         val navController = rememberNavController()
         Scaffold(
-            modifier = Modifier
-                .statusBarsPadding()
-                .navigationBarsPadding(),
             bottomBar = {
                 BottomNavigationBar(
                     navController = navController,
@@ -232,9 +231,15 @@ class MainActivity : ComponentActivity() {
             }
             composable<NavigationRoute.Stream> {
                 val windowInfo = LocalWindowInfo.current
+                val density = LocalDensity.current
+                val windowInsets = WindowInsets.systemBars
                 LaunchedEffect(Unit) {
-                    this@MainActivity.weightPx = windowInfo.containerSize.width
-                    this@MainActivity.heightPx = windowInfo.containerSize.height
+                    screenInfo = ScreenInfo(
+                        widthPx = windowInfo.containerSize.width,
+                        heightPx = windowInfo.containerSize.height,
+                        topOffsetPx = windowInsets.getTop(density),
+                        bottomOffsetPx = windowInsets.getBottom(density),
+                    )
                 }
                 StreamScreen(
                     navController = navController,

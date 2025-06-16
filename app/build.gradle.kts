@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)
+    id("kotlin-parcelize")
 }
 
 android {

@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.bunbeauty.tiptoplive.common.presentation.BaseViewModel
 import com.bunbeauty.tiptoplive.shared.domain.recording.GetRecordingUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +19,8 @@ class RecordingPreviewViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            // TODO find more elegant solution
+            delay(3_000)
             val uri = getRecordingUriUseCase()
             if (uri != null) {
                 setState {
