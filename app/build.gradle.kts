@@ -13,12 +13,12 @@ plugins {
 
 android {
     namespace = "com.bunbeauty.tiptoplive"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.bunbeauty.tiptoplive"
         minSdk = 27
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 430
         versionName = "4.3.0"
         multiDexEnabled = true
