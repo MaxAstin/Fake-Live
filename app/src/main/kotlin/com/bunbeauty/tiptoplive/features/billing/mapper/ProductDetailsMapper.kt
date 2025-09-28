@@ -10,8 +10,8 @@ enum class PriceFormat {
     COMMAS_DOT
 }
 
-private val dotsCommaRegex = Regex("^\\d{1,3}(\\.\\d{3})*(,\\d{1,2})?\$")
-private val commasDotRegex = Regex("^\\d{1,3}(,\\d{3})*(\\.\\d{1,2})?\$")
+private val dotsCommaRegex = Regex("^\\d{1,3}(\\.\\d{3})*(,\\d{1,2})?$")
+private val commasDotRegex = Regex("^\\d{1,3}(,\\d{3})*(\\.\\d{1,2})?$")
 
 fun ProductDetails.inAppProductToProduct(percent: Int): Product? {
     val details = oneTimePurchaseOfferDetails ?: return null
