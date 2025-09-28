@@ -1,32 +1,32 @@
 [versions]
-activityCompose = "1.10.1"
-application = "8.10.1"
+activityCompose = "1.11.0"
+application = "8.13.0"
 billingKtx = "8.0.0"
-camera2 = "1.4.2"
-coilCompose = "2.6.0"
-composeBom = "2025.06.01"
-coreKtx = "1.16.0"
+camera2 = "1.5.0"
+coilCompose = "2.7.0"
+composeBom = "2025.09.01"
+coreKtx = "1.17.0"
 coreSplashscreen = "1.0.1"
-firebase = "33.16.0"
+firebase = "34.3.0"
 googleServicesVersion = "4.4.3"
-hiltNavigationCompose = "1.2.0"
+hiltNavigationCompose = "1.3.0"
 imageCropper = "4.6.0"
-kotlin = "2.1.21"
-kotlinxCollectionsImmutable = "0.3.7"
+kotlin = "2.2.20"
+kotlinxCollectionsImmutable = "0.4.0"
 ksp = "2.1.21-2.0.2"
-hilt = "2.56"
+hilt = "2.57.2"
 googleServices = "4.4.3"
-firebaseCrashlytics = "3.0.4"
-lifecycleRuntimeKtx = "2.9.1"
-media3 = "1.7.1"
-navigationCompose = "2.9.0"
+firebaseCrashlytics = "3.0.6"
+lifecycleRuntimeKtx = "2.9.4"
+media3 = "1.8.0"
+navigationCompose = "2.9.5"
 review = "2.0.2"
-kotlinxSerializationJson = "1.8.0"
+kotlinxSerializationJson = "1.9.0"
 junit = "4.13.2"
-junitJupiter = "5.8.1"
-ktor = "3.1.1"
-lottie = "6.6.4"
-work = "2.10.2"
+junitJupiter = "5.13.4"
+ktor = "3.3.0"
+lottie = "6.6.9"
+work = "2.10.5"
 datastore = "1.1.7"
 
 [libraries]
@@ -66,7 +66,7 @@ hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", ve
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
-firebase-database = { module = "com.google.firebase:firebase-database-ktx" }
+firebase-database = { module = "com.google.firebase:firebase-database" }
 
 # Media
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
