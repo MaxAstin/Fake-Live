@@ -65,7 +65,7 @@ private fun FakeLiveDialogButtonPreview() {
     FakeLiveTheme {
         FakeLiveDialogButton(
             text = "Button",
-            iconId = R.drawable.img_thumbs_up,
+            iconId = R.drawable.ic_forward,
             background = FakeLiveTheme.colors.interactive,
             onClick = {}
         )
