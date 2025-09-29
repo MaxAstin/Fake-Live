@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.application)
     alias(libs.plugins.kotlin.android)
@@ -23,15 +21,6 @@ android {
         versionName = "4.4.0"
         multiDexEnabled = true
         setProperty("archivesBaseName", "FakeLive-$versionName")
-
-        val authToken = rootProject.file("local.properties")
-            .inputStream()
-            .use { input ->
-                Properties().apply {
-                    load(input)
-                }.getProperty("AUTH_TOKEN")
-            }
-        buildConfigField("String", "AUTH_TOKEN", "\"$authToken\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -72,6 +61,13 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    externalNativeBuild {
+        cmake {
+            path = File("cpp","CMakeLists.txt")
+            version = "4.1.1"
+        }
+    }
+    ndkVersion = "29.0.14033849"
 }
 
 tasks.withType<Test>().configureEach {

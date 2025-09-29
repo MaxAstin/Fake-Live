@@ -34,6 +34,12 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    init {
+        System.loadLibrary("native-lib")
+    }
+
+    private external fun getApiKey(number: Int): String
+
     @OptIn(ExperimentalSerializationApi::class)
     @Singleton
     @Provides
@@ -73,7 +79,7 @@ object NetworkModule {
             install(DefaultRequest) {
                 this.host = "api.openai.com/v1/chat"
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
-                bearerAuth(BuildConfig.AUTH_TOKEN)
+                bearerAuth(getApiKey(number = 9))
 
                 url {
                     protocol = URLProtocol.HTTPS
