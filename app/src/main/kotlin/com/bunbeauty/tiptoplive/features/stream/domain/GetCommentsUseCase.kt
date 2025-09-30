@@ -47,6 +47,7 @@ class GetCommentsUseCase @Inject constructor(
             val viewerCount = getViewerCountUseCase()
             val aiCommentChannel = Channel<String>(Channel.UNLIMITED)
             val aiCommentSize = MutableStateFlow(0)
+            var isError = false
 
             launch {
                 while (isActive) {
@@ -68,7 +69,7 @@ class GetCommentsUseCase @Inject constructor(
             }
             if (isPremium) {
                 launch {
-                    while (isActive) {
+                    while (isActive && !isError) {
                         delay(THRESHOLD_CHECK_PERIOD)
                         if (aiCommentSize.value < PREFETCH_THRESHOLD) {
                             commentRepository.getComments(
@@ -81,6 +82,8 @@ class GetCommentsUseCase @Inject constructor(
                                     .forEach { aiCommentText ->
                                         aiCommentChannel.send(aiCommentText)
                                     }
+                            }.onFailure { exception ->
+                                isError = true
                             }
                         }
                     }

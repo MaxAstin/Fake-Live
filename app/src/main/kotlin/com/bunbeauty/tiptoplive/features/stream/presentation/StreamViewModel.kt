@@ -23,6 +23,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.min
@@ -385,7 +386,7 @@ class StreamViewModel @Inject constructor(
     private fun startGenerateQuestions() {
         viewModelScope.launch {
             delay(5_000)
-            while (true) {
+            while (isActive) {
                 val questionCount = currentState.questionState.notAnsweredQuestions.size
                 if (questionCount < QUESTION_LIMIT) {
                     handleNewQuestion(question = getQuestionUseCase())
