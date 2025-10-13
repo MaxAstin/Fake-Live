@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.application)
     alias(libs.plugins.kotlin.android)
@@ -13,25 +11,16 @@ plugins {
 
 android {
     namespace = "com.bunbeauty.tiptoplive"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.bunbeauty.tiptoplive"
         minSdk = 27
-        targetSdk = 35
-        versionCode = 430
-        versionName = "4.3.0"
+        targetSdk = 36
+        versionCode = 450
+        versionName = "4.5.0"
         multiDexEnabled = true
         setProperty("archivesBaseName", "FakeLive-$versionName")
-
-        val authToken = rootProject.file("local.properties")
-            .inputStream()
-            .use { input ->
-                Properties().apply {
-                    load(input)
-                }.getProperty("AUTH_TOKEN")
-            }
-        buildConfigField("String", "AUTH_TOKEN", "\"$authToken\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -67,14 +56,18 @@ android {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    externalNativeBuild {
+        cmake {
+            path = File("cpp","CMakeLists.txt")
+            version = "4.1.1"
+        }
+    }
+    ndkVersion = "29.0.14033849"
 }
 
 tasks.withType<Test>().configureEach {

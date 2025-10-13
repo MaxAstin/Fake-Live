@@ -1,6 +1,5 @@
 package com.bunbeauty.tiptoplive.common.ui.util
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -11,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Path
@@ -322,26 +320,6 @@ private fun MeshGradientPreview() {
                     resolutionX = 16,
                     resolutionY = 16,
                 )
-        ) {}
-    }
-}
-
-@Preview
-@Composable
-private fun LenearGradientPreview() {
-    FakeLiveTheme {
-        val black = Color(0xFF060606)
-        val brush = Brush.verticalGradient(
-            colors = listOf(
-                black,
-                black,
-                FakeLiveTheme.colors.instagram.logo2
-            )
-        )
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(brush)
         ) {}
     }
 }
