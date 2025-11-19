@@ -48,6 +48,7 @@ import com.bunbeauty.tiptoplive.features.main.view.BottomNavigationBar
 import com.bunbeauty.tiptoplive.features.main.view.CameraIsRequiredDialog
 import com.bunbeauty.tiptoplive.features.more.MoreScreen
 import com.bunbeauty.tiptoplive.features.notification.NotificationMessage
+import com.bunbeauty.tiptoplive.features.onboarding.OnboardingScreen
 import com.bunbeauty.tiptoplive.features.premiumdetails.view.PremiumDetailsScreen
 import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseFailedScreen
 import com.bunbeauty.tiptoplive.features.premiumdetails.view.PurchaseSuccessScreen
@@ -178,7 +179,7 @@ class MainActivity : ComponentActivity() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = NavigationRoute.Intro,
+            startDestination = NavigationRoute.Onboarding,
             modifier = modifier,
             enterTransition = {
                 EnterTransition.None
@@ -187,6 +188,9 @@ class MainActivity : ComponentActivity() {
                 ExitTransition.None
             },
         ) {
+            composable<NavigationRoute.Onboarding> {
+                OnboardingScreen()
+            }
             composable<NavigationRoute.Intro> {
                 IntroScreen(navController = navController)
             }

@@ -3,7 +3,6 @@ package com.bunbeauty.tiptoplive.features.stream.view
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.activity.compose.BackHandler
-import androidx.annotation.DrawableRes
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
@@ -67,14 +66,15 @@ import com.bunbeauty.tiptoplive.common.ui.theme.bold
 import com.bunbeauty.tiptoplive.common.util.showToast
 import com.bunbeauty.tiptoplive.features.stream.presentation.Stream
 import com.bunbeauty.tiptoplive.features.stream.presentation.StreamViewModel
+import com.bunbeauty.tiptoplive.features.stream.view.ui.ActionIcon
 import com.bunbeauty.tiptoplive.features.stream.view.ui.AnimatedReaction
-import com.bunbeauty.tiptoplive.features.stream.view.ui.AvatarImage
 import com.bunbeauty.tiptoplive.features.stream.view.ui.CameraComponent
 import com.bunbeauty.tiptoplive.features.stream.view.ui.EmptyBottomSheet
 import com.bunbeauty.tiptoplive.features.stream.view.ui.FiltersRow
 import com.bunbeauty.tiptoplive.features.stream.view.ui.QuestionState
 import com.bunbeauty.tiptoplive.features.stream.view.ui.QuestionUi
 import com.bunbeauty.tiptoplive.features.stream.view.ui.QuestionsBottomSheet
+import com.bunbeauty.tiptoplive.features.stream.view.ui.StreamHeader
 import com.bunbeauty.tiptoplive.features.stream.view.ui.VideoComponent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -228,54 +228,25 @@ private fun StreamContent(
                             .padding(horizontal = 16.dp)
                             .padding(top = 12.dp, bottom = 16.dp)
                     ) {
-                        Column(
+                        StreamHeader(
                             modifier = Modifier.align(Alignment.TopEnd),
-                            horizontalAlignment = Alignment.End
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                AvatarImage(
-                                    image = state.image,
-                                    modifier = Modifier.size(32.dp)
-                                )
-                                UsernameRow(
-                                    modifier = Modifier
-                                        .padding(start = 12.dp)
-                                        .weight(1f),
-                                    username = state.username
-                                )
-
-                                LiveCard(modifier = Modifier.padding(start = 12.dp))
-                                ViewersCard(
-                                    modifier = Modifier.padding(start = 8.dp),
-                                    viewersCount = state.viewersCount
-                                )
-                                ActionIcon(
-                                    modifier = Modifier
-                                        .padding(start = 8.dp)
-                                        .clickableWithoutIndication(
-                                            onClick = {
-                                                onAction(Stream.Action.FinishStreamClick)
-                                            }
-                                        ),
-                                    iconResId = R.drawable.ic_close,
-                                    contentDescription = "Close",
-                                )
-                            }
-                            Actions(
-                                modifier = Modifier.padding(top = 16.dp),
-                                onSwitchClick = {
-                                    onAction(Stream.Action.SwitchCameraClick)
-                                },
-                                onCameraClick = {
-                                    onAction(Stream.Action.CameraClick)
-                                },
-                                onFiltersClick = {
-                                    showFilters = !showFilters
-                                }
-                            )
-                        }
+                            image = state.image,
+                            username = state.username,
+                            viewersCount = state.viewersCount,
+                            actionEnabled = true,
+                            onClose = {
+                                onAction(Stream.Action.FinishStreamClick)
+                            },
+                            onSwitchCamera = {
+                                onAction(Stream.Action.SwitchCameraClick)
+                            },
+                            onCameraClick = {
+                                onAction(Stream.Action.CameraClick)
+                            },
+                            onFiltersClick = {
+                                showFilters = !showFilters
+                            },
+                        )
                         Column(
                             modifier = Modifier.align(Alignment.BottomStart),
                         ) {
@@ -341,152 +312,6 @@ private fun StreamContent(
                 onAction(Stream.Action.HideDirect)
             }
         )
-    }
-}
-
-@Composable
-private fun UsernameRow(
-    username: String,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            modifier = Modifier.weight(1f, false),
-            text = username,
-            color = FakeLiveTheme.colors.onSurface,
-            style = FakeLiveTheme.typography.titleSmall,
-            overflow = Ellipsis,
-            maxLines = 1,
-        )
-        Icon(
-            modifier = Modifier
-                .padding(start = 4.dp)
-                .size(16.dp),
-            imageVector = ImageVector.vectorResource(R.drawable.ic_chevron_down),
-            contentDescription = "Dropdown",
-            tint = FakeLiveTheme.colors.icon,
-        )
-    }
-}
-
-@Composable
-private fun LiveCard(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(FakeLiveTheme.colors.instagram.accent)
-            .padding(8.dp)
-    ) {
-        Text(
-            text = stringResource(R.string.stream_live),
-            style = FakeLiveTheme.typography.bodySmall,
-            color = FakeLiveTheme.colors.onSurface
-        )
-    }
-}
-
-@Composable
-private fun ViewersCard(
-    viewersCount: ViewersCountUi,
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(FakeLiveTheme.colors.surface.copy(alpha = 0.5f))
-            .padding(8.dp)
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                modifier = Modifier.size(12.dp),
-                imageVector = ImageVector.vectorResource(R.drawable.ic_eye),
-                contentDescription = "Viewers",
-                tint = FakeLiveTheme.colors.icon,
-            )
-            val viewersCountText = when (viewersCount) {
-                is ViewersCountUi.UpToThousand -> viewersCount.count
-                is ViewersCountUi.Thousands -> stringResource(
-                    R.string.stream_thousands_viewers_count,
-                    viewersCount.thousands,
-                    viewersCount.hundreds
-                )
-            }
-            Text(
-                modifier = Modifier.padding(start = 2.dp),
-                text = viewersCountText,
-                style = FakeLiveTheme.typography.bodySmall,
-                color = FakeLiveTheme.colors.onSurface
-            )
-        }
-    }
-}
-
-@Composable
-private fun Actions(
-    modifier: Modifier = Modifier,
-    onSwitchClick: () -> Unit,
-    onCameraClick: (Boolean) -> Unit,
-    onFiltersClick: () -> Unit,
-) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = spacedBy(16.dp)
-    ) {
-        var isMicMuted by remember {
-            mutableStateOf(false)
-        }
-        var isCameraEnabled by remember {
-            mutableStateOf(true)
-        }
-
-        ActionIcon(
-            modifier = Modifier.clickableWithoutIndication(
-                onClick = {
-                    isMicMuted = !isMicMuted
-                }
-            ),
-            iconResId = if (isMicMuted) {
-                R.drawable.ic_mic_crossed_out
-            } else {
-                R.drawable.ic_mic
-            },
-            contentDescription = "Mic",
-        )
-        ActionIcon(
-            modifier = Modifier.clickableWithoutIndication(
-                onClick = {
-                    isCameraEnabled = !isCameraEnabled
-                    onCameraClick(isCameraEnabled)
-                }
-            ),
-            iconResId = if (isCameraEnabled) {
-                R.drawable.ic_camera
-            } else {
-                R.drawable.ic_camera_crossed_out
-            },
-            contentDescription = "Camera",
-        )
-        if (isCameraEnabled) {
-            ActionIcon(
-                modifier = Modifier.clickableWithoutIndication(
-                    onClick = onSwitchClick
-                ),
-                iconResId = R.drawable.ic_switch,
-                contentDescription = "Switch camera",
-            )
-            ActionIcon(
-                modifier = Modifier.clickableWithoutIndication(
-                    onClick = {
-                        onFiltersClick()
-                    }
-                ),
-                iconResId = R.drawable.ic_effect,
-                contentDescription = "Effect",
-            )
-        }
     }
 }
 
@@ -727,20 +552,6 @@ private fun BottomPanel(
             contentDescription = "Direct",
         )
     }
-}
-
-@Composable
-private fun ActionIcon(
-    modifier: Modifier = Modifier,
-    @DrawableRes iconResId: Int,
-    contentDescription: String,
-) {
-    Icon(
-        modifier = modifier.size(28.dp),
-        imageVector = ImageVector.vectorResource(iconResId),
-        contentDescription = contentDescription,
-        tint = FakeLiveTheme.colors.icon,
-    )
 }
 
 @Composable

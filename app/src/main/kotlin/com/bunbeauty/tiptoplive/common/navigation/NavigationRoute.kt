@@ -7,6 +7,9 @@ sealed interface BottomNavigationRoute: NavigationRoute
 interface NavigationRoute {
 
     @Serializable
+    data object Onboarding: NavigationRoute
+
+    @Serializable
     data object Intro: NavigationRoute
 
     @Serializable

@@ -12,9 +12,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 fun Modifier.clickableWithoutIndication(
+    enabled: Boolean = true,
     onClick: () -> Unit,
 ) = composed {
     Modifier.clickable(
+        enabled = enabled,
         interactionSource = remember { MutableInteractionSource() },
         indication = null,
         onClick = onClick

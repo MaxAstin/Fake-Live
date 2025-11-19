@@ -107,7 +107,7 @@ fun SegmentedControlButton(
             .then(if (selected) Modifier.layoutId(SelectedButtonId) else Modifier)
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(8.dp))
-            .clickableWithoutIndication(onClick),
+            .clickableWithoutIndication(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
         val textStyle = FakeLiveTheme.typography.bodyMedium
