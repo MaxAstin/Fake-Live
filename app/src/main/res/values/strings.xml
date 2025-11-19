@@ -21,6 +21,22 @@
     <string name="notification_body_will_you_go">Will you go Live?</string>
     <string name="notification_body_when_next">When is the next Live stream?</string>
 
+    <!-- Onboarding -->
+    <string name="onboarding_your_name">your_name</string>
+    <string name="onboarding_get_started">Get started</string>
+    <string name="onboarding_go_live_title">Go Live</string>
+    <string name="onboarding_go_live_text">Experience Live streaming that feels real</string>
+    <string name="onboarding_attract_viewers_title">Attract viewers</string>
+    <string name="onboarding_attract_viewers_text">Draw in over 1 million virtual fans</string>
+    <string name="onboarding_get_likes_title">Get likes</string>
+    <string name="onboarding_get_likes_text">Get endless likes and emotions from your fans</string>
+    <string name="onboarding_interact_with_ai_title">Interact with AI</string>
+    <string name="onboarding_interact_with_ai_text">Chat with lifelike AI-generated fans that boost your fame</string>
+    <string name="onboarding_pranks_title">Pull off pranks</string>
+    <string name="onboarding_pranks_text">Keep the spotlight on you with playful antics</string>
+    <string name="onboarding_answer_questions_title">Answer questions</string>
+    <string name="onboarding_answer_questions_text">Engage with your fans by addressing their queries</string>
+
     <!-- Preparation -->
     <string name="preparation_special_offer">Special offer ends in</string>
     <string name="preparation_upgrade_now">Upgrade now</string>
