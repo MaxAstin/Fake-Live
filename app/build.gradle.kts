@@ -9,6 +9,13 @@ plugins {
     alias(libs.plugins.serialization)
 }
 
+val appVersionCode = 460
+val appVersionName = "4.6.0"
+
+base {
+    archivesName.set("FakeLive-$appVersionName")
+}
+
 kotlin {
     jvmToolchain(11)
 }
@@ -21,8 +28,8 @@ android {
         applicationId = "com.bunbeauty.tiptoplive"
         minSdk = 27
         targetSdk = 36
-        versionCode = 450
-        versionName = "4.5.0"
+        versionCode = appVersionCode
+        versionName = appVersionName
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
