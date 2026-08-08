@@ -9,9 +9,13 @@ plugins {
     alias(libs.plugins.serialization)
 }
 
+kotlin {
+    jvmToolchain(11)
+}
+
 android {
     namespace = "com.bunbeauty.tiptoplive"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.bunbeauty.tiptoplive"
@@ -20,7 +24,6 @@ android {
         versionCode = 450
         versionName = "4.5.0"
         multiDexEnabled = true
-        setProperty("archivesBaseName", "FakeLive-$versionName")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -31,6 +34,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -46,11 +50,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
         compose = true
