@@ -9,8 +9,8 @@ plugins {
     alias(libs.plugins.serialization)
 }
 
-val appVersionCode = 460
-val appVersionName = "4.6.0"
+val appVersionCode = 470
+val appVersionName = "4.7.0"
 
 base {
     archivesName.set("FakeLive-$appVersionName")
