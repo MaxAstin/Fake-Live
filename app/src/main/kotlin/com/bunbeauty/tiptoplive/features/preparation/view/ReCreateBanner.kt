@@ -46,6 +46,9 @@ fun ReCreateBanner(
             .height(IntrinsicSize.Min)
             .clip(RoundedCornerShape(12.dp))
             .background(FakeLiveTheme.colors.premium)
+            .clickableWithoutIndication(onClick = {
+                uriHandler.openUri(RECREATE_APP_URL)
+            })
     ) {
         Column(
             modifier = Modifier
@@ -72,9 +75,6 @@ fun ReCreateBanner(
                     .padding(top = 12.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .background(FakeLiveTheme.colors.onSurface)
-                    .clickableWithoutIndication {
-                        uriHandler.openUri(RECREATE_APP_URL)
-                    }
                     .padding(horizontal = 12.dp, vertical = 7.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
