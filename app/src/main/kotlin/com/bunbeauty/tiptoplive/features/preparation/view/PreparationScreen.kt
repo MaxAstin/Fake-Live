@@ -263,13 +263,7 @@ private fun Premium(
     when (premiumStatus) {
         Preparation.PremiumStatus.Loading -> Unit
         is Preparation.PremiumStatus.Free -> {
-            PremiumBanner(
-                modifier = modifier,
-                timer = premiumStatus.offerTimer,
-                onClick = {
-                    onAction(Preparation.Action.PremiumClick)
-                }
-            )
+            ReCreateBanner(modifier = modifier)
         }
 
         Preparation.PremiumStatus.Active -> {

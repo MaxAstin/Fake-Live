@@ -30,6 +30,11 @@
     <string name="preparation_start_live">Начать стрим</string>
     <string name="preparation_seconds">(%d сек)</string>
 
+     <!-- ReCreate banner -->
+    <string name="preparation_recreate_title">Приложение %s</string>
+    <string name="preparation_recreate_description">От идеи для фото до идеального результата в один клик.</string>
+    <string name="preparation_recreate_try_it_now">Попробовать</string>
+
     <!-- Stream -->
     <string name="stream_live">ПРЯМОЙ ЭФИР</string>
     <string name="stream_thousands_viewers_count">%s,%s тыс.</string>
