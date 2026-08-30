@@ -31,6 +31,12 @@
     <string name="preparation_start_live">Start Live</string>
     <string name="preparation_seconds">(%d sec)</string>
 
+    <!-- ReCreate banner -->
+    <string name="recreate_app_name" translatable="false">ReCreate</string>
+    <string name="preparation_recreate_title">%s app</string>
+    <string name="preparation_recreate_description">Turn photo inspiration into the perfect shot with one tap.</string>
+    <string name="preparation_recreate_try_it_now">Try it now</string>
+
     <!-- Stream -->
     <string name="stream_live">LIVE</string>
     <string name="stream_thousands_viewers_count">%s.%sK</string>
