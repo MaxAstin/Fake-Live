@@ -32,7 +32,7 @@ import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.bold
 
 private const val RECREATE_APP_URL =
-    "https://play.google.com/store/apps/details?id=com.recreate.photo&utm_source=live_app"
+    "https://play.google.com/store/apps/details?id=com.recreate.photo&referrer=utm_source%3Dlive_app"
 
 @Composable
 fun ReCreateBanner(
